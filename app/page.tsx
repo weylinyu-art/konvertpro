@@ -41,7 +41,22 @@ export default function HomePage() {
             // All converters
           </p>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {Object.values(CATEGORIES).map((cat) => (
+            {/* AI Tools 入口 */}
+<Link
+  href="/ai"
+  className="group bg-[#edf4f0] border border-[#3d6b4f]/30 rounded-2xl p-5 hover:border-[#3d6b4f] hover:bg-[#e0ede6] transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5 col-span-2 md:col-span-3 lg:col-span-4"
+>
+  <div className="flex items-center justify-between">
+    <div className="flex items-center gap-3">
+      <span className="text-2xl">🤖</span>
+      <div>
+        <span className="font-semibold text-sm text-[#3d6b4f]">AI & LLM Tools</span>
+        <p className="text-xs text-[#6a8a72] mt-0.5">Token calculator · Model size · API cost · Context window</p>
+      </div>
+    </div>
+    <span className="font-mono text-xs text-[#3d6b4f] group-hover:translate-x-1 transition-transform">→</span>
+  </div>
+</Link>{Object.values(CATEGORIES).map((cat) => (
               <Link
                 key={cat.slug}
                 href={`/${cat.slug}`}
