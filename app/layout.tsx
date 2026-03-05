@@ -26,6 +26,9 @@ export const metadata: Metadata = {
   title: { default: "Konvert — Free Unit Converter", template: "%s | Konvert" },
   description: "Free, instant unit conversions for length, weight, temperature, volume, speed, area and data. No signup required.",
   keywords: ["unit converter", "length converter", "weight converter", "temperature converter"],
+  verification: {
+    google: "F8Iq38o3BwOPbFfefYM3d8MXRslMOFDXHipAJHItem4",
+  },
   openGraph: {
     title: "Konvert — Free Unit Converter",
     description: "Instant conversions for every unit. Free, fast, no signup.",
