@@ -1,9 +1,19 @@
 "use client";
 // components/ConverterWidget.tsx
-// Interactive converter — used on homepage, category page, and conversion page.
 
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { CATEGORIES, convert, formatNumber, getSymbol } from "@/lib/units";
+
+// ── Default "from/to" for each category based on most common searches ──
+const CATEGORY_DEFAULTS: Record<string, { from: string; to: string; val: string }> = {
+  length:      { from: "mile",       to: "kilometer",  val: "1"   },
+  weight:      { from: "pound",      to: "kilogram",   val: "150" },  // typical body weight
+  temperature: { from: "fahrenheit", to: "celsius",    val: "72"  },  // room temperature
+  volume:      { from: "gallon_us",  to: "liter",      val: "1"   },
+  speed:       { from: "mph",        to: "kph",        val: "60"  },  // typical speed limit
+  area:        { from: "acre",       to: "sq_meter",   val: "1"   },
+  data:        { from: "gigabyte",   to: "megabyte",   val: "1"   },
+};
 
 interface Props {
   defaultCategory?: string;
@@ -11,14 +21,21 @@ interface Props {
   defaultTo?: string;
 }
 
-export default function ConverterWidget({ defaultCategory = "length", defaultFrom, defaultTo }: Props) {
+export default function ConverterWidget({
+  defaultCategory = "length",
+  defaultFrom,
+  defaultTo,
+}: Props) {
   const [catSlug, setCatSlug] = useState(defaultCategory);
   const cat = CATEGORIES[catSlug];
 
+  const defaults = CATEGORY_DEFAULTS[catSlug] ?? { from: Object.keys(cat.units)[0], to: Object.keys(cat.units)[1], val: "1" };
+
+  const [from,     setFrom]     = useState(defaultFrom ?? defaults.from);
+  const [to,       setTo]       = useState(defaultTo   ?? defaults.to);
+  const [inputVal, setInputVal] = useState(defaultFrom ? "1" : defaults.val);
+
   const unitKeys = Object.keys(cat.units);
-  const [from, setFrom] = useState(defaultFrom ?? unitKeys[0]);
-  const [to,   setTo]   = useState(defaultTo   ?? unitKeys[1]);
-  const [inputVal, setInputVal] = useState("1");
 
   const result = (() => {
     const n = parseFloat(inputVal);
@@ -36,15 +53,15 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
 
   const switchCat = (slug: string) => {
     setCatSlug(slug);
-    const keys = Object.keys(CATEGORIES[slug].units);
-    setFrom(keys[0]);
-    setTo(keys[1]);
-    setInputVal("1");
+    const d = CATEGORY_DEFAULTS[slug] ?? { from: Object.keys(CATEGORIES[slug].units)[0], to: Object.keys(CATEGORIES[slug].units)[1], val: "1" };
+    setFrom(d.from);
+    setTo(d.to);
+    setInputVal(d.val);
   };
 
   return (
     <div className="animate-slide-up">
-      {/* Category tabs — only show on homepage (no defaultCategory prop) */}
+      {/* Category tabs — only on homepage */}
       {!defaultFrom && (
         <div className="flex gap-2 flex-wrap justify-center mb-6">
           {Object.values(CATEGORIES).map((c) => (
@@ -74,7 +91,7 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
           </span>
         </div>
 
-        {/* Inputs row */}
+        {/* Inputs */}
         <div className="grid grid-cols-[1fr_auto_1fr] gap-4 p-7 items-start">
 
           {/* From */}
@@ -113,7 +130,7 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
               type="number"
               readOnly
               value={result !== null ? formatNumber(result) : ""}
-              className="w-full bg-[#edf4f0] border border-[#e4e0da] rounded-xl px-5 py-4 font-mono text-[28px] text-[#3d6b4f] outline-none cursor-default transition-all"
+              className="w-full bg-[#edf4f0] border border-[#e4e0da] rounded-xl px-5 py-4 font-mono text-[28px] text-[#3d6b4f] outline-none cursor-default"
             />
             <select
               value={to}
@@ -152,9 +169,9 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {cat.popular.map((p) => {
-              const r = convert(p.val, p.from, p.to, catSlug);
+              const r  = convert(p.val, p.from, p.to, catSlug);
               const fs = getSymbol(p.from, catSlug);
-              const ts = getSymbol(p.to, catSlug);
+              const ts = getSymbol(p.to,   catSlug);
               return (
                 <button
                   key={`${p.from}-${p.to}`}
