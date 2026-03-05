@@ -1,7 +1,4 @@
 // app/[category]/[conversion]/page.tsx
-// e.g. /length/miles-to-kilometers
-// These pages are the SEO backbone — each one ranks for a specific search query.
-
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -9,6 +6,7 @@ import {
   CATEGORIES, convert, formatNumber, getSymbol,
   slugToUnit, unitToSlug, getAllConversionPaths,
 } from "@/lib/units";
+import { getConversionContent } from "@/lib/seo-content";
 import ConverterWidget from "@/components/ConverterWidget";
 
 interface Props {
@@ -16,8 +14,6 @@ interface Props {
 }
 
 function parseConversion(conversion: string) {
-  // "miles-to-kilometers" → { from: "mile", to: "kilometer" }
-  // We split on "-to-" (last occurrence to handle multi-word unit names)
   const idx = conversion.lastIndexOf("-to-");
   if (idx === -1) return null;
   return {
@@ -31,17 +27,16 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const cat = CATEGORIES[params.category];
+  const cat    = CATEGORIES[params.category];
   const parsed = parseConversion(params.conversion);
   if (!cat || !parsed) return {};
-
   const { from, to } = parsed;
   if (!cat.units[from] || !cat.units[to]) return {};
 
   const fromLabel = cat.units[from].label;
   const toLabel   = cat.units[to].label;
   const fromSym   = getSymbol(from, params.category);
-  const toSym     = getSymbol(to, params.category);
+  const toSym     = getSymbol(to,   params.category);
   const example   = formatNumber(convert(1, from, to, params.category));
 
   return {
@@ -55,7 +50,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-// Reference table: 1–20 common values
 const REFERENCE_VALUES = [1, 2, 5, 10, 20, 25, 50, 100, 250, 500, 1000];
 
 export default function ConversionPage({ params }: Props) {
@@ -66,13 +60,13 @@ export default function ConversionPage({ params }: Props) {
   const { from, to } = parsed;
   if (!cat.units[from] || !cat.units[to]) notFound();
 
-  const fromLabel = cat.units[from].label;
-  const toLabel   = cat.units[to].label;
-  const fromSym   = getSymbol(from, params.category);
-  const toSym     = getSymbol(to, params.category);
-  const oneResult = convert(1, from, to, params.category);
+  const fromLabel  = cat.units[from].label;
+  const toLabel    = cat.units[to].label;
+  const fromSym    = getSymbol(from, params.category);
+  const toSym      = getSymbol(to,   params.category);
+  const oneResult  = convert(1, from, to, params.category);
+  const seoContent = getConversionContent(params.category, from, to);
 
-  // Related conversions (same category, different pair)
   const related = Object.keys(cat.units)
     .filter((u) => u !== from && u !== to)
     .slice(0, 4)
@@ -109,15 +103,87 @@ export default function ConversionPage({ params }: Props) {
           </p>
         </section>
 
-        {/* Converter widget pre-filled */}
+        {/* Converter widget */}
         <ConverterWidget
           defaultCategory={params.category}
           defaultFrom={from}
           defaultTo={to}
         />
 
+        {/* ── SEO Content Block ── */}
+        {seoContent && (
+          <section className="mt-14 space-y-6">
+
+            {/* From / To descriptions */}
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="bg-white border border-[#e4e0da] rounded-2xl p-6 shadow-sm">
+                <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-3">
+                  What is a {fromLabel.split(" ")[0]}?
+                </p>
+                <p className="text-sm text-[#4a4540] leading-relaxed">{seoContent.fromDesc}</p>
+              </div>
+              <div className="bg-white border border-[#e4e0da] rounded-2xl p-6 shadow-sm">
+                <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-3">
+                  What is a {toLabel.split(" ")[0]}?
+                </p>
+                <p className="text-sm text-[#4a4540] leading-relaxed">{seoContent.toDesc}</p>
+              </div>
+            </div>
+
+            {/* Quick tip */}
+            <div className="bg-[#edf4f0] border border-[#3d6b4f]/20 rounded-2xl p-6 flex gap-4">
+              <span className="text-2xl flex-shrink-0">💡</span>
+              <div>
+                <p className="font-mono text-[11px] text-[#3d6b4f] tracking-[0.1em] uppercase mb-2">Quick Tip</p>
+                <p className="text-sm text-[#2a4a35] leading-relaxed">{seoContent.quickTip}</p>
+              </div>
+            </div>
+
+            {/* Common uses */}
+            <div className="bg-white border border-[#e4e0da] rounded-2xl p-6 shadow-sm">
+              <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-4">
+                Common Uses
+              </p>
+              <ul className="space-y-2">
+                {seoContent.uses.map((use, i) => (
+                  <li key={i} className="flex items-start gap-3 text-sm text-[#4a4540]">
+                    <span className="text-[#3d6b4f] mt-0.5 flex-shrink-0">→</span>
+                    {use}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Fun fact */}
+            {seoContent.funFact && (
+              <div className="bg-[#faf8f4] border border-[#e4e0da] rounded-2xl p-6 flex gap-4">
+                <span className="text-2xl flex-shrink-0">🌍</span>
+                <div>
+                  <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-2">Did You Know?</p>
+                  <p className="text-sm text-[#4a4540] leading-relaxed">{seoContent.funFact}</p>
+                </div>
+              </div>
+            )}
+          </section>
+        )}
+
+        {/* How to convert */}
+        <section className="mt-6 mb-8 bg-white border border-[#e4e0da] rounded-2xl p-8 shadow-sm">
+          <h2 className="font-serif text-2xl mb-4">How to convert {fromLabel} to {toLabel}</h2>
+          <p className="text-[#9a948a] text-sm leading-relaxed mb-4">
+            To convert from {fromLabel} ({fromSym}) to {toLabel} ({toSym}), multiply your value by{" "}
+            <strong className="text-[#1a1814]">{formatNumber(oneResult)}</strong>.
+          </p>
+          <div className="bg-[#f7f5f2] rounded-xl px-6 py-4 font-mono text-sm text-[#3d6b4f]">
+            {toSym} = {fromSym} × {formatNumber(oneResult)}
+          </div>
+          <p className="text-[#9a948a] text-sm leading-relaxed mt-4">
+            For example, 10 {fromSym} = {formatNumber(convert(10, from, to, params.category))} {toSym}.
+          </p>
+        </section>
+
         {/* Reference table */}
-        <section className="mt-14 mb-12">
+        <section className="mb-12">
           <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-5">
             // {fromLabel} to {toLabel} conversion table
           </p>
@@ -141,21 +207,6 @@ export default function ConversionPage({ params }: Props) {
               </tbody>
             </table>
           </div>
-        </section>
-
-        {/* How to convert — SEO content */}
-        <section className="mb-12 bg-white border border-[#e4e0da] rounded-2xl p-8 shadow-sm">
-          <h2 className="font-serif text-2xl mb-4">How to convert {fromLabel} to {toLabel}</h2>
-          <p className="text-[#9a948a] text-sm leading-relaxed mb-4">
-            To convert from {fromLabel} ({fromSym}) to {toLabel} ({toSym}), multiply your value by{" "}
-            <strong className="text-[#1a1814]">{formatNumber(oneResult)}</strong>.
-          </p>
-          <div className="bg-[#f7f5f2] rounded-xl px-6 py-4 font-mono text-sm text-[#3d6b4f]">
-            {toSym} = {fromSym} × {formatNumber(oneResult)}
-          </div>
-          <p className="text-[#9a948a] text-sm leading-relaxed mt-4">
-            For example, 10 {fromSym} = {formatNumber(convert(10, from, to, params.category))} {toSym}.
-          </p>
         </section>
 
         {/* Related conversions */}
