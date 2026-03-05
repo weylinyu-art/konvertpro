@@ -1,0 +1,43 @@
+/* app/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg:           #f7f5f2;
+  --surface:      #ffffff;
+  --surface2:     #f2f0ed;
+  --border:       #e4e0da;
+  --accent:       #3d6b4f;
+  --accent-light: #edf4f0;
+  --text:         #1a1814;
+  --muted:        #9a948a;
+}
+
+/* Dot grid background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(circle, #c5bdb4 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.font-serif  { font-family: var(--font-serif),  Georgia, serif; }
+.font-mono   { font-family: var(--font-mono),   monospace; }
+.font-sans   { font-family: var(--font-sans),   sans-serif; }
+
+/* Slide-up animation */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-slide-up { animation: slideUp 0.4s ease both; }
+
+/* Number input — hide spinners */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+input[type="number"] { -moz-appearance: textfield; }
