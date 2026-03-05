@@ -32,7 +32,7 @@ export default function HomePage() {
           </p>
         </section>
 
-        {/* ── Interactive converter (client component) ── */}
+        {/* ── Interactive converter ── */}
         <ConverterWidget />
 
         {/* ── All categories grid ── */}
@@ -40,23 +40,30 @@ export default function HomePage() {
           <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-5">
             // All converters
           </p>
+
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {/* AI Tools 入口 */}
-<Link
-  href="/ai"
-  className="group bg-[#edf4f0] border border-[#3d6b4f]/30 rounded-2xl p-5 hover:border-[#3d6b4f] hover:bg-[#e0ede6] transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5 col-span-2 md:col-span-3 lg:col-span-4"
->
-  <div className="flex items-center justify-between">
-    <div className="flex items-center gap-3">
-      <span className="text-2xl">🤖</span>
-      <div>
-        <span className="font-semibold text-sm text-[#3d6b4f]">AI & LLM Tools</span>
-        <p className="text-xs text-[#6a8a72] mt-0.5">Token calculator · Model size · API cost · Context window</p>
-      </div>
-    </div>
-    <span className="font-mono text-xs text-[#3d6b4f] group-hover:translate-x-1 transition-transform">→</span>
-  </div>
-</Link>{Object.values(CATEGORIES).map((cat) => (
+
+            {/* AI Tools — featured card spanning full width */}
+            <Link
+              href="/ai"
+              className="group col-span-2 md:col-span-3 lg:col-span-4 bg-[#edf4f0] border border-[#3d6b4f]/30 rounded-2xl p-5 hover:border-[#3d6b4f] hover:bg-[#e0ede6] transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <span className="text-3xl">🤖</span>
+                  <div>
+                    <span className="font-semibold text-sm text-[#3d6b4f]">AI & LLM Tools</span>
+                    <p className="text-xs text-[#6a8a72] mt-0.5">
+                      Token calculator · Model size · API cost · Context window · Compute units
+                    </p>
+                  </div>
+                </div>
+                <span className="font-mono text-sm text-[#3d6b4f] group-hover:translate-x-1 transition-transform">→</span>
+              </div>
+            </Link>
+
+            {/* Regular category cards */}
+            {Object.values(CATEGORIES).map((cat) => (
               <Link
                 key={cat.slug}
                 href={`/${cat.slug}`}
@@ -71,6 +78,7 @@ export default function HomePage() {
                 </p>
               </Link>
             ))}
+
           </div>
         </section>
 
@@ -78,6 +86,9 @@ export default function HomePage() {
         <footer className="border-t border-[#e4e0da] py-8 flex items-center justify-between flex-wrap gap-4">
           <span className="font-mono text-xs text-[#9a948a]">© 2025 Konvert</span>
           <div className="flex gap-5 flex-wrap">
+            <Link href="/ai" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f] transition-colors">
+              AI Tools
+            </Link>
             {Object.values(CATEGORIES).map((cat) => (
               <Link key={cat.slug} href={`/${cat.slug}`}
                 className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f] transition-colors">
