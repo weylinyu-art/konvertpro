@@ -1,1 +1,68 @@
+// app/ai/page.tsx
+import Link from "next/link";
+import type { Metadata } from "next";
+import { AI_TOOLS } from "@/lib/ai-units";
 
+export const metadata: Metadata = {
+  title: "AI & LLM Tools — Token Calculator, Model Size, API Cost",
+  description: "Free AI tools: token calculator, LLM model size estimator, API cost calculator, context window checker and compute unit converter.",
+};
+
+export default function AiPage() {
+  return (
+    <main className="relative z-10">
+      <div className="max-w-4xl mx-auto px-6">
+
+        <header className="flex items-center justify-between pt-8">
+          <Link href="/" className="flex items-baseline gap-2">
+            <span className="font-serif text-[28px] tracking-tight">Konvert</span>
+            <span className="w-2 h-2 rounded-full bg-[#3d6b4f] mb-1" />
+          </Link>
+          <span className="font-mono text-xs text-[#9a948a] tracking-widest">// ai tools</span>
+        </header>
+
+        <section className="py-14 text-center">
+          <div className="inline-flex items-center gap-2 bg-[#edf4f0] border border-[#3d6b4f]/20 rounded-full px-4 py-1.5 text-xs font-mono text-[#3d6b4f] tracking-wider mb-7">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#3d6b4f] animate-pulse" />
+            Built for LLM developers & AI enthusiasts
+          </div>
+          <h1 className="font-serif text-[clamp(36px,6vw,64px)] leading-[1.05] tracking-[-2px] mb-4">
+            AI & LLM <em className="italic text-[#3d6b4f]">Calculators</em>
+          </h1>
+          <p className="text-[#9a948a] text-base font-light max-w-md mx-auto leading-relaxed">
+            Token counts, model memory, API costs, context windows — everything you need when working with large language models.
+          </p>
+        </section>
+
+        {/* Tools grid */}
+        <div className="grid md:grid-cols-2 gap-4 mb-20">
+          {AI_TOOLS.map((tool) => (
+            <Link
+              key={tool.slug}
+              href={`/ai/${tool.slug}`}
+              className="group bg-white border border-[#e4e0da] rounded-2xl p-7 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5"
+            >
+              <div className="flex items-start gap-4">
+                <span className="text-3xl">{tool.icon}</span>
+                <div>
+                  <h2 className="font-semibold text-[#1a1814] group-hover:text-[#3d6b4f] transition-colors mb-1">
+                    {tool.title}
+                  </h2>
+                  <p className="text-sm text-[#9a948a] leading-relaxed">{tool.description}</p>
+                </div>
+              </div>
+              <div className="mt-4 flex items-center gap-1 font-mono text-xs text-[#3d6b4f] opacity-0 group-hover:opacity-100 transition-opacity">
+                Open tool →
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        <footer className="border-t border-[#e4e0da] py-8 flex items-center justify-between flex-wrap gap-4 mb-4">
+          <Link href="/" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f]">← All converters</Link>
+          <span className="font-mono text-xs text-[#9a948a]">© 2025 Konvert</span>
+        </footer>
+      </div>
+    </main>
+  );
+}
