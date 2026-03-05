@@ -2,7 +2,7 @@
 // components/ConverterWidget.tsx
 
 import { useState } from "react";
-import { CATEGORIES, convert, formatNumber, getSymbol } from "@/lib/units";
+import { CATEGORIES, convert, formatNumber, getSymbol } from "@/lib/units";import Link from "next/link";
 
 // ── Default "from/to" for each category based on most common searches ──
 const CATEGORY_DEFAULTS: Record<string, { from: string; to: string; val: string }> = {
@@ -64,7 +64,12 @@ export default function ConverterWidget({
       {/* Category tabs — only on homepage */}
       {!defaultFrom && (
         <div className="flex gap-2 flex-wrap justify-center mb-6">
-          {Object.values(CATEGORIES).map((c) => (
+          <Link
+  href="/ai"
+  className="flex items-center gap-1.5 px-4 py-2 rounded-full text-[13px] font-medium border bg-[#edf4f0] border-[#3d6b4f]/40 text-[#3d6b4f] hover:bg-[#3d6b4f] hover:text-white transition-all"
+>
+  🤖 AI Tools
+</Link>{Object.values(CATEGORIES).map((c) => (
             <button
               key={c.slug}
               onClick={() => switchCat(c.slug)}
