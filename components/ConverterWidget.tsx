@@ -2,7 +2,8 @@
 // components/ConverterWidget.tsx
 
 import { useState } from "react";
-import { CATEGORIES, convert, formatNumber, getSymbol } from "@/lib/units";import Link from "next/link";
+import { CATEGORIES, convert, formatNumber, getSymbol } from "@/lib/units";
+import Link from "next/link";
 
 // ── Default "from/to" for each category based on most common searches ──
 const CATEGORY_DEFAULTS: Record<string, { from: string; to: string; val: string }> = {
