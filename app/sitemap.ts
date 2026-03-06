@@ -1,31 +1,54 @@
 // app/sitemap.ts
 import { MetadataRoute } from "next";
-import { CATEGORIES, getAllConversionPaths, unitToSlug } from "@/lib/units";
+import { CATEGORIES, getAllConversionPaths } from "@/lib/units";
+import { AI_TOOLS } from "@/lib/ai-units";
 
-const BASE_URL = "https://konvertpro.pages.dev"; // 换成你的域名
+const BASE_URL = "https://koverts.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const entries: MetadataRoute.Sitemap = [
-    { url: BASE_URL, priority: 1.0, changeFrequency: "monthly" },
+  const now = new Date();
+
+  // Homepage
+  const home: MetadataRoute.Sitemap = [
+    {
+      url: BASE_URL,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 1.0,
+    },
+  ];
+
+  // AI tools pages
+  const aiPages: MetadataRoute.Sitemap = [
+    {
+      url: `${BASE_URL}/ai`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    ...AI_TOOLS.map((tool) => ({
+      url: `${BASE_URL}/ai/${tool.slug}`,
+      lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    })),
   ];
 
   // Category pages
-  for (const slug of Object.keys(CATEGORIES)) {
-    entries.push({
-      url: `${BASE_URL}/${slug}`,
-      priority: 0.8,
-      changeFrequency: "monthly",
-    });
-  }
+  const categoryPages: MetadataRoute.Sitemap = Object.keys(CATEGORIES).map((slug) => ({
+    url: `${BASE_URL}/${slug}`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
 
-  // All conversion pages
-  for (const { category, conversion } of getAllConversionPaths()) {
-    entries.push({
-      url: `${BASE_URL}/${category}/${conversion}`,
-      priority: 0.6,
-      changeFrequency: "yearly",
-    });
-  }
+  // Individual conversion pages
+  const conversionPages: MetadataRoute.Sitemap = getAllConversionPaths().map(({ category, conversion }) => ({
+    url: `${BASE_URL}/${category}/${conversion}`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
 
-  return entries;
+  return [...home, ...aiPages, ...categoryPages, ...conversionPages];
 }
