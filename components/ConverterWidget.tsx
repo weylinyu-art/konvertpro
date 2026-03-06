@@ -2,18 +2,22 @@
 // components/ConverterWidget.tsx
 
 import { useState } from "react";
-import { CATEGORIES, convert, formatNumber, getSymbol } from "@/lib/units";
 import Link from "next/link";
+import { CATEGORIES, convert, formatNumber, getSymbol } from "@/lib/units";
 
-// ── Default "from/to" for each category based on most common searches ──
 const CATEGORY_DEFAULTS: Record<string, { from: string; to: string; val: string }> = {
-  length:      { from: "mile",       to: "kilometer",  val: "1"   },
-  weight:      { from: "pound",      to: "kilogram",   val: "150" },  // typical body weight
-  temperature: { from: "fahrenheit", to: "celsius",    val: "72"  },  // room temperature
-  volume:      { from: "gallon_us",  to: "liter",      val: "1"   },
-  speed:       { from: "mph",        to: "kph",        val: "60"  },  // typical speed limit
-  area:        { from: "acre",       to: "sq_meter",   val: "1"   },
-  data:        { from: "gigabyte",   to: "megabyte",   val: "1"   },
+  length:      { from: "mile",        to: "kilometer",  val: "1"   },
+  weight:      { from: "pound",       to: "kilogram",   val: "150" },
+  temperature: { from: "fahrenheit",  to: "celsius",    val: "72"  },
+  volume:      { from: "gallon_us",   to: "liter",      val: "1"   },
+  speed:       { from: "mph",         to: "kph",        val: "60"  },
+  area:        { from: "acre",        to: "sq_meter",   val: "1"   },
+  data:        { from: "gigabyte",    to: "megabyte",   val: "1"   },
+  time:        { from: "hour",        to: "minute",     val: "1"   },
+  energy:      { from: "kilocalorie", to: "kilojoule",  val: "100" },
+  pressure:    { from: "psi",         to: "bar",        val: "1"   },
+  angle:       { from: "degree",      to: "radian",     val: "180" },
+  power:       { from: "horsepower",  to: "kilowatt",   val: "1"   },
 };
 
 interface Props {
@@ -30,7 +34,11 @@ export default function ConverterWidget({
   const [catSlug, setCatSlug] = useState(defaultCategory);
   const cat = CATEGORIES[catSlug];
 
-  const defaults = CATEGORY_DEFAULTS[catSlug] ?? { from: Object.keys(cat.units)[0], to: Object.keys(cat.units)[1], val: "1" };
+  const defaults = CATEGORY_DEFAULTS[catSlug] ?? {
+    from: Object.keys(cat.units)[0],
+    to:   Object.keys(cat.units)[1],
+    val:  "1",
+  };
 
   const [from,     setFrom]     = useState(defaultFrom ?? defaults.from);
   const [to,       setTo]       = useState(defaultTo   ?? defaults.to);
@@ -47,14 +55,15 @@ export default function ConverterWidget({
   const fromSym = getSymbol(from, catSlug);
   const toSym   = getSymbol(to,   catSlug);
 
-  const swap = () => {
-    setFrom(to);
-    setTo(from);
-  };
+  const swap = () => { setFrom(to); setTo(from); };
 
   const switchCat = (slug: string) => {
     setCatSlug(slug);
-    const d = CATEGORY_DEFAULTS[slug] ?? { from: Object.keys(CATEGORIES[slug].units)[0], to: Object.keys(CATEGORIES[slug].units)[1], val: "1" };
+    const d = CATEGORY_DEFAULTS[slug] ?? {
+      from: Object.keys(CATEGORIES[slug].units)[0],
+      to:   Object.keys(CATEGORIES[slug].units)[1],
+      val:  "1",
+    };
     setFrom(d.from);
     setTo(d.to);
     setInputVal(d.val);
@@ -62,15 +71,9 @@ export default function ConverterWidget({
 
   return (
     <div className="animate-slide-up">
-      {/* Category tabs — only on homepage */}
       {!defaultFrom && (
         <div className="flex gap-2 flex-wrap justify-center mb-6">
-          <Link
-  href="/ai"
-  className="flex items-center gap-1.5 px-4 py-2 rounded-full text-[13px] font-medium border bg-[#edf4f0] border-[#3d6b4f]/40 text-[#3d6b4f] hover:bg-[#3d6b4f] hover:text-white transition-all"
->
-  🤖 AI Tools
-</Link>{Object.values(CATEGORIES).map((c) => (
+          {Object.values(CATEGORIES).map((c) => (
             <button
               key={c.slug}
               onClick={() => switchCat(c.slug)}
@@ -84,23 +87,23 @@ export default function ConverterWidget({
               {c.label}
             </button>
           ))}
+          <Link
+            href="/ai"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-full text-[13px] font-medium border bg-[#edf4f0] border-[#3d6b4f]/40 text-[#3d6b4f] hover:bg-[#3d6b4f] hover:text-white transition-all"
+          >
+            🤖 AI Tools
+          </Link>
         </div>
       )}
 
-      {/* Main card */}
       <div className="bg-white border border-[#e4e0da] rounded-2xl overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.07)]">
-
-        {/* Card header */}
-        <div className="flex items-center justify-between px-7 py-4 border-b border-[#e4e0da]">
+        <div className="flex items-center px-7 py-4 border-b border-[#e4e0da]">
           <span className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase">
             {cat.title}
           </span>
         </div>
 
-        {/* Inputs */}
         <div className="grid grid-cols-[1fr_auto_1fr] gap-4 p-7 items-start">
-
-          {/* From */}
           <div>
             <label className="block font-mono text-[11px] text-[#9a948a] tracking-widest uppercase mb-2.5">From</label>
             <input
@@ -120,16 +123,13 @@ export default function ConverterWidget({
             </select>
           </div>
 
-          {/* Swap */}
           <button
             onClick={swap}
             className="mt-[52px] w-11 h-11 rounded-full bg-[#f2f0ed] border border-[#e4e0da] text-[#9a948a] text-lg flex items-center justify-center hover:bg-[#3d6b4f] hover:border-[#3d6b4f] hover:text-white transition-all hover:rotate-180 duration-300 flex-shrink-0"
-            title="Swap units"
           >
             ⇄
           </button>
 
-          {/* To */}
           <div>
             <label className="block font-mono text-[11px] text-[#9a948a] tracking-widest uppercase mb-2.5">To</label>
             <input
@@ -150,7 +150,6 @@ export default function ConverterWidget({
           </div>
         </div>
 
-        {/* Result bar */}
         <div className="bg-[#f0ede8] border-t border-[#e4e0da] px-7 py-6">
           <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-3">Result</p>
           <div className="flex items-baseline gap-3 flex-wrap">
@@ -167,7 +166,6 @@ export default function ConverterWidget({
         </div>
       </div>
 
-      {/* Quick references */}
       {cat.popular.length > 0 && (
         <div className="mt-8">
           <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-4">
