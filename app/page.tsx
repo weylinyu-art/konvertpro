@@ -1,13 +1,14 @@
 "use client";
-// app/page.tsx — with i18n support
+// app/page.tsx
 import Link from "next/link";
 import { CATEGORIES } from "@/lib/units";
 import { getTranslations, getCategoryLabel, LOCALE_META } from "@/lib/i18n";
+import { useLocale } from "@/components/LocaleProvider";
+import LocaleSwitcher from "@/components/LocaleSwitcher";
 import ConverterWidget from "@/components/ConverterWidget";
-import LocaleSwitcher, { useLocale } from "@/components/LocaleSwitcher";
 
 export default function HomePage() {
-  const { locale, changeLocale, mounted } = useLocale();
+  const { locale, setLocale, mounted } = useLocale();
   const t   = getTranslations(locale);
   const dir = LOCALE_META[locale].dir;
 
@@ -22,12 +23,8 @@ export default function HomePage() {
             <span className="w-2 h-2 rounded-full bg-[#3d6b4f] mb-1" />
           </div>
           <div className="flex items-center gap-3">
-            <span className="font-mono text-xs text-[#9a948a] tracking-widest hidden md:block">
-              // instant conversions
-            </span>
-            {mounted && (
-              <LocaleSwitcher currentLocale={locale} onLocaleChange={changeLocale} />
-            )}
+            <span className="font-mono text-xs text-[#9a948a] tracking-widest hidden md:block">// instant conversions</span>
+            {mounted && <LocaleSwitcher currentLocale={locale} onLocaleChange={setLocale} />}
           </div>
         </header>
 
@@ -41,9 +38,7 @@ export default function HomePage() {
             {t.heroTitle} <em className="italic text-[#3d6b4f]">{t.heroTitleEm}</em>
             <br />{t.heroTitleSuffix}
           </h1>
-          <p className="text-[#9a948a] font-light text-base max-w-sm mx-auto leading-relaxed">
-            {t.heroSubtitle}
-          </p>
+          <p className="text-[#9a948a] font-light text-base max-w-sm mx-auto leading-relaxed">{t.heroSubtitle}</p>
         </section>
 
         {/* Converter */}
@@ -55,35 +50,27 @@ export default function HomePage() {
             // {t.allConverters}
           </p>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-
             <Link href="/ai"
-              className="group col-span-2 md:col-span-3 lg:col-span-4 bg-[#edf4f0] border border-[#3d6b4f]/30 rounded-2xl p-5 hover:border-[#3d6b4f] hover:bg-[#e0ede6] transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5"
-            >
+              className="group col-span-2 md:col-span-3 lg:col-span-4 bg-[#edf4f0] border border-[#3d6b4f]/30 rounded-2xl p-5 hover:border-[#3d6b4f] hover:bg-[#e0ede6] transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <span className="text-3xl">🤖</span>
                   <div>
                     <span className="font-semibold text-sm text-[#3d6b4f]">{t.aiTools}</span>
-                    <p className="text-xs text-[#6a8a72] mt-0.5">
-                      Token calculator · Model size · API cost · Context window
-                    </p>
+                    <p className="text-xs text-[#6a8a72] mt-0.5">Token calculator · Model size · API cost · Context window</p>
                   </div>
                 </div>
                 <span className="font-mono text-sm text-[#3d6b4f] group-hover:translate-x-1 transition-transform">→</span>
               </div>
             </Link>
-
             {Object.values(CATEGORIES).map((cat) => (
               <Link key={cat.slug} href={`/${cat.slug}`}
-                className="group bg-white border border-[#e4e0da] rounded-2xl p-5 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5"
-              >
+                className="group bg-white border border-[#e4e0da] rounded-2xl p-5 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5">
                 <span className="text-2xl mb-3 block">{cat.icon}</span>
                 <span className="font-semibold text-sm text-[#1a1814] group-hover:text-[#3d6b4f] transition-colors">
                   {getCategoryLabel(cat.slug, t)}
                 </span>
-                <p className="text-xs text-[#9a948a] mt-1">
-                  {Object.keys(cat.units).length} {t.units}
-                </p>
+                <p className="text-xs text-[#9a948a] mt-1">{Object.keys(cat.units).length} {t.units}</p>
               </Link>
             ))}
           </div>
@@ -94,8 +81,7 @@ export default function HomePage() {
           <div className="flex gap-5 flex-wrap">
             <Link href="/ai" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f]">{t.aiTools}</Link>
             {Object.values(CATEGORIES).map((cat) => (
-              <Link key={cat.slug} href={`/${cat.slug}`}
-                className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f]">
+              <Link key={cat.slug} href={`/${cat.slug}`} className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f]">
                 {getCategoryLabel(cat.slug, t)}
               </Link>
             ))}
