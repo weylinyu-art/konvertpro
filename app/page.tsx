@@ -72,7 +72,19 @@ export default function HomePage() {
                 </span>
                 <p className="text-xs text-[#9a948a] mt-1">{Object.keys(cat.units).length} {t.units}</p>
               </Link>
-            ))}
+            ))}<Link href="/currency"
+  className="group col-span-2 bg-white border border-[#e4e0da] rounded-2xl p-5 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5">
+  <div className="flex items-center justify-between">
+    <div className="flex items-center gap-4">
+      <span className="text-3xl">💱</span>
+      <div>
+        <span className="font-semibold text-sm text-[#1a1814] group-hover:text-[#3d6b4f]">Currency</span>
+        <p className="text-xs text-[#9a948a] mt-0.5">Real-time · 32 currencies · ECB data</p>
+      </div>
+    </div>
+    <span className="font-mono text-sm text-[#9a948a] group-hover:text-[#3d6b4f] group-hover:translate-x-1 transition-transform">→</span>
+  </div>
+</Link>
           </div>
         </section>
 
