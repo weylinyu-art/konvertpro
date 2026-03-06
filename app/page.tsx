@@ -47,7 +47,7 @@ export default function HomePage() {
         </section>
 
         {/* Converter */}
-        <ConverterWidget locale={locale} />
+        <ConverterWidget />
 
         {/* Categories grid */}
         <section className="mt-16 mb-20">
