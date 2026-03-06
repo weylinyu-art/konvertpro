@@ -17,7 +17,7 @@ interface Props {
 }
 
 export default function SiteHeader({ breadcrumbs }: Props) {
-  const { locale, changeLocale, mounted } = useLocale();
+  const { locale, setLocale, mounted } = useLocale();
   const t = getTranslations(locale);
 
   return (
@@ -58,7 +58,7 @@ export default function SiteHeader({ breadcrumbs }: Props) {
       {/* Right: locale switcher */}
       {mounted && (
         <div className="flex-shrink-0 ml-2">
-          <LocaleSwitcher currentLocale={locale} onLocaleChange={changeLocale} />
+          <LocaleSwitcher currentLocale={locale} onLocaleChange={setLocale} />
         </div>
       )}
     </header>
