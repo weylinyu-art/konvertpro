@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Background -->
+  <rect width="32" height="32" rx="8" fill="#3d6b4f"/>
+  <!-- Letter K -->
+  <text x="6" y="24" font-family="Georgia, serif" font-size="22" font-weight="400" fill="white">K</text>
+  <!-- Small dot accent -->
+  <circle cx="26" cy="8" r="3" fill="#edf4f0"/>
+</svg>
