@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useLocale } from "@/components/LocaleProvider";
 import LocaleSwitcher from "@/components/LocaleSwitcher";
 import { getTranslations } from "@/lib/i18n";
+import { currencyFaqSchema } from "./metadata";
 
 const CURRENCY_NAMES: Record<string, string> = {
   USD: "US Dollar",        EUR: "Euro",             GBP: "British Pound",
@@ -88,6 +89,11 @@ export default function CurrencyPage() {
 
   return (
     <main className="relative z-10">
+      {/* FAQ JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(currencyFaqSchema) }}
+      />
       <div className="max-w-4xl mx-auto px-6">
 
         {/* Header */}
@@ -282,6 +288,26 @@ export default function CurrencyPage() {
                 ))}
               </tbody>
             </table>
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="mb-10">
+          <p className="font-mono text-[10px] md:text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-4">
+            // Frequently Asked Questions
+          </p>
+          <div className="space-y-2">
+            {currencyFaqSchema.mainEntity.map((faq, i) => (
+              <details key={i} className="group bg-white border border-[#e4e0da] rounded-xl overflow-hidden shadow-sm">
+                <summary className="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-[#faf8f5] transition-colors">
+                  <span className="font-medium text-sm text-[#1a1814] pr-4">{faq.name}</span>
+                  <span className="text-[#9a948a] flex-shrink-0 group-open:rotate-180 transition-transform duration-200">▼</span>
+                </summary>
+                <div className="px-5 pb-4 text-sm text-[#6a6460] leading-relaxed border-t border-[#f0ede8]">
+                  <p className="pt-3">{faq.acceptedAnswer.text}</p>
+                </div>
+              </details>
+            ))}
           </div>
         </section>
 
