@@ -76,7 +76,11 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
               <span className="hidden sm:inline">{getCategoryLabel(c.slug, t)}</span>
             </button>
           ))}
-          <Link href="/ai"
+          <Link href="/currency"
+  className="flex items-center gap-1 md:gap-1.5 px-2.5 py-1.5 md:px-4 md:py-2 rounded-full text-xs md:text-[13px] font-medium border bg-white border-[#e4e0da] text-[#9a948a] hover:border-[#3d6b4f] hover:text-[#3d6b4f] hover:bg-[#edf4f0] transition-all"
+>
+  💱 <span className="hidden sm:inline">Currency</span>
+</Link><Link href="/ai"
             className="flex items-center gap-1 md:gap-1.5 px-2.5 py-1.5 md:px-4 md:py-2 rounded-full text-xs md:text-[13px] font-medium border bg-[#edf4f0] border-[#3d6b4f]/40 text-[#3d6b4f] hover:bg-[#3d6b4f] hover:text-white transition-all"
           >
             🤖 <span className="hidden sm:inline">{t.aiTools}</span>
