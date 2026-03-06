@@ -1,91 +1,76 @@
 /* app/globals.css */
-/* 性能优化：关键 CSS 内联，减少渲染阻塞 */
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ── Design tokens ── */
 :root {
   --bg:           #f7f5f2;
   --surface:      #ffffff;
-  --surface2:     #f2f0ed;
   --border:       #e4e0da;
   --accent:       #3d6b4f;
   --accent-light: #edf4f0;
   --text:         #1a1814;
   --muted:        #9a948a;
+  --font-sans: var(--font-sans, "Inter"), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-mono, "JetBrains Mono"), ui-monospace, monospace;
 }
 
-/* ── Critical: body base styles ── */
 html {
-  /* 开启字体平滑 */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* 防止 iOS 字体缩放 */
   -webkit-text-size-adjust: 100%;
-  /* 减少 CLS：预先声明滚动条宽度 */
   scrollbar-gutter: stable;
+  letter-spacing: -0.01em;
 }
 
-/* ── Dot grid background — 用 CSS 实现，无需图片请求 ── */
+body { font-family: var(--font-sans); }
+
+.font-sans { font-family: var(--font-sans); }
+.font-mono { font-family: var(--font-mono); }
+
+/* Inter headlines */
+h1, h2, h3 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+/* Dot grid */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   background-image: radial-gradient(circle, #c5bdb4 1px, transparent 1px);
   background-size: 28px 28px;
-  opacity: 0.35;
+  opacity: 0.3;
   pointer-events: none;
   z-index: 0;
-  /* 告诉浏览器这一层不会变化，可以独立合成 */
-  will-change: auto;
   contain: strict;
 }
 
-/* ── Font variables ── */
-.font-serif  { font-family: var(--font-serif),  Georgia, serif; }
-.font-mono   { font-family: var(--font-mono),   "Courier New", monospace; }
-.font-sans   { font-family: var(--font-sans),   system-ui, sans-serif; }
-
-/* ── Animations ── */
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(14px); }
+  from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 .animate-slide-up {
-  animation: slideUp 0.4s ease both;
-  /* 开启 GPU 加速 */
+  animation: slideUp 0.35s ease both;
   will-change: transform, opacity;
 }
 
-/* 动画结束后释放 GPU 资源 */
-.animate-slide-up:not(:hover) {
-  will-change: auto;
-}
-
-/* ── Number input — 隐藏步进箭头 ── */
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
 input[type="number"] { -moz-appearance: textfield; }
 
-/* ── Select — 统一样式 ── */
 select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239a948a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 16px center;
 }
 
-/* ── FAQ details/summary ── */
 details > summary { user-select: none; }
 details > summary::-webkit-details-marker { display: none; }
 
-/* ── 减少布局抖动：预设卡片最小高度 ── */
-.converter-card-skeleton {
-  min-height: 320px;
-}
-
-/* ── 链接点击区域优化（移动端） ── */
 @media (max-width: 768px) {
   a, button { min-height: 44px; }
 }
