@@ -86,7 +86,7 @@ export default function HomePage() {
               </Link>
             ))}
           </div>
-        </footer>
+        </footer><Link href="/about" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f]">About</Link>
 
       </div>
     </main>
