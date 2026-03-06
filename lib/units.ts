@@ -4,8 +4,8 @@
 export type UnitKey = string;
 
 export interface UnitDef {
-  label: string;       // Display name e.g. "Kilometer (km)"
-  factor?: number;     // Multiply by this to get base unit (temperature uses custom logic)
+  label: string;
+  factor?: number;
 }
 
 export interface Category {
@@ -13,54 +13,51 @@ export interface Category {
   label: string;
   icon: string;
   title: string;
-  baseUnit: string;    // The reference unit (factor = 1)
+  baseUnit: string;
   units: Record<UnitKey, UnitDef>;
   popular: Array<{ from: UnitKey; to: UnitKey; val: number }>;
-  description: string; // Used for SEO meta description
+  description: string;
 }
 
 export const CATEGORIES: Record<string, Category> = {
+
+  // ── ORIGINAL 7 ──────────────────────────────────────────────────────────────
+
   length: {
-    slug: "length",
-    label: "Length",
-    icon: "📏",
-    title: "Length Converter",
+    slug: "length", label: "Length", icon: "📏", title: "Length Converter",
     baseUnit: "meter",
     description: "Convert between meters, kilometers, miles, feet, inches and more length units instantly.",
     units: {
-      meter:        { label: "Meter (m)",         factor: 1 },
-      kilometer:    { label: "Kilometer (km)",     factor: 1000 },
-      centimeter:   { label: "Centimeter (cm)",    factor: 0.01 },
-      millimeter:   { label: "Millimeter (mm)",    factor: 0.001 },
-      mile:         { label: "Mile (mi)",          factor: 1609.344 },
-      yard:         { label: "Yard (yd)",          factor: 0.9144 },
-      foot:         { label: "Foot (ft)",          factor: 0.3048 },
-      inch:         { label: "Inch (in)",          factor: 0.0254 },
-      nautical_mile:{ label: "Nautical Mile (nmi)",factor: 1852 },
+      meter:        { label: "Meter (m)",          factor: 1 },
+      kilometer:    { label: "Kilometer (km)",      factor: 1000 },
+      centimeter:   { label: "Centimeter (cm)",     factor: 0.01 },
+      millimeter:   { label: "Millimeter (mm)",     factor: 0.001 },
+      mile:         { label: "Mile (mi)",           factor: 1609.344 },
+      yard:         { label: "Yard (yd)",           factor: 0.9144 },
+      foot:         { label: "Foot (ft)",           factor: 0.3048 },
+      inch:         { label: "Inch (in)",           factor: 0.0254 },
+      nautical_mile:{ label: "Nautical Mile (nmi)", factor: 1852 },
     },
     popular: [
-      { from: "mile",      to: "kilometer", val: 1 },
-      { from: "foot",      to: "meter",     val: 1 },
-      { from: "inch",      to: "centimeter",val: 1 },
-      { from: "kilometer", to: "mile",      val: 1 },
+      { from: "mile",      to: "kilometer",  val: 1 },
+      { from: "foot",      to: "meter",      val: 1 },
+      { from: "inch",      to: "centimeter", val: 1 },
+      { from: "kilometer", to: "mile",       val: 1 },
     ],
   },
 
   weight: {
-    slug: "weight",
-    label: "Weight",
-    icon: "⚖️",
-    title: "Weight & Mass Converter",
+    slug: "weight", label: "Weight", icon: "⚖️", title: "Weight & Mass Converter",
     baseUnit: "kilogram",
     description: "Convert between kilograms, pounds, ounces, grams, stones and more weight units.",
     units: {
-      kilogram:  { label: "Kilogram (kg)",     factor: 1 },
-      gram:      { label: "Gram (g)",          factor: 0.001 },
-      milligram: { label: "Milligram (mg)",    factor: 0.000001 },
-      pound:     { label: "Pound (lb)",        factor: 0.453592 },
-      ounce:     { label: "Ounce (oz)",        factor: 0.0283495 },
-      ton:       { label: "Metric Ton (t)",    factor: 1000 },
-      stone:     { label: "Stone (st)",        factor: 6.35029 },
+      kilogram:  { label: "Kilogram (kg)",   factor: 1 },
+      gram:      { label: "Gram (g)",        factor: 0.001 },
+      milligram: { label: "Milligram (mg)",  factor: 0.000001 },
+      pound:     { label: "Pound (lb)",      factor: 0.453592 },
+      ounce:     { label: "Ounce (oz)",      factor: 0.0283495 },
+      ton:       { label: "Metric Ton (t)",  factor: 1000 },
+      stone:     { label: "Stone (st)",      factor: 6.35029 },
     },
     popular: [
       { from: "pound",    to: "kilogram", val: 1 },
@@ -71,10 +68,7 @@ export const CATEGORIES: Record<string, Category> = {
   },
 
   temperature: {
-    slug: "temperature",
-    label: "Temperature",
-    icon: "🌡️",
-    title: "Temperature Converter",
+    slug: "temperature", label: "Temperature", icon: "🌡️", title: "Temperature Converter",
     baseUnit: "celsius",
     description: "Convert between Celsius, Fahrenheit and Kelvin temperature scales.",
     units: {
@@ -91,21 +85,18 @@ export const CATEGORIES: Record<string, Category> = {
   },
 
   volume: {
-    slug: "volume",
-    label: "Volume",
-    icon: "🧪",
-    title: "Volume Converter",
+    slug: "volume", label: "Volume", icon: "🧪", title: "Volume Converter",
     baseUnit: "liter",
     description: "Convert between liters, gallons, milliliters, cups, fluid ounces and more.",
     units: {
-      liter:      { label: "Liter (L)",          factor: 1 },
-      milliliter: { label: "Milliliter (mL)",     factor: 0.001 },
-      gallon_us:  { label: "Gallon US (gal)",     factor: 3.78541 },
-      quart:      { label: "Quart (qt)",          factor: 0.946353 },
-      pint:       { label: "Pint (pt)",           factor: 0.473176 },
-      cup:        { label: "Cup (c)",             factor: 0.236588 },
-      fluid_oz:   { label: "Fluid Ounce (fl oz)", factor: 0.0295735 },
-      cubic_meter:{ label: "Cubic Meter (m³)",    factor: 1000 },
+      liter:       { label: "Liter (L)",           factor: 1 },
+      milliliter:  { label: "Milliliter (mL)",      factor: 0.001 },
+      gallon_us:   { label: "Gallon US (gal)",      factor: 3.78541 },
+      quart:       { label: "Quart (qt)",           factor: 0.946353 },
+      pint:        { label: "Pint (pt)",            factor: 0.473176 },
+      cup:         { label: "Cup (c)",              factor: 0.236588 },
+      fluid_oz:    { label: "Fluid Ounce (fl oz)",  factor: 0.0295735 },
+      cubic_meter: { label: "Cubic Meter (m³)",     factor: 1000 },
     },
     popular: [
       { from: "gallon_us", to: "liter",      val: 1 },
@@ -116,18 +107,15 @@ export const CATEGORIES: Record<string, Category> = {
   },
 
   speed: {
-    slug: "speed",
-    label: "Speed",
-    icon: "⚡",
-    title: "Speed Converter",
+    slug: "speed", label: "Speed", icon: "⚡", title: "Speed Converter",
     baseUnit: "mps",
     description: "Convert between km/h, mph, m/s, knots and other speed units.",
     units: {
-      mps:  { label: "Meters/sec (m/s)",  factor: 1 },
-      kph:  { label: "Km/hour (km/h)",    factor: 0.277778 },
-      mph:  { label: "Miles/hour (mph)",  factor: 0.44704 },
-      knot: { label: "Knot (kn)",         factor: 0.514444 },
-      fps:  { label: "Feet/sec (ft/s)",   factor: 0.3048 },
+      mps:  { label: "Meters/sec (m/s)", factor: 1 },
+      kph:  { label: "Km/hour (km/h)",   factor: 0.277778 },
+      mph:  { label: "Miles/hour (mph)", factor: 0.44704 },
+      knot: { label: "Knot (kn)",        factor: 0.514444 },
+      fps:  { label: "Feet/sec (ft/s)",  factor: 0.3048 },
     },
     popular: [
       { from: "mph",  to: "kph", val: 60 },
@@ -138,35 +126,29 @@ export const CATEGORIES: Record<string, Category> = {
   },
 
   area: {
-    slug: "area",
-    label: "Area",
-    icon: "⬛",
-    title: "Area Converter",
+    slug: "area", label: "Area", icon: "⬛", title: "Area Converter",
     baseUnit: "sq_meter",
     description: "Convert between square meters, acres, hectares, square feet and more area units.",
     units: {
-      sq_meter:    { label: "Sq. Meter (m²)",   factor: 1 },
-      sq_kilometer:{ label: "Sq. Kilometer (km²)",factor: 1e6 },
-      sq_foot:     { label: "Sq. Foot (ft²)",   factor: 0.092903 },
-      sq_inch:     { label: "Sq. Inch (in²)",   factor: 0.00064516 },
-      sq_yard:     { label: "Sq. Yard (yd²)",   factor: 0.836127 },
-      acre:        { label: "Acre",             factor: 4046.86 },
-      hectare:     { label: "Hectare (ha)",     factor: 10000 },
-      sq_mile:     { label: "Sq. Mile (mi²)",   factor: 2.59e6 },
+      sq_meter:     { label: "Sq. Meter (m²)",    factor: 1 },
+      sq_kilometer: { label: "Sq. Kilometer (km²)",factor: 1e6 },
+      sq_foot:      { label: "Sq. Foot (ft²)",    factor: 0.092903 },
+      sq_inch:      { label: "Sq. Inch (in²)",    factor: 0.00064516 },
+      sq_yard:      { label: "Sq. Yard (yd²)",    factor: 0.836127 },
+      acre:         { label: "Acre",              factor: 4046.86 },
+      hectare:      { label: "Hectare (ha)",      factor: 10000 },
+      sq_mile:      { label: "Sq. Mile (mi²)",    factor: 2.59e6 },
     },
     popular: [
-      { from: "acre",      to: "sq_meter",    val: 1 },
-      { from: "hectare",   to: "acre",        val: 1 },
-      { from: "sq_foot",   to: "sq_meter",    val: 100 },
-      { from: "sq_mile",   to: "sq_kilometer",val: 1 },
+      { from: "acre",    to: "sq_meter",     val: 1 },
+      { from: "hectare", to: "acre",         val: 1 },
+      { from: "sq_foot", to: "sq_meter",     val: 100 },
+      { from: "sq_mile", to: "sq_kilometer", val: 1 },
     ],
   },
 
   data: {
-    slug: "data",
-    label: "Data",
-    icon: "💾",
-    title: "Data Size Converter",
+    slug: "data", label: "Data", icon: "💾", title: "Data Size Converter",
     baseUnit: "byte",
     description: "Convert between bytes, kilobytes, megabytes, gigabytes and terabytes.",
     units: {
@@ -184,45 +166,147 @@ export const CATEGORIES: Record<string, Category> = {
       { from: "gigabyte", to: "byte",     val: 1 },
     ],
   },
+
+  // ── NEW 5 ───────────────────────────────────────────────────────────────────
+
+  time: {
+    slug: "time", label: "Time", icon: "⏱️", title: "Time Converter",
+    baseUnit: "second",
+    description: "Convert between seconds, minutes, hours, days, weeks, months and years instantly.",
+    units: {
+      second:      { label: "Second (s)",      factor: 1 },
+      millisecond: { label: "Millisecond (ms)", factor: 0.001 },
+      microsecond: { label: "Microsecond (μs)", factor: 0.000001 },
+      minute:      { label: "Minute (min)",    factor: 60 },
+      hour:        { label: "Hour (hr)",       factor: 3600 },
+      day:         { label: "Day (d)",         factor: 86400 },
+      week:        { label: "Week (wk)",       factor: 604800 },
+      month:       { label: "Month (mo)",      factor: 2629800 },   // average
+      year:        { label: "Year (yr)",       factor: 31557600 },  // 365.25 days
+    },
+    popular: [
+      { from: "hour",   to: "minute", val: 1 },
+      { from: "day",    to: "hour",   val: 1 },
+      { from: "week",   to: "day",    val: 1 },
+      { from: "year",   to: "day",    val: 1 },
+    ],
+  },
+
+  energy: {
+    slug: "energy", label: "Energy", icon: "🔋", title: "Energy Converter",
+    baseUnit: "joule",
+    description: "Convert between joules, calories, kilowatt-hours, BTU and more energy units.",
+    units: {
+      joule:       { label: "Joule (J)",             factor: 1 },
+      kilojoule:   { label: "Kilojoule (kJ)",        factor: 1000 },
+      calorie:     { label: "Calorie (cal)",         factor: 4.184 },
+      kilocalorie: { label: "Kilocalorie (kcal)",    factor: 4184 },
+      watt_hour:   { label: "Watt-hour (Wh)",        factor: 3600 },
+      kwh:         { label: "Kilowatt-hour (kWh)",   factor: 3600000 },
+      btu:         { label: "BTU",                   factor: 1055.06 },
+      electronvolt:{ label: "Electronvolt (eV)",     factor: 1.60218e-19 },
+    },
+    popular: [
+      { from: "kilocalorie", to: "kilojoule", val: 1 },
+      { from: "kwh",         to: "kilojoule", val: 1 },
+      { from: "calorie",     to: "joule",     val: 100 },
+      { from: "btu",         to: "kilojoule", val: 1 },
+    ],
+  },
+
+  pressure: {
+    slug: "pressure", label: "Pressure", icon: "💧", title: "Pressure Converter",
+    baseUnit: "pascal",
+    description: "Convert between pascal, bar, PSI, atm, mmHg and more pressure units.",
+    units: {
+      pascal:      { label: "Pascal (Pa)",       factor: 1 },
+      kilopascal:  { label: "Kilopascal (kPa)",  factor: 1000 },
+      megapascal:  { label: "Megapascal (MPa)",  factor: 1000000 },
+      bar:         { label: "Bar",               factor: 100000 },
+      millibar:    { label: "Millibar (mbar)",   factor: 100 },
+      atm:         { label: "Atmosphere (atm)",  factor: 101325 },
+      psi:         { label: "PSI (psi)",         factor: 6894.76 },
+      mmhg:        { label: "mmHg (Torr)",       factor: 133.322 },
+    },
+    popular: [
+      { from: "psi",  to: "bar",        val: 1 },
+      { from: "bar",  to: "psi",        val: 1 },
+      { from: "atm",  to: "pascal",     val: 1 },
+      { from: "psi",  to: "kilopascal", val: 14.7 },
+    ],
+  },
+
+  angle: {
+    slug: "angle", label: "Angle", icon: "📐", title: "Angle Converter",
+    baseUnit: "degree",
+    description: "Convert between degrees, radians, gradians and other angle units.",
+    units: {
+      degree:     { label: "Degree (°)",      factor: 1 },
+      radian:     { label: "Radian (rad)",    factor: 180 / Math.PI },
+      gradian:    { label: "Gradian (grad)",  factor: 0.9 },
+      arcminute:  { label: "Arcminute (′)",   factor: 1/60 },
+      arcsecond:  { label: "Arcsecond (″)",   factor: 1/3600 },
+      revolution: { label: "Revolution (rev)",factor: 360 },
+    },
+    popular: [
+      { from: "degree", to: "radian",  val: 180 },
+      { from: "radian", to: "degree",  val: 1 },
+      { from: "degree", to: "gradian", val: 90 },
+      { from: "degree", to: "arcminute", val: 1 },
+    ],
+  },
+
+  power: {
+    slug: "power", label: "Power", icon: "💡", title: "Power Converter",
+    baseUnit: "watt",
+    description: "Convert between watts, kilowatts, horsepower, BTU/hr and more power units.",
+    units: {
+      watt:       { label: "Watt (W)",            factor: 1 },
+      kilowatt:   { label: "Kilowatt (kW)",        factor: 1000 },
+      megawatt:   { label: "Megawatt (MW)",        factor: 1000000 },
+      horsepower: { label: "Horsepower (hp)",      factor: 745.7 },
+      btu_hr:     { label: "BTU/hour (BTU/hr)",    factor: 0.293071 },
+      calorie_s:  { label: "Calorie/sec (cal/s)",  factor: 4.184 },
+      foot_lb_s:  { label: "Foot-lb/sec (ft·lb/s)",factor: 1.35582 },
+    },
+    popular: [
+      { from: "horsepower", to: "kilowatt", val: 1 },
+      { from: "kilowatt",   to: "horsepower", val: 1 },
+      { from: "watt",       to: "kilowatt",  val: 1000 },
+      { from: "megawatt",   to: "kilowatt",  val: 1 },
+    ],
+  },
+
 };
 
-// ─── Conversion engine ────────────────────────────────────────────────────────
+// ── Conversion engine ────────────────────────────────────────────────────────
 
 function convertTemp(val: number, from: UnitKey, to: UnitKey): number {
   let celsius: number;
-  if (from === "celsius")    celsius = val;
+  if (from === "celsius")     celsius = val;
   else if (from === "fahrenheit") celsius = (val - 32) * 5 / 9;
-  else celsius = val - 273.15; // kelvin
+  else celsius = val - 273.15;
 
   if (to === "celsius")    return celsius;
   if (to === "fahrenheit") return celsius * 9 / 5 + 32;
-  return celsius + 273.15; // kelvin
+  return celsius + 273.15;
 }
 
-export function convert(
-  val: number,
-  from: UnitKey,
-  to: UnitKey,
-  categorySlug: string
-): number {
+export function convert(val: number, from: UnitKey, to: UnitKey, categorySlug: string): number {
   if (from === to) return val;
   const cat = CATEGORIES[categorySlug];
   if (!cat) throw new Error(`Unknown category: ${categorySlug}`);
-
   if (categorySlug === "temperature") return convertTemp(val, from, to);
-
   const fromFactor = cat.units[from]?.factor ?? 1;
   const toFactor   = cat.units[to]?.factor   ?? 1;
   return (val * fromFactor) / toFactor;
 }
 
-// ─── URL helpers ──────────────────────────────────────────────────────────────
+// ── URL helpers ───────────────────────────────────────────────────────────────
 
-/** "mile" → "mile", "nautical_mile" → "nautical-mile" */
 export const unitToSlug = (u: UnitKey) => u.replace(/_/g, "-");
 export const slugToUnit = (s: string)  => s.replace(/-/g, "_");
 
-/** Get short symbol from label: "Kilometer (km)" → "km" */
 export function getSymbol(unitKey: UnitKey, categorySlug: string): string {
   const label = CATEGORIES[categorySlug]?.units[unitKey]?.label ?? unitKey;
   const match = label.match(/\(([^)]+)\)/);
@@ -237,9 +321,6 @@ export function formatNumber(n: number): string {
   return parseFloat(n.toPrecision(8)).toLocaleString("en", { maximumFractionDigits: 6 });
 }
 
-// ─── Static path generation helpers ──────────────────────────────────────────
-
-/** All [category, from-to] pairs for generateStaticParams */
 export function getAllConversionPaths() {
   const paths: { category: string; conversion: string }[] = [];
   for (const [catSlug, cat] of Object.entries(CATEGORIES)) {
