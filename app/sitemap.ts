@@ -2,7 +2,7 @@
 import { MetadataRoute } from "next";
 import { CATEGORIES, getAllConversionPaths, unitToSlug } from "@/lib/units";
 
-const BASE_URL = "https://konvert.app"; // 换成你的域名
+const BASE_URL = "https://konvertpro.pages.dev"; // 换成你的域名
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const entries: MetadataRoute.Sitemap = [
