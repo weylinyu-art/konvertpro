@@ -5,7 +5,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { CATEGORIES, convert, formatNumber, getSymbol } from "@/lib/units";
 import { getTranslations, getCategoryLabel, type Locale } from "@/lib/i18n";
-import { useLocale } from "@/components/LocaleSwitcher";
+import { useLocale } from "@/components/LocaleProvider";
 
 const CATEGORY_DEFAULTS: Record<string, { from: string; to: string; val: string }> = {
   length:      { from: "mile",        to: "kilometer",  val: "1"   },
