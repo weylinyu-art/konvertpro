@@ -1,22 +1,16 @@
 // app/layout.tsx
-// 性能优化：
-// 1. 字体用 next/font 自动自托管（消除 Google Fonts 跨域请求）
-// 2. display: swap 避免字体阻塞渲染
-// 3. preconnect 提前建立关键连接
-// 4. viewport themeColor 减少 CLS
-
 import type { Metadata, Viewport } from "next";
 import { Instrument_Serif, DM_Mono, Outfit } from "next/font/google";
 import "./globals.css";
 
-// next/font 会在构建时自动下载字体并自托管
-// 用户不再需要连接 fonts.googleapis.com，首屏速度大幅提升
+const BASE_URL = "https://koverts.com";
+
 const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
   weight: ["400"],
   style: ["normal", "italic"],
   variable: "--font-serif",
-  display: "swap",      // 字体加载前先用系统字体，避免 FOIT
+  display: "swap",
   preload: true,
 });
 
@@ -25,7 +19,7 @@ const dmMono = DM_Mono({
   weight: ["300", "400", "500"],
   variable: "--font-mono",
   display: "swap",
-  preload: false,       // 非关键字体，不预加载
+  preload: false,
 });
 
 const outfit = Outfit({
@@ -37,18 +31,22 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(BASE_URL),
   title: {
-    default: "Konvert — Free Unit Converter",
-    template: "%s | Konvert",
+    default: "Koverts — Free Unit Converter",
+    template: "%s | Koverts",
   },
-  description: "Free, instant unit conversions for length, weight, temperature, volume, speed, area and data. No signup required.",
-  keywords: ["unit converter", "length converter", "weight converter", "temperature converter", "ai token calculator"],
+  description: "Free, instant unit conversions for length, weight, temperature, volume, speed, area, data and more. Plus AI tools: token calculator, model size, API cost estimator.",
+  keywords: ["unit converter", "length converter", "weight converter", "temperature converter", "ai token calculator", "koverts"],
   openGraph: {
-    title: "Konvert — Free Unit Converter",
+    title: "Koverts — Free Unit Converter",
     description: "Instant conversions for every unit. Free, fast, no signup.",
     type: "website",
+    url: BASE_URL,
   },
-  // 告诉爬虫这是可索引的
+  alternates: {
+    canonical: BASE_URL,
+  },
   robots: {
     index: true,
     follow: true,
@@ -56,7 +54,6 @@ export const metadata: Metadata = {
   },
 };
 
-// 独立导出 viewport（Next.js 14 推荐方式，避免 console warning）
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -65,13 +62,9 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en"
-      className={`${instrumentSerif.variable} ${dmMono.variable} ${outfit.variable}`}
-    >
+    <html lang="en" className={`${instrumentSerif.variable} ${dmMono.variable} ${outfit.variable}`}>
       <head>
-        {/* DNS prefetch for any external resources */}
-        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+        <link rel="canonical" href={BASE_URL} />
       </head>
       <body className="bg-[#f7f5f2] text-[#1a1814] font-sans antialiased min-h-screen">
         {children}
