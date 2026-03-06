@@ -1,22 +1,28 @@
 // app/layout.tsx
 import type { Metadata, Viewport } from "next";
-import { Instrument_Serif, DM_Mono, Outfit } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import { LocaleProvider } from "@/components/LocaleProvider";
 import "./globals.css";
 
 const BASE_URL = "https://koverts.com";
 
-const instrumentSerif = Instrument_Serif({
-  subsets: ["latin"], weight: ["400"], style: ["normal", "italic"],
-  variable: "--font-serif", display: "swap", preload: true,
+// Inter — 最主流的现代无衬线字体，Figma/Linear/Vercel都用它
+// 大多数设备已有缓存，加载极快
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-sans",
+  display: "swap",
+  preload: true,
 });
-const dmMono = DM_Mono({
-  subsets: ["latin"], weight: ["300", "400", "500"],
-  variable: "--font-mono", display: "swap", preload: false,
-});
-const outfit = Outfit({
-  subsets: ["latin"], weight: ["300", "400", "500", "600"],
-  variable: "--font-sans", display: "swap", preload: true,
+
+// JetBrains Mono — 替换 DM Mono，更清晰，开发者友好
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["300", "400", "500"],
+  variable: "--font-mono",
+  display: "swap",
+  preload: false, // 非关键字体，不阻塞
 });
 
 export const metadata: Metadata = {
@@ -46,7 +52,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${instrumentSerif.variable} ${dmMono.variable} ${outfit.variable}`}>
+    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <body className="bg-[#f7f5f2] text-[#1a1814] font-sans antialiased min-h-screen">
         <LocaleProvider>
           {children}
