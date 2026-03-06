@@ -277,6 +277,93 @@ export const CATEGORIES: Record<string, Category> = {
     ],
   },
 
+  // ── NEW HIGH-TRAFFIC 4 ───────────────────────────────────────────────────────
+
+  cooking: {
+    slug: "cooking", label: "Cooking", icon: "🍳", title: "Cooking Measurement Converter",
+    baseUnit: "ml",
+    description: "Convert cups to ml, tablespoons to teaspoons, ounces to grams and more cooking measurements.",
+    units: {
+      ml:        { label: "Milliliter (ml)",    factor: 1 },
+      liter:     { label: "Liter (L)",          factor: 1000 },
+      tsp:       { label: "Teaspoon (tsp)",      factor: 4.92892 },
+      tbsp:      { label: "Tablespoon (tbsp)",   factor: 14.7868 },
+      fl_oz:     { label: "Fluid Ounce (fl oz)", factor: 29.5735 },
+      cup:       { label: "Cup (cup)",           factor: 236.588 },
+      pint:      { label: "Pint (pt)",           factor: 473.176 },
+      quart:     { label: "Quart (qt)",          factor: 946.353 },
+      gallon:    { label: "Gallon (gal)",        factor: 3785.41 },
+      gram:      { label: "Gram (g)",            factor: 1 },       // special: used for dry
+      oz_weight: { label: "Ounce weight (oz)",   factor: 28.3495 }, // special: dry ounce
+      pound:     { label: "Pound (lb)",          factor: 453.592 },
+    },
+    popular: [
+      { from: "cup",  to: "ml",   val: 1 },
+      { from: "tbsp", to: "tsp",  val: 1 },
+      { from: "fl_oz",to: "ml",   val: 1 },
+      { from: "cup",  to: "tbsp", val: 1 },
+    ],
+  },
+
+  fuel: {
+    slug: "fuel", label: "Fuel", icon: "⛽", title: "Fuel Consumption Converter",
+    baseUnit: "lper100km",
+    description: "Convert between MPG, L/100km, km/L and other fuel economy and consumption units.",
+    units: {
+      lper100km: { label: "L/100km",           factor: 1 },
+      mpg_us:    { label: "MPG (US)",           factor: 235.215 },  // stored as reciprocal factor
+      mpg_uk:    { label: "MPG (UK)",           factor: 282.481 },
+      kml:       { label: "km/L",               factor: 100 },      // km/L = 100/L/100km
+      mpl:       { label: "Miles/Liter (mi/L)", factor: 62.1371 },
+    },
+    popular: [
+      { from: "mpg_us",    to: "lper100km", val: 30 },
+      { from: "lper100km", to: "mpg_us",    val: 8  },
+      { from: "kml",       to: "mpg_us",    val: 15 },
+      { from: "mpg_uk",    to: "mpg_us",    val: 40 },
+    ],
+  },
+
+  shoe: {
+    slug: "shoe", label: "Shoe Size", icon: "👟", title: "Shoe Size Converter",
+    baseUnit: "us_m",
+    description: "Convert shoe sizes between US, UK, EU, CM and other international sizing systems.",
+    units: {
+      us_m:  { label: "US Men's",    factor: 1 },
+      us_w:  { label: "US Women's",  factor: 1.5 },       // Women's = Men's + 1.5
+      uk:    { label: "UK",          factor: -0.5 },      // UK = US - 0.5 (offset handled below)
+      eu:    { label: "EU / FR",     factor: 33.5 },      // EU = US + 33.5 (offset)
+      cm:    { label: "CM (foot)",   factor: 0.6667 },    // rough: US = (cm - 14.7) / 0.6667
+      jp:    { label: "Japan (cm)",  factor: 0.6667 },
+    },
+    popular: [
+      { from: "us_m", to: "eu",   val: 9  },
+      { from: "eu",   to: "us_m", val: 42 },
+      { from: "us_w", to: "eu",   val: 8  },
+      { from: "us_m", to: "uk",   val: 10 },
+    ],
+  },
+
+  numbase: {
+    slug: "numbase", label: "Number Base", icon: "🔢", title: "Number Base Converter",
+    baseUnit: "decimal",
+    description: "Convert between decimal, binary, hexadecimal, octal and other number bases.",
+    units: {
+      decimal: { label: "Decimal (Base 10)", factor: 1 },
+      binary:  { label: "Binary (Base 2)",   factor: 2 },
+      octal:   { label: "Octal (Base 8)",    factor: 8 },
+      hex:     { label: "Hex (Base 16)",     factor: 16 },
+      base32:  { label: "Base 32",           factor: 32 },
+      base64:  { label: "Base 36",           factor: 36 },
+    },
+    popular: [
+      { from: "decimal", to: "binary",  val: 255 },
+      { from: "binary",  to: "decimal", val: 1010 },
+      { from: "decimal", to: "hex",     val: 255 },
+      { from: "hex",     to: "decimal", val: 255 },
+    ],
+  },
+
 };
 
 // ── Conversion engine ────────────────────────────────────────────────────────
@@ -292,11 +379,73 @@ function convertTemp(val: number, from: UnitKey, to: UnitKey): number {
   return celsius + 273.15;
 }
 
+// Fuel: reciprocal conversion (L/100km ↔ MPG)
+function convertFuel(val: number, from: UnitKey, to: UnitKey): number {
+  // Convert everything to L/100km first, then to target
+  const toLper100km: Record<string, (v: number) => number> = {
+    lper100km: (v) => v,
+    mpg_us:    (v) => 235.215 / v,
+    mpg_uk:    (v) => 282.481 / v,
+    kml:       (v) => 100 / v,
+    mpl:       (v) => 62.1371 / v,
+  };
+  const fromLper100km: Record<string, (v: number) => number> = {
+    lper100km: (v) => v,
+    mpg_us:    (v) => 235.215 / v,
+    mpg_uk:    (v) => 282.481 / v,
+    kml:       (v) => 100 / v,
+    mpl:       (v) => 62.1371 / v,
+  };
+  const base = toLper100km[from]?.(val) ?? val;
+  return fromLper100km[to]?.(base) ?? base;
+}
+
+// Shoe: offset-based conversion
+function convertShoe(val: number, from: UnitKey, to: UnitKey): number {
+  // Convert to US Men's first
+  const toUSMen: Record<string, (v: number) => number> = {
+    us_m: (v) => v,
+    us_w: (v) => v - 1.5,
+    uk:   (v) => v + 0.5,
+    eu:   (v) => v - 33.5,
+    cm:   (v) => (v - 14.7) / 0.6667,
+    jp:   (v) => (v - 14.7) / 0.6667,
+  };
+  const fromUSMen: Record<string, (v: number) => number> = {
+    us_m: (v) => v,
+    us_w: (v) => v + 1.5,
+    uk:   (v) => v - 0.5,
+    eu:   (v) => v + 33.5,
+    cm:   (v) => v * 0.6667 + 14.7,
+    jp:   (v) => v * 0.6667 + 14.7,
+  };
+  const base = toUSMen[from]?.(val) ?? val;
+  return fromUSMen[to]?.(base) ?? base;
+}
+
+// Number base conversion
+function convertNumbase(val: number, from: UnitKey, to: UnitKey): number {
+  const baseMap: Record<string, number> = {
+    decimal: 10, binary: 2, octal: 8, hex: 16, base32: 32, base64: 36,
+  };
+  const fromBase = baseMap[from] ?? 10;
+  const toBase   = baseMap[to]   ?? 10;
+  // Parse from source base then convert to decimal
+  const decVal = parseInt(String(Math.floor(val)), fromBase);
+  if (isNaN(decVal)) return NaN;
+  if (toBase === 10) return decVal;
+  // Return as decimal number representing the target base string
+  return parseInt(decVal.toString(toBase), 10);
+}
+
 export function convert(val: number, from: UnitKey, to: UnitKey, categorySlug: string): number {
   if (from === to) return val;
   const cat = CATEGORIES[categorySlug];
   if (!cat) throw new Error(`Unknown category: ${categorySlug}`);
   if (categorySlug === "temperature") return convertTemp(val, from, to);
+  if (categorySlug === "fuel")        return convertFuel(val, from, to);
+  if (categorySlug === "shoe")        return convertShoe(val, from, to);
+  if (categorySlug === "numbase")     return convertNumbase(val, from, to);
   const fromFactor = cat.units[from]?.factor ?? 1;
   const toFactor   = cat.units[to]?.factor   ?? 1;
   return (val * fromFactor) / toFactor;
