@@ -33,16 +33,30 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "Koverts — Free Unit Converter",
+    default: "Koverts — Free Unit Converter & AI Tools",
     template: "%s | Koverts",
   },
-  description: "Free, instant unit conversions for length, weight, temperature, volume, speed, area, data and more. Plus AI tools: token calculator, model size, API cost estimator.",
+  description: "Free instant unit conversions for length, weight, temperature, volume, speed, area, data and more. Plus AI tools: token calculator, model size estimator, API cost calculator.",
   keywords: ["unit converter", "length converter", "weight converter", "temperature converter", "ai token calculator", "koverts"],
   openGraph: {
-    title: "Koverts — Free Unit Converter",
-    description: "Instant conversions for every unit. Free, fast, no signup.",
+    title: "Koverts — Free Unit Converter & AI Tools",
+    description: "Instant conversions for every unit. Plus AI tools: token calculator, model size, API cost. Free, fast, no signup.",
     type: "website",
     url: BASE_URL,
+    images: [
+      {
+        url: `${BASE_URL}/og-image.svg`,
+        width: 1200,
+        height: 630,
+        alt: "Koverts — Free Unit Converter & AI Tools",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Koverts — Free Unit Converter & AI Tools",
+    description: "Instant conversions for every unit. Plus AI tools. Free, no signup.",
+    images: [`${BASE_URL}/og-image.svg`],
   },
   alternates: {
     canonical: BASE_URL,
@@ -63,9 +77,6 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${instrumentSerif.variable} ${dmMono.variable} ${outfit.variable}`}>
-      <head>
-        <link rel="canonical" href={BASE_URL} />
-      </head>
       <body className="bg-[#f7f5f2] text-[#1a1814] font-sans antialiased min-h-screen">
         {children}
       </body>
