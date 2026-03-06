@@ -20,6 +20,10 @@ const CATEGORY_DEFAULTS: Record<string, { from: string; to: string; val: string 
   pressure:    { from: "psi",         to: "bar",        val: "1"   },
   angle:       { from: "degree",      to: "radian",     val: "180" },
   power:       { from: "horsepower",  to: "kilowatt",   val: "1"   },
+  cooking:     { from: "cup",         to: "ml",         val: "1"   },
+  fuel:        { from: "mpg_us",      to: "lper100km",  val: "30"  },
+  shoe:        { from: "us_m",        to: "eu",         val: "9"   },
+  numbase:     { from: "decimal",     to: "binary",     val: "255" },
 };
 
 interface Props {
