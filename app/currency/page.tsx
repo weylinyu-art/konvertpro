@@ -10,33 +10,54 @@ import { getTranslations } from "@/lib/i18n";
 import { currencyFaqSchema } from "./metadata";
 
 const CURRENCY_NAMES: Record<string, string> = {
-  USD: "US Dollar",        EUR: "Euro",             GBP: "British Pound",
-  CNY: "Chinese Yuan",     JPY: "Japanese Yen",     KRW: "South Korean Won",
-  HKD: "Hong Kong Dollar", CAD: "Canadian Dollar",  AUD: "Australian Dollar",
-  CHF: "Swiss Franc",      SGD: "Singapore Dollar", INR: "Indian Rupee",
-  MXN: "Mexican Peso",     BRL: "Brazilian Real",   RUB: "Russian Ruble",
-  ZAR: "South African Rand", SEK: "Swedish Krona",  NOK: "Norwegian Krone",
-  DKK: "Danish Krone",     NZD: "New Zealand Dollar", THB: "Thai Baht",
-  MYR: "Malaysian Ringgit", IDR: "Indonesian Rupiah", PHP: "Philippine Peso",
-  TWD: "Taiwan Dollar",    PLN: "Polish Zloty",     TRY: "Turkish Lira",
-  AED: "UAE Dirham",       SAR: "Saudi Riyal",      ILS: "Israeli Shekel",
-  CZK: "Czech Koruna",     HUF: "Hungarian Forint",
+  // Major reserve currencies
+  USD: "US Dollar",          EUR: "Euro",               GBP: "British Pound",
+  JPY: "Japanese Yen",       CHF: "Swiss Franc",        CNY: "Chinese Yuan",
+  // Asia-Pacific
+  HKD: "Hong Kong Dollar",   AUD: "Australian Dollar",  SGD: "Singapore Dollar",
+  NZD: "New Zealand Dollar", KRW: "South Korean Won",   TWD: "Taiwan Dollar",
+  INR: "Indian Rupee",       THB: "Thai Baht",          MYR: "Malaysian Ringgit",
+  IDR: "Indonesian Rupiah",  PHP: "Philippine Peso",    VND: "Vietnamese Dong",
+  PKR: "Pakistani Rupee",    BDT: "Bangladeshi Taka",
+  // Americas
+  CAD: "Canadian Dollar",    MXN: "Mexican Peso",       BRL: "Brazilian Real",
+  ARS: "Argentine Peso",     CLP: "Chilean Peso",       COP: "Colombian Peso",
+  PEN: "Peruvian Sol",
+  // Europe
+  SEK: "Swedish Krona",      NOK: "Norwegian Krone",    DKK: "Danish Krone",
+  PLN: "Polish Zloty",       CZK: "Czech Koruna",       HUF: "Hungarian Forint",
+  RON: "Romanian Leu",       HRK: "Croatian Kuna",      BGN: "Bulgarian Lev",
+  // Middle East & Africa
+  AED: "UAE Dirham",         SAR: "Saudi Riyal",        QAR: "Qatari Riyal",
+  KWD: "Kuwaiti Dinar",      BHD: "Bahraini Dinar",     OMR: "Omani Rial",
+  ILS: "Israeli Shekel",     EGP: "Egyptian Pound",     NGN: "Nigerian Naira",
+  ZAR: "South African Rand", KES: "Kenyan Shilling",
+  // CIS
+  RUB: "Russian Ruble",      UAH: "Ukrainian Hryvnia",  KZT: "Kazakhstani Tenge",
+  // Other
+  TRY: "Turkish Lira",
 };
 
 const CURRENCY_FLAGS: Record<string, string> = {
-  USD: "🇺🇸", EUR: "🇪🇺", GBP: "🇬🇧", CNY: "🇨🇳", JPY: "🇯🇵", KRW: "🇰🇷",
-  HKD: "🇭🇰", CAD: "🇨🇦", AUD: "🇦🇺", CHF: "🇨🇭", SGD: "🇸🇬", INR: "🇮🇳",
-  MXN: "🇲🇽", BRL: "🇧🇷", RUB: "🇷🇺", ZAR: "🇿🇦", SEK: "🇸🇪", NOK: "🇳🇴",
-  DKK: "🇩🇰", NZD: "🇳🇿", THB: "🇹🇭", MYR: "🇲🇾", IDR: "🇮🇩", PHP: "🇵🇭",
-  TWD: "🇹🇼", PLN: "🇵🇱", TRY: "🇹🇷", AED: "🇦🇪", SAR: "🇸🇦", ILS: "🇮🇱",
-  CZK: "🇨🇿", HUF: "🇭🇺",
+  USD: "🇺🇸", EUR: "🇪🇺", GBP: "🇬🇧", JPY: "🇯🇵", CHF: "🇨🇭", CNY: "🇨🇳",
+  HKD: "🇭🇰", AUD: "🇦🇺", SGD: "🇸🇬", NZD: "🇳🇿", KRW: "🇰🇷", TWD: "🇹🇼",
+  INR: "🇮🇳", THB: "🇹🇭", MYR: "🇲🇾", IDR: "🇮🇩", PHP: "🇵🇭", VND: "🇻🇳",
+  PKR: "🇵🇰", BDT: "🇧🇩",
+  CAD: "🇨🇦", MXN: "🇲🇽", BRL: "🇧🇷", ARS: "🇦🇷", CLP: "🇨🇱", COP: "🇨🇴",
+  PEN: "🇵🇪",
+  SEK: "🇸🇪", NOK: "🇳🇴", DKK: "🇩🇰", PLN: "🇵🇱", CZK: "🇨🇿", HUF: "🇭🇺",
+  RON: "🇷🇴", HRK: "🇭🇷", BGN: "🇧🇬",
+  AED: "🇦🇪", SAR: "🇸🇦", QAR: "🇶🇦", KWD: "🇰🇼", BHD: "🇧🇭", OMR: "🇴🇲",
+  ILS: "🇮🇱", EGP: "🇪🇬", NGN: "🇳🇬", ZAR: "🇿🇦", KES: "🇰🇪",
+  RUB: "🇷🇺", UAH: "🇺🇦", KZT: "🇰🇿",
+  TRY: "🇹🇷",
 };
 
 const POPULAR_PAIRS = [
-  { from: "USD", to: "EUR" }, { from: "USD", to: "CNY" },
-  { from: "EUR", to: "GBP" }, { from: "USD", to: "JPY" },
-  { from: "GBP", to: "USD" }, { from: "USD", to: "KRW" },
-  { from: "EUR", to: "USD" }, { from: "USD", to: "HKD" },
+  { from: "USD", to: "CNY" }, { from: "USD", to: "EUR" },
+  { from: "USD", to: "JPY" }, { from: "EUR", to: "GBP" },
+  { from: "USD", to: "INR" }, { from: "USD", to: "KRW" },
+  { from: "USD", to: "HKD" }, { from: "USD", to: "AED" },
 ];
 
 const CURRENCIES = Object.keys(CURRENCY_NAMES);
@@ -175,7 +196,7 @@ export default function CurrencyPage() {
               <select value={from} onChange={(e) => setFrom(e.target.value)}
                 className="mt-2 w-full bg-[#f2f0ed] border border-[#e4e0da] rounded-xl px-4 py-2.5 text-sm font-medium text-[#1a1814] outline-none cursor-pointer appearance-none">
                 {CURRENCIES.map((c) => (
-                  <option key={c} value={c}>{CURRENCY_FLAGS[c]} {c} — {CURRENCY_NAMES[c]}</option>
+                  {allRates && (allRates[c] || c === "USD") && <option key={c} value={c}>{CURRENCY_FLAGS[c]} {c} — {CURRENCY_NAMES[c]}</option>}
                 ))}
               </select>
             </div>
@@ -193,7 +214,7 @@ export default function CurrencyPage() {
               <select value={to} onChange={(e) => setTo(e.target.value)}
                 className="mt-2 w-full bg-[#f2f0ed] border border-[#e4e0da] rounded-xl px-4 py-2.5 text-sm font-medium text-[#1a1814] outline-none cursor-pointer appearance-none">
                 {CURRENCIES.map((c) => (
-                  <option key={c} value={c}>{CURRENCY_FLAGS[c]} {c} — {CURRENCY_NAMES[c]}</option>
+                  {allRates && (allRates[c] || c === "USD") && <option key={c} value={c}>{CURRENCY_FLAGS[c]} {c} — {CURRENCY_NAMES[c]}</option>}
                 ))}
               </select>
             </div>
@@ -208,7 +229,7 @@ export default function CurrencyPage() {
               <select value={from} onChange={(e) => setFrom(e.target.value)}
                 className="mt-2.5 w-full bg-[#f2f0ed] border border-[#e4e0da] rounded-xl px-5 py-3 text-sm font-medium text-[#1a1814] outline-none cursor-pointer appearance-none transition-all">
                 {CURRENCIES.map((c) => (
-                  <option key={c} value={c}>{CURRENCY_FLAGS[c]} {c} — {CURRENCY_NAMES[c]}</option>
+                  {allRates && (allRates[c] || c === "USD") && <option key={c} value={c}>{CURRENCY_FLAGS[c]} {c} — {CURRENCY_NAMES[c]}</option>}
                 ))}
               </select>
             </div>
@@ -224,7 +245,7 @@ export default function CurrencyPage() {
               <select value={to} onChange={(e) => setTo(e.target.value)}
                 className="mt-2.5 w-full bg-[#f2f0ed] border border-[#e4e0da] rounded-xl px-5 py-3 text-sm font-medium text-[#1a1814] outline-none cursor-pointer appearance-none transition-all">
                 {CURRENCIES.map((c) => (
-                  <option key={c} value={c}>{CURRENCY_FLAGS[c]} {c} — {CURRENCY_NAMES[c]}</option>
+                  {allRates && (allRates[c] || c === "USD") && <option key={c} value={c}>{CURRENCY_FLAGS[c]} {c} — {CURRENCY_NAMES[c]}</option>}
                 ))}
               </select>
             </div>
