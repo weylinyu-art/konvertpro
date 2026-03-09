@@ -127,8 +127,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="applicable-device" content="pc,mobile" />
         <meta httpEquiv="mobile-agent" content={`format=html5;url=${BASE_URL}`} />
 
-        {/* Yandex — site verification (replace XXXX with code from webmaster.yandex.com) */}
+        {/* Yandex — site verification */}
         <meta name="yandex-verification" content="0e3d8f5d87f4821b" />
+
+        {/* Bing / DuckDuckGo / Yahoo — site verification */}
+        <meta name="msvalidate.01" content="FF5C640EDE929FBE5184E1BA4B64140D" />
 
         {/* Organization schema */}
         <script
