@@ -53,10 +53,8 @@ export interface Translations {
   pressure: string;
   angle: string;
   power: string;
-  cooking: string;
   fuel: string;
-  shoe: string;
-  numbase: string;
+  currency: string;
 
   // Page elements
   units: string;
@@ -103,10 +101,8 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     pressure: "Pressure",
     angle: "Angle",
     power: "Power",
-    cooking: "Cooking",
     fuel: "Fuel",
-    shoe: "Shoe Size",
-    numbase: "Number Base",
+    currency: "Currency",
     units: "units",
     freeInstant: "Free · Instant",
     noSignup: "No signup required",
@@ -148,10 +144,8 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     pressure: "压强",
     angle: "角度",
     power: "功率",
-    cooking: "烹饪",
     fuel: "油耗",
-    shoe: "鞋码",
-    numbase: "进制",
+    currency: "货币",
     units: "个单位",
     freeInstant: "免费 · 即时",
     noSignup: "无需注册",
@@ -193,10 +187,8 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     pressure: "Presión",
     angle: "Ángulo",
     power: "Potencia",
-    cooking: "Cocina",
     fuel: "Combustible",
-    shoe: "Talla de Zapato",
-    numbase: "Base Numérica",
+    currency: "Divisa",
     units: "unidades",
     freeInstant: "Gratis · Instantáneo",
     noSignup: "Sin registro requerido",
@@ -238,10 +230,8 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     pressure: "Pression",
     angle: "Angle",
     power: "Puissance",
-    cooking: "Cuisine",
     fuel: "Carburant",
-    shoe: "Pointure",
-    numbase: "Base Numérique",
+    currency: "Devise",
     units: "unités",
     freeInstant: "Gratuit · Instantané",
     noSignup: "Sans inscription",
@@ -283,10 +273,8 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     pressure: "Давление",
     angle: "Угол",
     power: "Мощность",
-    cooking: "Кулинария",
     fuel: "Топливо",
-    shoe: "Размер обуви",
-    numbase: "Система счисления",
+    currency: "Валюта",
     units: "единиц",
     freeInstant: "Бесплатно · Мгновенно",
     noSignup: "Без регистрации",
@@ -328,10 +316,8 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     pressure: "الضغط",
     angle: "الزاوية",
     power: "الطاقة الكهربائية",
-    cooking: "الطبخ",
-    fuel: "استهلاك الوقود",
-    shoe: "مقاس الحذاء",
-    numbase: "نظام العد",
+    fuel: "الوقود",
+    currency: "العملة",
     units: "وحدات",
     freeInstant: "مجاني · فوري",
     noSignup: "لا يلزم التسجيل",
@@ -359,7 +345,7 @@ export function getCategoryLabel(slug: string, t: Translations): string {
     volume: "volume", speed: "speed", area: "area", data: "data",
     time: "time", energy: "energy", pressure: "pressure",
     angle: "angle", power: "power",
-    cooking: "cooking", fuel: "fuel", shoe: "shoe", numbase: "numbase",
+    fuel: "fuel", currency: "currency",
   };
   const key = map[slug];
   return key ? String(t[key]) : slug;
