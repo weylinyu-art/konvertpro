@@ -66,5 +66,27 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...home, ...staticPages, ...aiPages, ...categoryPages, ...conversionPages, ...comparePages];
+  // High-value numeric direct-answer pages
+  const NUMERIC_PAIRS = [
+    { cat: "length",      from: "mile",       to: "kilometer" },
+    { cat: "length",      from: "foot",       to: "meter" },
+    { cat: "length",      from: "inch",       to: "centimeter" },
+    { cat: "weight",      from: "pound",      to: "kilogram" },
+    { cat: "weight",      from: "ounce",      to: "gram" },
+    { cat: "temperature", from: "fahrenheit", to: "celsius" },
+    { cat: "volume",      from: "cup",        to: "milliliter" },
+    { cat: "volume",      from: "gallon_us",  to: "liter" },
+    { cat: "speed",       from: "mph",        to: "kph" },
+  ];
+  const NUMERIC_VALUES = [1, 5, 10, 25, 50, 100, 200, 500, 1000];
+  const numericPages: MetadataRoute.Sitemap = NUMERIC_PAIRS.flatMap(({ cat, from, to }) =>
+    NUMERIC_VALUES.map((v) => ({
+      url: `${BASE_URL}/${cat}/${v}-${from.replace(/_/g, "-")}-to-${to.replace(/_/g, "-")}`,
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.65,
+    }))
+  );
+
+  return [...home, ...staticPages, ...aiPages, ...categoryPages, ...conversionPages, ...comparePages, ...numericPages];
 }
