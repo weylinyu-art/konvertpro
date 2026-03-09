@@ -34,8 +34,8 @@ const orgSchema = {
   "@type": "Organization",
   "name": "Koverts",
   "url": BASE_URL,
-  "logo": `${BASE_URL}/favicon.svg`,
-  "description": "Free instant unit converter and AI tools. 16 categories, 32 currencies, 6 languages.",
+  "logo": `${BASE_URL}/og-image.png`,
+  "description": "Free instant unit converter and AI tools. 17 categories, 49 currencies, 6 languages. No signup, no ads.",
   "contactPoint": {
     "@type": "ContactPoint",
     "email": "hello@koverts.com",
@@ -55,7 +55,7 @@ const websiteSchema = {
     "@type": "SearchAction",
     "target": {
       "@type": "EntryPoint",
-      "urlTemplate": `${BASE_URL}/length/{search_term_string}-to-meter`,
+      "urlTemplate": `${BASE_URL}/length/meter-to-{search_term_string}`,
     },
     "query-input": "required name=search_term_string",
   },
@@ -64,7 +64,7 @@ const websiteSchema = {
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: { default: "Koverts — Free Unit Converter & AI Tools", template: "%s | Koverts" },
-  description: "Free instant unit conversions for length, weight, temperature, volume, speed, area, cooking, currency and more. Plus AI tools: token calculator, model size estimator, API cost calculator.",
+  description: "Free instant unit converter with 17 categories, 49 currencies and 6 languages. AI tools included: token calculator, model size estimator, API cost calculator. No signup, no ads.",
   keywords: [
     "unit converter", "currency converter", "cooking converter",
     "shoe size converter", "ai token calculator", "koverts",
