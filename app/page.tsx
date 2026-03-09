@@ -8,7 +8,6 @@ import SiteHeader from "@/components/SiteHeader";
 import { useLocale } from "@/components/LocaleProvider";
 import { getTranslations } from "@/lib/i18n";
 
-// Same order as ConverterWidget tabs — by popularity
 const CATEGORY_ORDER = [
   "length", "weight", "temperature", "volume", "cooking",
   "speed", "area", "time", "data", "shoe",
@@ -45,7 +44,6 @@ export default function HomePage() {
           </p>
         </section>
 
-        {/* Converter widget */}
         <ConverterWidget />
 
         {/* All categories grid */}
@@ -55,13 +53,11 @@ export default function HomePage() {
           </p>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
 
-            {/* Currency — first because it's highest traffic */}
+            {/* Currency first — highest traffic */}
             <Link href="/currency"
               className="group bg-white border border-[#e4e0da] rounded-2xl p-5 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5">
               <span className="text-2xl mb-3 block">💱</span>
-              <span className="font-semibold text-sm text-[#1a1814] group-hover:text-[#3d6b4f] transition-colors block">
-                Currency
-              </span>
+              <span className="font-semibold text-sm text-[#1a1814] group-hover:text-[#3d6b4f] transition-colors block">Currency</span>
               <p className="text-xs text-[#9a948a] mt-1">32 currencies · live</p>
             </Link>
 
@@ -72,13 +68,11 @@ export default function HomePage() {
                 <span className="font-semibold text-sm text-[#1a1814] group-hover:text-[#3d6b4f] transition-colors block">
                   {cat.label}
                 </span>
-                <p className="text-xs text-[#9a948a] mt-1">
-                  {Object.keys(cat.units).length} {t.units}
-                </p>
+                <p className="text-xs text-[#9a948a] mt-1">{Object.keys(cat.units).length} {t.units}</p>
               </Link>
             ))}
 
-            {/* AI Tools — last */}
+            {/* AI Tools last */}
             <Link href="/ai"
               className="group bg-[#edf4f0] border border-[#3d6b4f]/30 rounded-2xl p-5 hover:border-[#3d6b4f] hover:bg-[#3d6b4f] transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5">
               <span className="text-2xl mb-3 block">🤖</span>
