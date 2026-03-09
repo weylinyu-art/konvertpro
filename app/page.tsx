@@ -34,14 +34,14 @@ export default function HomePage() {
         <section className="text-center py-14">
           <div className="inline-flex items-center gap-2 bg-[#edf4f0] border border-[#3d6b4f]/20 rounded-full px-4 py-1.5 text-xs font-mono text-[#3d6b4f] tracking-wider mb-7">
             <span className="w-1.5 h-1.5 rounded-full bg-[#3d6b4f] animate-pulse" />
-            {t.badge}
+            {t.heroBadge}
           </div>
           <h1 className="font-sans font-bold text-[clamp(40px,7vw,72px)] leading-[1.05] tracking-tight mb-4">
-            {t.heroLine1} <em className="italic text-[#3d6b4f]">{t.heroEmphasis}</em>
-            <br />{t.heroLine2}
+            {t.heroTitle} <em className="italic text-[#3d6b4f]">{t.heroTitleEm}</em>
+            <br />{t.heroTitleSuffix}
           </h1>
           <p className="text-[#9a948a] font-light text-base max-w-sm mx-auto leading-relaxed">
-            {t.heroSub}
+            {t.heroSubtitle}
           </p>
         </section>
 
