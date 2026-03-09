@@ -8,11 +8,10 @@ import { useLocale } from "@/components/LocaleProvider";
 import { getTranslations, getCategoryLabel } from "@/lib/i18n";
 
 // Ordered by global search volume / popularity (2025–2026)
-// currency and fuel are separate links, not in CATEGORIES
 const CATEGORY_ORDER = [
   "length", "weight", "temperature", "volume", "speed",
   "area", "time", "data", "cooking", "energy",
-  "pressure", "power", "angle", "shoe", "numbase", "fuel",
+  "pressure", "power", "fuel", "angle", "shoe", "numbase",
 ];
 
 interface Props {
