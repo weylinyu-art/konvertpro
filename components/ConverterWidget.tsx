@@ -5,7 +5,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { CATEGORIES, convert, formatNumber, getSymbol } from "@/lib/units";
 import { useLocale } from "@/components/LocaleProvider";
-import { getTranslations } from "@/lib/i18n";
+import { getTranslations, getCategoryLabel } from "@/lib/i18n";
 
 // Ordered by global search volume / popularity (2025–2026)
 const CATEGORY_ORDER = [
@@ -70,7 +70,7 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
                   : "bg-white border-[#e4e0da] text-[#9a948a] hover:border-[#3d6b4f] hover:text-[#3d6b4f] hover:bg-[#edf4f0]"
               }`}>
               <span className="text-sm">{c.icon}</span>
-              <span className="hidden sm:inline">{c.label}</span>
+              <span className="hidden sm:inline">{getCategoryLabel(c.slug, t)}</span>
             </button>
           ))}
 
@@ -100,7 +100,7 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
           </span>
           {defaultFrom && (
             <Link href={`/${catSlug}`} className="font-mono text-[10px] text-[#9a948a] hover:text-[#3d6b4f] transition-colors">
-              ← {cat.label}
+              ← {getCategoryLabel(catSlug, t)}
             </Link>
           )}
         </div>
@@ -146,7 +146,7 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
           </div>
           <button onClick={swap}
             className="mt-[52px] w-11 h-11 rounded-full bg-[#f2f0ed] border border-[#e4e0da] text-[#9a948a] text-lg flex items-center justify-center hover:bg-[#3d6b4f] hover:border-[#3d6b4f] hover:text-white transition-all hover:rotate-180 duration-300 flex-shrink-0"
-            title="Swap units">
+            title={t.swap}>
             ⇄
           </button>
           <div>
