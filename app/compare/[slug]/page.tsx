@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CATEGORIES, convert, formatNumber, getSymbol, slugToUnit, unitToSlug } from "@/lib/units";
+import { FAQHeading, MoreComparisonsHeading, FullConverterLink } from "@/components/PageLabels";
 
 const BASE_URL = "https://koverts.com";
 
@@ -186,27 +187,19 @@ export default function ComparePage({ params }: Props) {
             <p className="font-mono text-[11px] text-[#9a948a] tracking-widest uppercase mb-3">1 {aSym} equals</p>
             <p className="font-sans font-bold text-3xl text-[#3d6b4f] mb-1">{formatNumber(aToB)} <span className="text-xl">{bSym}</span></p>
             <p className="text-xs text-[#9a948a]">{aLabel} → {bLabel}</p>
-            <Link href={`/${pair.category}/${unitToSlug(pair.a)}-to-${unitToSlug(pair.b)}`}
-              className="mt-4 inline-flex items-center gap-1 font-mono text-xs text-[#3d6b4f] hover:underline">
-              Full converter →
-            </Link>
+<FullConverterLink href={`/${pair.category}/${unitToSlug(pair.a)}-to-${unitToSlug(pair.b)}`} />
           </div>
           <div className="bg-white border border-[#e4e0da] rounded-2xl p-6 shadow-sm">
             <p className="font-mono text-[11px] text-[#9a948a] tracking-widest uppercase mb-3">1 {bSym} equals</p>
             <p className="font-sans font-bold text-3xl text-[#3d6b4f] mb-1">{formatNumber(bToA)} <span className="text-xl">{aSym}</span></p>
             <p className="text-xs text-[#9a948a]">{bLabel} → {aLabel}</p>
-            <Link href={`/${pair.category}/${unitToSlug(pair.b)}-to-${unitToSlug(pair.a)}`}
-              className="mt-4 inline-flex items-center gap-1 font-mono text-xs text-[#3d6b4f] hover:underline">
-              Full converter →
-            </Link>
+<FullConverterLink href={`/${pair.category}/${unitToSlug(pair.b)}-to-${unitToSlug(pair.a)}`} />
           </div>
         </section>
 
         {/* Comparison table */}
         <section className="mb-12">
-          <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-5">
-            // Side-by-side comparison table
-          </p>
+<p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-5">// Side-by-side</p>
           <div className="bg-white border border-[#e4e0da] rounded-2xl overflow-hidden shadow-sm">
             <table className="w-full text-sm">
               <thead>
@@ -251,7 +244,7 @@ export default function ComparePage({ params }: Props) {
 
         {/* FAQ */}
         <section className="mb-12">
-          <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-5">// Frequently Asked Questions</p>
+<FAQHeading />
           <div className="space-y-2">
             {faqSchema.mainEntity.map((faq, i) => (
               <details key={i} className="group bg-white border border-[#e4e0da] rounded-xl overflow-hidden shadow-sm">
@@ -269,7 +262,7 @@ export default function ComparePage({ params }: Props) {
 
         {/* Other comparisons */}
         <section className="mb-16">
-          <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-5">// More comparisons</p>
+<MoreComparisonsHeading />
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {COMPARE_PAIRS.filter((p) => p.slug !== params.slug).slice(0, 6).map((p) => (
               <Link key={p.slug} href={`/compare/${p.slug}`}
