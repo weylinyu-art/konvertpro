@@ -5,6 +5,8 @@ import Link from "next/link";
 import { CATEGORIES, convert, formatNumber, getSymbol, unitToSlug } from "@/lib/units";
 import ConverterWidget from "@/components/ConverterWidget";
 
+const BASE_URL = "https://koverts.com";
+
 interface Props {
   params: { category: string };
 }
@@ -16,7 +18,25 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const cat = CATEGORIES[params.category];
   if (!cat) return {};
-  return { title: cat.title, description: cat.description };
+  const pageUrl = `${BASE_URL}/${params.category}`;
+  const unitCount = Object.keys(cat.units).length;
+  return {
+    title: `${cat.title} — Free Online ${cat.label} Converter`,
+    description: `${cat.description} Convert between ${unitCount} ${cat.label.toLowerCase()} units instantly. Free, no signup required.`,
+    keywords: [
+      `${cat.label.toLowerCase()} converter`,
+      `convert ${cat.label.toLowerCase()}`,
+      `${cat.label.toLowerCase()} conversion`,
+      `free ${cat.label.toLowerCase()} calculator`,
+      ...Object.values(cat.units).slice(0, 4).map(u => u.label.toLowerCase()),
+    ],
+    alternates: { canonical: pageUrl },
+    openGraph: {
+      title: `${cat.title} — Free Online ${cat.label} Converter`,
+      description: cat.description,
+      url: pageUrl, type: "website",
+    },
+  };
 }
 
 export default function CategoryPage({ params }: Props) {
@@ -24,9 +44,56 @@ export default function CategoryPage({ params }: Props) {
   if (!cat) notFound();
 
   const unitKeys = Object.keys(cat.units);
+  const pageUrl  = `${BASE_URL}/${params.category}`;
+
+  // ── Structured Data ──────────────────────────────────────────
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home",    "item": BASE_URL },
+      { "@type": "ListItem", "position": 2, "name": cat.label, "item": pageUrl },
+    ],
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": `What is a ${cat.label.toLowerCase()} converter?`,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": `A ${cat.label.toLowerCase()} converter is a tool that instantly converts values between different ${cat.label.toLowerCase()} units. Koverts supports ${unitKeys.length} ${cat.label.toLowerCase()} units including ${Object.values(cat.units).slice(0, 3).map(u => u.label).join(", ")}, and more.`,
+        },
+      },
+      {
+        "@type": "Question",
+        "name": `How do I convert ${cat.label.toLowerCase()} units?`,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": `To convert ${cat.label.toLowerCase()} units, enter your value in the input field, select your source unit and target unit, and the result will appear instantly. No signup or download required.`,
+        },
+      },
+      {
+        "@type": "Question",
+        "name": `Which ${cat.label.toLowerCase()} units does Koverts support?`,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": `Koverts supports ${unitKeys.length} ${cat.label.toLowerCase()} units: ${Object.values(cat.units).map(u => u.label).join(", ")}.`,
+        },
+      },
+    ],
+  };
 
   return (
     <main className="relative z-10">
+      {/* Structured Data */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+
       <div className="max-w-4xl mx-auto px-6">
 
         {/* Header */}
@@ -67,7 +134,7 @@ export default function CategoryPage({ params }: Props) {
             {cat.popular.map((p) => {
               const result = convert(p.val, p.from, p.to, params.category);
               const fromSymbol = getSymbol(p.from, params.category);
-              const toSymbol   = getSymbol(p.to, params.category);
+              const toSymbol   = getSymbol(p.to,   params.category);
               return (
                 <Link key={`${p.from}-${p.to}`}
                   href={`/${params.category}/${unitToSlug(p.from)}-to-${unitToSlug(p.to)}`}
@@ -79,6 +146,26 @@ export default function CategoryPage({ params }: Props) {
                 </Link>
               );
             })}
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="mb-12">
+          <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-5">
+            // Frequently Asked Questions
+          </p>
+          <div className="space-y-2">
+            {faqSchema.mainEntity.map((faq, i) => (
+              <details key={i} className="group bg-white border border-[#e4e0da] rounded-xl overflow-hidden shadow-sm">
+                <summary className="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-[#faf8f5] transition-colors">
+                  <span className="font-medium text-sm text-[#1a1814] pr-4">{faq.name}</span>
+                  <span className="text-[#9a948a] flex-shrink-0 group-open:rotate-180 transition-transform duration-200">▼</span>
+                </summary>
+                <div className="px-5 pb-4 pt-3 text-sm text-[#6a6460] leading-relaxed border-t border-[#f0ede8]">
+                  {faq.acceptedAnswer.text}
+                </div>
+              </details>
+            ))}
           </div>
         </section>
 
