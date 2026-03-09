@@ -1,32 +1,27 @@
+"use client";
 // app/ai/page.tsx
 import Link from "next/link";
-import type { Metadata } from "next";
 import { AI_TOOLS } from "@/lib/ai-units";
-
-export const metadata: Metadata = {
-  title: "AI & LLM Tools — Token Calculator, Model Size, API Cost",
-  description: "Free AI tools: token calculator, LLM model size estimator, API cost calculator, context window checker and compute unit converter.",
-};
+import SiteHeader from "@/components/SiteHeader";
+import { useLocale } from "@/components/LocaleProvider";
+import { getTranslations } from "@/lib/i18n";
 
 export default function AiPage() {
+  const { locale } = useLocale();
+  const t = getTranslations(locale);
+
   return (
     <main className="relative z-10">
       <div className="max-w-4xl mx-auto px-6">
 
-        <header className="flex items-center justify-between pt-8">
-          <Link href="/" className="flex items-baseline gap-2">
-            <span className="font-serif text-[28px] tracking-tight">Konvert</span>
-            <span className="w-2 h-2 rounded-full bg-[#3d6b4f] mb-1" />
-          </Link>
-          <span className="font-mono text-xs text-[#9a948a] tracking-widest">// ai tools</span>
-        </header>
+        <SiteHeader crumbs={[{ label: "AI Tools" }]} />
 
         <section className="py-14 text-center">
           <div className="inline-flex items-center gap-2 bg-[#edf4f0] border border-[#3d6b4f]/20 rounded-full px-4 py-1.5 text-xs font-mono text-[#3d6b4f] tracking-wider mb-7">
             <span className="w-1.5 h-1.5 rounded-full bg-[#3d6b4f] animate-pulse" />
             Built for LLM developers & AI enthusiasts
           </div>
-          <h1 className="font-serif text-[clamp(36px,6vw,64px)] leading-[1.05] tracking-[-2px] mb-4">
+          <h1 className="font-sans font-bold text-[clamp(36px,6vw,64px)] leading-[1.05] tracking-tight mb-4">
             AI & LLM <em className="italic text-[#3d6b4f]">Calculators</em>
           </h1>
           <p className="text-[#9a948a] text-base font-light max-w-md mx-auto leading-relaxed">
@@ -34,7 +29,6 @@ export default function AiPage() {
           </p>
         </section>
 
-        {/* Tools grid */}
         <div className="grid md:grid-cols-2 gap-4 mb-20">
           {AI_TOOLS.map((tool) => (
             <Link
@@ -59,8 +53,8 @@ export default function AiPage() {
         </div>
 
         <footer className="border-t border-[#e4e0da] py-8 flex items-center justify-between flex-wrap gap-4 mb-4">
-          <Link href="/" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f]">← All converters</Link>
-          <span className="font-mono text-xs text-[#9a948a]">© 2025 Konvert</span>
+          <Link href="/" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f]">← {t.allConverters}</Link>
+          <span className="font-mono text-xs text-[#9a948a]">{t.copyright}</span>
         </footer>
       </div>
     </main>
