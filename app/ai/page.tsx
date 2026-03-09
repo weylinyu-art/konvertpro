@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { AI_TOOLS } from "@/lib/ai-units";
 import { useLocale } from "@/components/LocaleProvider";
+import LocaleSwitcher from "@/components/LocaleSwitcher";
 import { getTranslations } from "@/lib/i18n";
 
 export default function AiPage() {
-  const { locale } = useLocale();
+  const { locale, setLocale, mounted } = useLocale();
   const t = getTranslations(locale);
 
   return (
@@ -23,8 +24,9 @@ export default function AiPage() {
               <span className="w-1.5 h-1.5 rounded-full bg-[#3d6b4f] mb-0.5" />
             </Link>
             <span className="text-[#c5bdb4] text-xs flex-shrink-0">/</span>
-            <span className="font-mono text-xs text-[#3d6b4f]">AI Tools</span>
+            <span className="font-mono text-xs text-[#3d6b4f]">{t.aiTools}</span>
           </div>
+          {mounted && <LocaleSwitcher currentLocale={locale} onLocaleChange={setLocale} />}
         </header>
 
         <section className="py-14 text-center">
