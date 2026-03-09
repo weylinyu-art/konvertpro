@@ -2,8 +2,12 @@
 // app/page.tsx
 
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { CATEGORIES } from "@/lib/units";
-import ConverterWidget from "@/components/ConverterWidget";
+const ConverterWidget = dynamic(() => import("@/components/ConverterWidget"), {
+  loading: () => <div className="h-64 bg-white border border-[#e4e0da] rounded-2xl animate-pulse" />,
+  ssr: false,
+});
 import { useLocale } from "@/components/LocaleProvider";
 import { getTranslations, getCategoryLabel } from "@/lib/i18n";
 import LocaleSwitcher from "@/components/LocaleSwitcher";
