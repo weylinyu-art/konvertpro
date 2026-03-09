@@ -1,6 +1,14 @@
 // app/sitemap.ts
 import { MetadataRoute } from "next";
 import { CATEGORIES, getAllConversionPaths } from "@/lib/units";
+
+const COMPARE_SLUGS = [
+  "celsius-vs-fahrenheit", "celsius-vs-kelvin",
+  "kg-vs-lbs", "oz-vs-grams",
+  "miles-vs-kilometers", "feet-vs-meters", "inches-vs-centimeters",
+  "cups-vs-ml", "gallons-vs-liters",
+  "mph-vs-kmh", "acres-vs-hectares", "mb-vs-gb", "gb-vs-tb",
+];
 import { AI_TOOLS } from "@/lib/ai-units";
 
 const BASE_URL = "https://koverts.com";
@@ -50,5 +58,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...home, ...staticPages, ...aiPages, ...categoryPages, ...conversionPages];
+  // Compare pages
+  const comparePages: MetadataRoute.Sitemap = COMPARE_SLUGS.map((slug) => ({
+    url: `${BASE_URL}/compare/${slug}`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  return [...home, ...staticPages, ...aiPages, ...categoryPages, ...conversionPages, ...comparePages];
 }
