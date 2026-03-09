@@ -159,13 +159,13 @@ export default function CurrencyPage() {
         {/* Hero */}
         <section className="py-10">
           <div className="inline-flex items-center gap-2 bg-[#edf4f0] border border-[#3d6b4f]/20 rounded-full px-4 py-1.5 text-xs font-mono text-[#3d6b4f] tracking-wider mb-6">
-            💱 Currency Converter
+            💱 {t.currency}
           </div>
           <h1 className="text-[clamp(32px,5vw,52px)] font-bold tracking-tight leading-tight mb-2">
-            Currency Converter
+            {t.currency}
           </h1>
           <p className="text-[#9a948a] text-sm">
-            Real-time exchange rates · {CURRENCIES.length} currencies · Powered by ECB data
+            {t.heroBadge} · {CURRENCIES.length} {t.units} · ECB
           </p>
         </section>
 
@@ -175,7 +175,7 @@ export default function CurrencyPage() {
           {/* Card header */}
           <div className="flex items-center justify-between px-4 md:px-7 py-3 border-b border-[#e4e0da]">
             <span className="font-mono text-[10px] text-[#9a948a] tracking-[0.1em] uppercase">
-              💱 Currency Exchange
+              💱 {t.currency}
             </span>
             <div className="flex items-center gap-2">
               {loading && <span className="font-mono text-[10px] text-[#3d6b4f] animate-pulse">fetching rates...</span>}
@@ -196,7 +196,7 @@ export default function CurrencyPage() {
               <select value={from} onChange={(e) => setFrom(e.target.value)}
                 className="mt-2 w-full bg-[#f2f0ed] border border-[#e4e0da] rounded-xl px-4 py-2.5 text-sm font-medium text-[#1a1814] outline-none cursor-pointer appearance-none">
                 {CURRENCIES.map((c) => (
-                  {allRates && (allRates[c] || c === "USD") && <option key={c} value={c}>{CURRENCY_FLAGS[c]} {c} — {CURRENCY_NAMES[c]}</option>}
+                  (allRates && (allRates[c] || c === "USD")) ? <option key={c} value={c}>{CURRENCY_FLAGS[c]} {c} — {CURRENCY_NAMES[c]}</option> : null
                 ))}
               </select>
             </div>
@@ -214,7 +214,7 @@ export default function CurrencyPage() {
               <select value={to} onChange={(e) => setTo(e.target.value)}
                 className="mt-2 w-full bg-[#f2f0ed] border border-[#e4e0da] rounded-xl px-4 py-2.5 text-sm font-medium text-[#1a1814] outline-none cursor-pointer appearance-none">
                 {CURRENCIES.map((c) => (
-                  {allRates && (allRates[c] || c === "USD") && <option key={c} value={c}>{CURRENCY_FLAGS[c]} {c} — {CURRENCY_NAMES[c]}</option>}
+                  (allRates && (allRates[c] || c === "USD")) ? <option key={c} value={c}>{CURRENCY_FLAGS[c]} {c} — {CURRENCY_NAMES[c]}</option> : null
                 ))}
               </select>
             </div>
@@ -229,7 +229,7 @@ export default function CurrencyPage() {
               <select value={from} onChange={(e) => setFrom(e.target.value)}
                 className="mt-2.5 w-full bg-[#f2f0ed] border border-[#e4e0da] rounded-xl px-5 py-3 text-sm font-medium text-[#1a1814] outline-none cursor-pointer appearance-none transition-all">
                 {CURRENCIES.map((c) => (
-                  {allRates && (allRates[c] || c === "USD") && <option key={c} value={c}>{CURRENCY_FLAGS[c]} {c} — {CURRENCY_NAMES[c]}</option>}
+                  (allRates && (allRates[c] || c === "USD")) ? <option key={c} value={c}>{CURRENCY_FLAGS[c]} {c} — {CURRENCY_NAMES[c]}</option> : null
                 ))}
               </select>
             </div>
@@ -245,7 +245,7 @@ export default function CurrencyPage() {
               <select value={to} onChange={(e) => setTo(e.target.value)}
                 className="mt-2.5 w-full bg-[#f2f0ed] border border-[#e4e0da] rounded-xl px-5 py-3 text-sm font-medium text-[#1a1814] outline-none cursor-pointer appearance-none transition-all">
                 {CURRENCIES.map((c) => (
-                  {allRates && (allRates[c] || c === "USD") && <option key={c} value={c}>{CURRENCY_FLAGS[c]} {c} — {CURRENCY_NAMES[c]}</option>}
+                  (allRates && (allRates[c] || c === "USD")) ? <option key={c} value={c}>{CURRENCY_FLAGS[c]} {c} — {CURRENCY_NAMES[c]}</option> : null
                 ))}
               </select>
             </div>
@@ -309,7 +309,7 @@ export default function CurrencyPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-[#e4e0da] bg-[#f7f5f2]">
-                  <th className="text-left px-4 md:px-6 py-3 font-mono text-xs text-[#9a948a] tracking-wider">Currency</th>
+                  <th className="text-left px-4 md:px-6 py-3 font-mono text-xs text-[#9a948a] tracking-wider">{t.currency}</th>
                   <th className="text-left px-4 md:px-6 py-3 font-mono text-xs text-[#9a948a] tracking-wider">1 {from} =</th>
                 </tr>
               </thead>
