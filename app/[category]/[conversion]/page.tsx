@@ -45,8 +45,8 @@ export async function generateStaticParams() {
     { category: "weight",      from: "ounce",      to: "gram" },
     { category: "temperature", from: "fahrenheit", to: "celsius" },
     { category: "volume",      from: "cup",        to: "milliliter" },
-    { category: "volume",      from: "gallon",     to: "liter" },
-    { category: "speed",       from: "mph",        to: "kmh" },
+    { category: "volume",      from: "gallon_us",  to: "liter" },
+    { category: "speed",       from: "mph",        to: "kph" },
   ];
   const numeric = POPULAR_PAIRS.flatMap(({ category, from, to }) =>
     POPULAR_VALUES.map((v) => ({
@@ -87,10 +87,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         title: `${prefixValue} ${fromLabel} = ${resultStr} ${toLabel}`,
         description: `${prefixValue} ${fromSym} = ${resultStr} ${toSym}. Free instant converter.`,
         url: pageUrl, type: "website",
-        images: [{
-          url: `${BASE_URL}/api/og?from=${encodeURIComponent(fromSym)}&to=${encodeURIComponent(toSym)}&category=${params.category}&value=${prefixValue}&result=${encodeURIComponent(resultStr)}`,
-          width: 1200, height: 630, alt: `${prefixValue} ${fromLabel} to ${toLabel}`,
-        }],
+        images: [{ url: `${BASE_URL}/og-image.png`, width: 1200, height: 630, alt: `${prefixValue} ${fromLabel} to ${toLabel}` }],
       },
     };
   }
@@ -111,10 +108,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${fromLabel} to ${toLabel} Converter`,
       description: `1 ${fromSym} = ${oneResult} ${toSym}. Free instant converter.`,
       url: pageUrl, type: "website",
-      images: [{
-        url: `${BASE_URL}/api/og?from=${encodeURIComponent(fromSym)}&to=${encodeURIComponent(toSym)}&category=${params.category}&value=1&result=${encodeURIComponent(formatNumber(convert(1, from, to, params.category)))}`,
-        width: 1200, height: 630, alt: `${fromLabel} to ${toLabel} converter`,
-      }],
+      images: [{ url: `${BASE_URL}/og-image.png`, width: 1200, height: 630, alt: `${fromLabel} to ${toLabel} converter` }],
     },
   };
 }
