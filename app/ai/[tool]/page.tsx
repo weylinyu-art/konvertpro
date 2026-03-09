@@ -3,11 +3,11 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AI_TOOLS } from "@/lib/ai-units";
-import TokenCalculator    from "@/components/ai/TokenCalculator";
-import ModelSizeEstimator from "@/components/ai/ModelSizeEstimator";
-import ApiCostEstimator   from "@/components/ai/ApiCostEstimator";
-import ContextWindow      from "@/components/ai/ContextWindow";
-import ComputeConverter   from "@/components/ai/ComputeConverter";
+import TokenCalculator    from "@/components/TokenCalculator";
+import ModelSizeEstimator from "@/components/ModelSizeEstimator";
+import ApiCostEstimator   from "@/components/ApiCostEstimator";
+import ContextWindow      from "@/components/ContextWindow";
+import ComputeConverter   from "@/components/ComputeConverter";
 
 interface Props { params: { tool: string } }
 
