@@ -8,6 +8,7 @@ import {
   slugToUnit, unitToSlug, getAllConversionPaths,
 } from "@/lib/units";
 import ConverterWidget from "@/components/ConverterWidget";
+import { FAQHeading, HowToHeading, ConversionTableHeading, RelatedHeading } from "@/components/PageLabels";
 
 const BASE_URL = "https://koverts.com";
 
@@ -304,8 +305,7 @@ export default function ConversionPage({ params }: Props) {
         {/* Reference table with Dataset schema */}
         <section className="mt-14 mb-12">
           <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-5">
-            // {fromLabel} to {toLabel} conversion table
-          </p>
+            </p>
           <div className="bg-white border border-[#e4e0da] rounded-2xl overflow-hidden shadow-sm">
             <table className="w-full text-sm">
               <thead>
@@ -347,7 +347,8 @@ export default function ConversionPage({ params }: Props) {
 
         {/* How to convert */}
         <section className="mb-12 bg-white border border-[#e4e0da] rounded-2xl p-8 shadow-sm">
-          <h2 className="font-sans font-bold text-2xl mb-4">How to convert {fromLabel} to {toLabel}</h2>
+  <HowToHeading /> 
+          <p className="font-sans font-bold text-2xl mb-4">{fromLabel} → {toLabel}</p>
           <p className="text-[#9a948a] text-sm leading-relaxed mb-4">
             To convert from {fromLabel} ({fromSym}) to {toLabel} ({toSym}), multiply your value by{" "}
             <strong className="text-[#1a1814]">{formatNumber(oneResult)}</strong>.
@@ -362,7 +363,7 @@ export default function ConversionPage({ params }: Props) {
 
         {/* FAQ */}
         <section className="mb-12">
-          <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-5">// Frequently Asked Questions</p>
+<FAQHeading />
           <div className="space-y-2">
             {faqSchema.mainEntity.map((faq, i) => (
               <details key={i} className="group bg-white border border-[#e4e0da] rounded-xl overflow-hidden shadow-sm">
@@ -380,9 +381,7 @@ export default function ConversionPage({ params }: Props) {
 
         {/* Related conversions */}
         <section className="mb-16">
-          <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-5">
-            // Related {cat.label.toLowerCase()} conversions
-          </p>
+<RelatedHeading />
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {related.map((r) => (
               <Link key={r.unit}
