@@ -1,105 +1,79 @@
-"use client";
-// app/page.tsx
-
+// app/ai/[tool]/page.tsx
+import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import Link from "next/link";
-import { CATEGORIES } from "@/lib/units";
-import ConverterWidget from "@/components/ConverterWidget";
-import SiteHeader from "@/components/SiteHeader";
-import { useLocale } from "@/components/LocaleProvider";
-import { getTranslations } from "@/lib/i18n";
+import { AI_TOOLS } from "@/lib/ai-units";
+import TokenCalculator    from "@/components/TokenCalculator";
+import ModelSizeEstimator from "@/components/ModelSizeEstimator";
+import ApiCostEstimator   from "@/components/ApiCostEstimator";
+import ContextWindow      from "@/components/ContextWindow";
+import ComputeConverter   from "@/components/ComputeConverter";
 
-const CATEGORY_ORDER = [
-  "length", "weight", "temperature", "volume", "cooking",
-  "speed", "area", "time", "data", "shoe",
-  "energy", "pressure", "power", "angle", "numbase",
-];
+interface Props { params: { tool: string } }
 
-export default function HomePage() {
-  const { locale } = useLocale();
-  const t = getTranslations(locale);
+export async function generateStaticParams() {
+  return AI_TOOLS.map((t) => ({ tool: t.slug }));
+}
 
-  const orderedCats = [
-    ...CATEGORY_ORDER.filter((s) => CATEGORIES[s]).map((s) => CATEGORIES[s]),
-    ...Object.values(CATEGORIES).filter((c) => !CATEGORY_ORDER.includes(c.slug)),
-  ];
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const tool = AI_TOOLS.find((t) => t.slug === params.tool);
+  if (!tool) return {};
+  return { title: tool.title, description: tool.metaDescription };
+}
+
+const TOOL_COMPONENTS: Record<string, React.ComponentType> = {
+  "token-calculator":  TokenCalculator,
+  "model-size":        ModelSizeEstimator,
+  "api-cost":          ApiCostEstimator,
+  "context-window":    ContextWindow,
+  "compute-units":     ComputeConverter,
+};
+
+export default function AiToolPage({ params }: Props) {
+  const tool = AI_TOOLS.find((t) => t.slug === params.tool);
+  if (!tool) notFound();
+
+  const ToolComponent = TOOL_COMPONENTS[params.tool];
 
   return (
     <main className="relative z-10">
       <div className="max-w-4xl mx-auto px-6">
 
-        <SiteHeader />
-
-        {/* Hero */}
-        <section className="text-center py-14">
-          <div className="inline-flex items-center gap-2 bg-[#edf4f0] border border-[#3d6b4f]/20 rounded-full px-4 py-1.5 text-xs font-mono text-[#3d6b4f] tracking-wider mb-7">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#3d6b4f] animate-pulse" />
-            {t.heroBadge}
-          </div>
-          <h1 className="font-sans font-bold text-[clamp(40px,7vw,72px)] leading-[1.05] tracking-tight mb-4">
-            {t.heroTitle} <em className="italic text-[#3d6b4f]">{t.heroTitleEm}</em>
-            <br />{t.heroTitleSuffix}
-          </h1>
-          <p className="text-[#9a948a] font-light text-base max-w-sm mx-auto leading-relaxed">
-            {t.heroSubtitle}
-          </p>
-        </section>
-
-        <ConverterWidget />
-
-        {/* All categories grid */}
-        <section className="mt-16 mb-20">
-          <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-5">
-            // {t.allConverters}
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-
-            {/* Currency first — highest traffic */}
-            <Link href="/currency"
-              className="group bg-white border border-[#e4e0da] rounded-2xl p-5 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5">
-              <span className="text-2xl mb-3 block">💱</span>
-              <span className="font-semibold text-sm text-[#1a1814] group-hover:text-[#3d6b4f] transition-colors block">Currency</span>
-              <p className="text-xs text-[#9a948a] mt-1">32 currencies · live</p>
-            </Link>
-
-            {orderedCats.map((cat) => (
-              <Link key={cat.slug} href={`/${cat.slug}`}
-                className="group bg-white border border-[#e4e0da] rounded-2xl p-5 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5">
-                <span className="text-2xl mb-3 block">{cat.icon}</span>
-                <span className="font-semibold text-sm text-[#1a1814] group-hover:text-[#3d6b4f] transition-colors block">
-                  {cat.label}
-                </span>
-                <p className="text-xs text-[#9a948a] mt-1">{Object.keys(cat.units).length} {t.units}</p>
-              </Link>
-            ))}
-
-            {/* AI Tools last */}
-            <Link href="/ai"
-              className="group bg-[#edf4f0] border border-[#3d6b4f]/30 rounded-2xl p-5 hover:border-[#3d6b4f] hover:bg-[#3d6b4f] transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5">
-              <span className="text-2xl mb-3 block">🤖</span>
-              <span className="font-semibold text-sm text-[#3d6b4f] group-hover:text-white transition-colors block">
-                {t.aiTools}
+        <header className="flex items-center justify-between pt-6 md:pt-8">
+          <div className="flex items-center gap-1.5 min-w-0 overflow-hidden">
+            <Link href="/" className="flex items-baseline gap-1.5 flex-shrink-0 group">
+              <span className="font-sans font-bold text-[20px] md:text-[24px] tracking-tight text-[#1a1814] group-hover:text-[#3d6b4f] transition-colors">
+                Koverts
               </span>
-              <p className="text-xs text-[#3d6b4f]/60 group-hover:text-white/70 mt-1">5 tools</p>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#3d6b4f] mb-0.5" />
             </Link>
+            <span className="text-[#c5bdb4] text-xs flex-shrink-0">/</span>
+            <Link href="/ai" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f] transition-colors flex-shrink-0">
+              AI Tools
+            </Link>
+            <span className="text-[#c5bdb4] text-xs flex-shrink-0">/</span>
+            <span className="font-mono text-xs text-[#3d6b4f] truncate max-w-[100px] md:max-w-[200px]">
+              {tool.title}
+            </span>
           </div>
+        </header>
+
+        <section className="py-12">
+          <div className="inline-flex items-center gap-2 bg-[#edf4f0] border border-[#3d6b4f]/20 rounded-full px-4 py-1.5 text-xs font-mono text-[#3d6b4f] tracking-wider mb-6">
+            {tool.icon} AI Tool
+          </div>
+          <h1 className="font-sans font-bold text-[clamp(32px,5vw,52px)] tracking-tight leading-tight mb-3">
+            {tool.title}
+          </h1>
+          <p className="text-[#9a948a] text-sm max-w-lg leading-relaxed">{tool.description}</p>
         </section>
 
-        {/* Footer */}
-        <footer className="border-t border-[#e4e0da] py-8 flex items-center justify-between flex-wrap gap-4 mb-4">
-          <span className="font-mono text-xs text-[#9a948a]">{t.copyright}</span>
-          <div className="flex gap-4 flex-wrap">
-            <Link href="/currency" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f] transition-colors">Currency</Link>
-            {orderedCats.map((cat) => (
-              <Link key={cat.slug} href={`/${cat.slug}`}
-                className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f] transition-colors">
-                {cat.label}
-              </Link>
-            ))}
-            <Link href="/ai" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f] transition-colors">{t.aiTools}</Link>
-            <Link href="/about" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f] transition-colors">About</Link>
-          </div>
-        </footer>
+        <ToolComponent />
 
+        <footer className="border-t border-[#e4e0da] py-8 mt-16 flex items-center justify-between flex-wrap gap-4 mb-4">
+          <Link href="/ai" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f]">← AI Tools</Link>
+          <span className="font-mono text-xs text-[#9a948a]">© 2025 Koverts</span>
+        </footer>
       </div>
     </main>
   );
