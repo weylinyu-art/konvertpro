@@ -5,7 +5,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { CATEGORIES, convert, formatNumber, getSymbol } from "@/lib/units";
 import { useLocale } from "@/components/LocaleProvider";
-import { getTranslations, getCategoryLabel } from "@/lib/i18n";
+import { getTranslations, getCategoryLabel, getUnitLabel } from "@/lib/i18n";
 
 // Ordered by global search volume / popularity (2025–2026)
 const CATEGORY_ORDER = [
@@ -113,7 +113,7 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
               className="w-full bg-[#f2f0ed] border border-[#e4e0da] rounded-xl px-4 py-3 font-mono text-[22px] text-[#1a1814] outline-none focus:border-[#3d6b4f] transition-all" />
             <select value={from} onChange={(e) => setFrom(e.target.value)}
               className="mt-2 w-full bg-[#f2f0ed] border border-[#e4e0da] rounded-xl px-4 py-2.5 text-sm font-medium text-[#1a1814] outline-none cursor-pointer appearance-none">
-              {unitKeys.map((k) => <option key={k} value={k}>{cat.units[k].label}</option>)}
+              {unitKeys.map((k) => <option key={k} value={k}>{getUnitLabel(k, locale)}</option>)}
             </select>
           </div>
           <div className="flex justify-center">
@@ -128,7 +128,7 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
               className="w-full bg-[#edf4f0] border border-[#e4e0da] rounded-xl px-4 py-3 font-mono text-[22px] text-[#3d6b4f] outline-none cursor-default" />
             <select value={to} onChange={(e) => setTo(e.target.value)}
               className="mt-2 w-full bg-[#f2f0ed] border border-[#e4e0da] rounded-xl px-4 py-2.5 text-sm font-medium text-[#1a1814] outline-none cursor-pointer appearance-none">
-              {unitKeys.map((k) => <option key={k} value={k}>{cat.units[k].label}</option>)}
+              {unitKeys.map((k) => <option key={k} value={k}>{getUnitLabel(k, locale)}</option>)}
             </select>
           </div>
         </div>
@@ -141,7 +141,7 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
               className="w-full bg-[#f2f0ed] border border-[#e4e0da] rounded-xl px-5 py-4 font-mono text-[28px] text-[#1a1814] outline-none focus:border-[#3d6b4f] focus:ring-2 focus:ring-[#3d6b4f]/10 transition-all" />
             <select value={from} onChange={(e) => setFrom(e.target.value)}
               className="mt-2.5 w-full bg-[#f2f0ed] border border-[#e4e0da] rounded-xl px-5 py-3 text-sm font-medium text-[#1a1814] outline-none cursor-pointer appearance-none transition-all">
-              {unitKeys.map((k) => <option key={k} value={k}>{cat.units[k].label}</option>)}
+              {unitKeys.map((k) => <option key={k} value={k}>{getUnitLabel(k, locale)}</option>)}
             </select>
           </div>
           <button onClick={swap}
@@ -155,7 +155,7 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
               className="w-full bg-[#edf4f0] border border-[#e4e0da] rounded-xl px-5 py-4 font-mono text-[28px] text-[#3d6b4f] outline-none cursor-default transition-all" />
             <select value={to} onChange={(e) => setTo(e.target.value)}
               className="mt-2.5 w-full bg-[#f2f0ed] border border-[#e4e0da] rounded-xl px-5 py-3 text-sm font-medium text-[#1a1814] outline-none cursor-pointer appearance-none transition-all">
-              {unitKeys.map((k) => <option key={k} value={k}>{cat.units[k].label}</option>)}
+              {unitKeys.map((k) => <option key={k} value={k}>{getUnitLabel(k, locale)}</option>)}
             </select>
           </div>
         </div>
