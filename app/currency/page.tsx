@@ -1,6 +1,6 @@
 "use client";
 // app/currency/page.tsx
-// Real-time currency converter using frankfurter.app (ECB data, free, no key needed)
+// Real-time currency converter using frankfurter.app  (ECB data, free, no key needed)
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
