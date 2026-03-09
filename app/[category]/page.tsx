@@ -1,30 +1,49 @@
 // app/[category]/page.tsx
-"use client";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { CATEGORIES, convert, formatNumber, getSymbol, unitToSlug } from "@/lib/units";
 import ConverterWidget from "@/components/ConverterWidget";
-import SiteHeader from "@/components/SiteHeader";
-import { useLocale } from "@/components/LocaleProvider";
-import { getTranslations } from "@/lib/i18n";
 
 interface Props {
   params: { category: string };
+}
+
+export async function generateStaticParams() {
+  return Object.keys(CATEGORIES).map((cat) => ({ category: cat }));
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const cat = CATEGORIES[params.category];
+  if (!cat) return {};
+  return { title: cat.title, description: cat.description };
 }
 
 export default function CategoryPage({ params }: Props) {
   const cat = CATEGORIES[params.category];
   if (!cat) notFound();
 
-  const { locale } = useLocale();
-  const t = getTranslations(locale);
   const unitKeys = Object.keys(cat.units);
 
   return (
     <main className="relative z-10">
       <div className="max-w-4xl mx-auto px-6">
 
-        <SiteHeader crumbs={[{ label: cat.label }]} />
+        {/* Header */}
+        <header className="flex items-center justify-between pt-6 md:pt-8">
+          <div className="flex items-center gap-1.5 min-w-0 overflow-hidden">
+            <Link href="/" className="flex items-baseline gap-1.5 flex-shrink-0 group">
+              <span className="font-sans font-bold text-[20px] md:text-[24px] tracking-tight text-[#1a1814] group-hover:text-[#3d6b4f] transition-colors">
+                Koverts
+              </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#3d6b4f] mb-0.5" />
+            </Link>
+            <span className="text-[#c5bdb4] text-xs flex-shrink-0">/</span>
+            <span className="font-mono text-xs text-[#3d6b4f] truncate max-w-[120px] md:max-w-[200px]">
+              {cat.label}
+            </span>
+          </div>
+        </header>
 
         {/* Hero */}
         <section className="py-12 text-center">
@@ -50,11 +69,9 @@ export default function CategoryPage({ params }: Props) {
               const fromSymbol = getSymbol(p.from, params.category);
               const toSymbol   = getSymbol(p.to, params.category);
               return (
-                <Link
-                  key={`${p.from}-${p.to}`}
+                <Link key={`${p.from}-${p.to}`}
                   href={`/${params.category}/${unitToSlug(p.from)}-to-${unitToSlug(p.to)}`}
-                  className="group bg-white border border-[#e4e0da] rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm"
-                >
+                  className="group bg-white border border-[#e4e0da] rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm">
                   <p className="font-mono text-sm text-[#1a1814]">{p.val} {fromSymbol} →</p>
                   <p className="text-xs text-[#9a948a] mt-0.5 group-hover:text-[#3d6b4f] transition-colors">
                     {formatNumber(result)} {toSymbol}
@@ -100,8 +117,8 @@ export default function CategoryPage({ params }: Props) {
         </section>
 
         <footer className="border-t border-[#e4e0da] py-8 flex items-center justify-between flex-wrap gap-4 mb-4">
-          <Link href="/" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f]">← {t.allConverters}</Link>
-          <span className="font-mono text-xs text-[#9a948a]">{t.copyright}</span>
+          <Link href="/" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f]">← All converters</Link>
+          <span className="font-mono text-xs text-[#9a948a]">© 2025 Koverts</span>
         </footer>
       </div>
     </main>
