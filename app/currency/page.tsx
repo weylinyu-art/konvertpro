@@ -314,7 +314,7 @@ export default function CurrencyPage() {
                 </tr>
               </thead>
               <tbody>
-                {CURRENCIES.filter((c) => c !== from).map((c) => (
+                {CURRENCIES.filter((c) => c !== from && allRates && (allRates[c] || c === "USD")).map((c) => (
                   <tr key={c}
                     onClick={() => { setTo(c); window.scrollTo({ top: 0, behavior: "smooth" }); }}
                     className="border-b border-[#f0ede8] hover:bg-[#faf8f5] cursor-pointer transition-colors">
