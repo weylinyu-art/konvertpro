@@ -2,6 +2,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { LocaleProvider } from "@/components/LocaleProvider";
+import PWAInit from "@/components/PWAInit";
 import "./globals.css";
 
 const BASE_URL = "https://koverts.com";
@@ -121,6 +122,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         ))}
         <link rel="alternate" hrefLang="x-default" href={BASE_URL} />
 
+        {/* PWA */}
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Koverts" />
+        <link rel="apple-touch-icon" href="/icon-192.png" />
+
         {/* Baidu — site verification (replace XXXX with code from ziyuan.baidu.com) */}
         <meta name="baidu-site-verification" content="BAIDU_VERIFY_CODE" />
         {/* Baidu — preferred language signal */}
@@ -146,6 +155,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="bg-[#f7f5f2] text-[#1a1814] font-sans antialiased min-h-screen">
         <LocaleProvider>
+          <PWAInit />
           {children}
         </LocaleProvider>
       </body>
