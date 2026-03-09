@@ -8,6 +8,7 @@ import { useLocale } from "@/components/LocaleProvider";
 import LocaleSwitcher from "@/components/LocaleSwitcher";
 import { getTranslations } from "@/lib/i18n";
 import { currencyFaqSchema } from "./metadata";
+import SiteHeader from "@/components/SiteHeader";
 
 const CURRENCY_NAMES: Record<string, string> = {
   USD: "US Dollar",        EUR: "Euro",             GBP: "British Pound",
@@ -54,7 +55,7 @@ function formatCurrency(n: number, currency: string): string {
 }
 
 export default function CurrencyPage() {
-  const { locale, setLocale, mounted } = useLocale();
+  const { locale } = useLocale();
   const t = getTranslations(locale);
 
   const [from,     setFrom]     = useState("USD");
@@ -97,16 +98,7 @@ export default function CurrencyPage() {
       <div className="max-w-4xl mx-auto px-6">
 
         {/* Header */}
-        <header className="flex items-center justify-between pt-8">
-          <Link href="/" className="flex items-baseline gap-2 group">
-            <span className="font-sans font-bold text-[22px] tracking-tight text-[#1a1814] group-hover:text-[#3d6b4f] transition-colors">Koverts</span>
-            <span className="w-2 h-2 rounded-full bg-[#3d6b4f] mb-1" />
-          </Link>
-          <div className="flex items-center gap-3">
-            <Link href="/" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f] transition-colors">← {t.home}</Link>
-            {mounted && <LocaleSwitcher currentLocale={locale} onLocaleChange={setLocale} />}
-          </div>
-        </header>
+<SiteHeader crumbs={[{ label: "Currency Converter" }]} />
 
         {/* Hero */}
         <section className="py-10">
