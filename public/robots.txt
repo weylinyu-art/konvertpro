@@ -1,4 +1,41 @@
-User-agent: *
+# koverts.com robots.txt
+
+# ── Google ──────────────────────────────────────────────────
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Googlebot-Image
 Allow: /
 
+# ── Baidu ───────────────────────────────────────────────────
+User-agent: Baiduspider
+Allow: /
+Crawl-delay: 2
+
+User-agent: Baiduspider-image
+Allow: /
+
+User-agent: Baiduspider-video
+Disallow: /
+
+# ── Yandex ──────────────────────────────────────────────────
+User-agent: YandexBot
+Allow: /
+Crawl-delay: 2
+
+User-agent: YandexImages
+Allow: /
+
+# ── Bing ────────────────────────────────────────────────────
+User-agent: bingbot
+Allow: /
+Crawl-delay: 1
+
+# ── Others ──────────────────────────────────────────────────
+User-agent: *
+Allow: /
+Crawl-delay: 5
+
+# ── Sitemaps ─────────────────────────────────────────────────
 Sitemap: https://koverts.com/sitemap.xml
