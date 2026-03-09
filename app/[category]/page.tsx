@@ -48,6 +48,19 @@ export default function CategoryPage({ params }: Props) {
 
   // ── Structured Data ──────────────────────────────────────────
 
+  const datasetSchema = {
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    "name": `${cat.label} Unit Conversion Reference`,
+    "description": `Reference table for ${cat.label.toLowerCase()} unit conversions. Covers ${unitKeys.length} units: ${Object.values(cat.units).slice(0, 5).map((u: any) => u.label).join(", ")}.`,
+    "url": pageUrl,
+    "creator": { "@type": "Organization", "name": "Koverts", "url": BASE_URL },
+    "variableMeasured": unitKeys.map((k) => ({
+      "@type": "PropertyValue",
+      "name": cat.units[k].label,
+    })),
+  };
+
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -93,6 +106,7 @@ export default function CategoryPage({ params }: Props) {
       {/* Structured Data */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(datasetSchema) }} />
 
       <div className="max-w-4xl mx-auto px-6">
 
