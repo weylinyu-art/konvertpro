@@ -1,6 +1,6 @@
 "use client";
 // app/currency/page.tsx
-// Real-time currency converter using frankfurter.app  (ECB data, free, no key needed)
+// Real-time currency converter using frankfurter.app (ECB data, free, no key needed)
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
@@ -8,7 +8,6 @@ import { useLocale } from "@/components/LocaleProvider";
 import LocaleSwitcher from "@/components/LocaleSwitcher";
 import { getTranslations } from "@/lib/i18n";
 import { currencyFaqSchema } from "./metadata";
-import SiteHeader from "@/components/SiteHeader";
 
 const CURRENCY_NAMES: Record<string, string> = {
   USD: "US Dollar",        EUR: "Euro",             GBP: "British Pound",
@@ -55,26 +54,53 @@ function formatCurrency(n: number, currency: string): string {
 }
 
 export default function CurrencyPage() {
-  const { locale } = useLocale();
+  const { locale, setLocale, mounted } = useLocale();
   const t = getTranslations(locale);
 
   const [from,     setFrom]     = useState("USD");
   const [to,       setTo]       = useState("CNY");
   const [inputVal, setInputVal] = useState("100");
-  const [rate,     setRate]     = useState<number | null>(null);
+  const [allRates, setAllRates] = useState<Record<string, number> | null>(null);
   const [loading,  setLoading]  = useState(false);
   const [error,    setError]    = useState<string | null>(null);
   const [updated,  setUpdated]  = useState<string | null>(null);
 
-  const fetchRate = useCallback(async (fromCur: string, toCur: string) => {
-    if (fromCur === toCur) { setRate(1); return; }
+  // Derive rate locally — no extra fetch when switching currencies
+  const rate = (() => {
+    if (!allRates) return null;
+    if (from === to) return 1;
+    const fromUSD = from === "USD" ? 1 : allRates[from];
+    const toUSD   = to   === "USD" ? 1 : allRates[to];
+    if (!fromUSD || !toUSD) return null;
+    return toUSD / fromUSD;
+  })();
+
+  // Fetch ALL rates once per day (base USD), cache in localStorage
+  const fetchAllRates = useCallback(async () => {
+    const CACHE_KEY = "koverts_rates_v1";
+    const TTL_MS    = 24 * 60 * 60 * 1000;
+    try {
+      const cached = localStorage.getItem(CACHE_KEY);
+      if (cached) {
+        const { rates, date, ts } = JSON.parse(cached);
+        if (Date.now() - ts < TTL_MS) {
+          setAllRates(rates);
+          setUpdated(date);
+          return;
+        }
+      }
+    } catch {}
     setLoading(true);
     setError(null);
     try {
-      const res  = await fetch(`https://api.frankfurter.app/latest?from=${fromCur}&to=${toCur}`);
+      const res  = await fetch("https://api.frankfurter.app/latest?from=USD");
       const data = await res.json();
-      setRate(data.rates[toCur]);
+      const rates = { ...data.rates, USD: 1 };
+      setAllRates(rates);
       setUpdated(data.date);
+      try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ rates, date: data.date, ts: Date.now() }));
+      } catch {}
     } catch {
       setError("Unable to fetch rates. Please try again.");
     } finally {
@@ -82,7 +108,7 @@ export default function CurrencyPage() {
     }
   }, []);
 
-  useEffect(() => { fetchRate(from, to); }, [from, to, fetchRate]);
+  useEffect(() => { fetchAllRates(); }, [fetchAllRates]);
 
   const result  = rate !== null && !isNaN(parseFloat(inputVal))
     ? parseFloat(inputVal) * rate : null;
@@ -98,7 +124,16 @@ export default function CurrencyPage() {
       <div className="max-w-4xl mx-auto px-6">
 
         {/* Header */}
-<SiteHeader crumbs={[{ label: "Currency Converter" }]} />
+        <header className="flex items-center justify-between pt-8">
+          <Link href="/" className="flex items-baseline gap-2 group">
+            <span className="font-sans font-bold text-[22px] tracking-tight text-[#1a1814] group-hover:text-[#3d6b4f] transition-colors">Koverts</span>
+            <span className="w-2 h-2 rounded-full bg-[#3d6b4f] mb-1" />
+          </Link>
+          <div className="flex items-center gap-3">
+            <Link href="/" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f] transition-colors">← {t.home}</Link>
+            {mounted && <LocaleSwitcher currentLocale={locale} onLocaleChange={setLocale} />}
+          </div>
+        </header>
 
         {/* Hero */}
         <section className="py-10">
@@ -124,7 +159,7 @@ export default function CurrencyPage() {
             <div className="flex items-center gap-2">
               {loading && <span className="font-mono text-[10px] text-[#3d6b4f] animate-pulse">fetching rates...</span>}
               {updated && !loading && <span className="font-mono text-[10px] text-[#9a948a]">ECB · {updated}</span>}
-              <button onClick={() => fetchRate(from, to)}
+              <button onClick={() => { localStorage.removeItem('koverts_rates_v1'); fetchAllRates(); }}
                 className="font-mono text-[10px] text-[#9a948a] hover:text-[#3d6b4f] transition-colors px-2 py-1 rounded border border-[#e4e0da] hover:border-[#3d6b4f]">
                 ↻ refresh
               </button>
