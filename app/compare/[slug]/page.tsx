@@ -32,10 +32,10 @@ const COMPARE_PAIRS: {
   // Volume
   { slug: "cups-vs-ml",       category: "volume", a: "cup",    b: "milliliter",
     title: "Cups vs Milliliters",   description: "US cups vs milliliters for cooking and baking." },
-  { slug: "gallons-vs-liters", category: "volume", a: "gallon", b: "liter",
+  { slug: "gallons-vs-liters", category: "volume", a: "gallon_us", b: "liter",
     title: "Gallons vs Liters",     description: "Gallons and liters compared for fuel and liquids." },
   // Speed
-  { slug: "mph-vs-kmh", category: "speed", a: "mph", b: "kmh",
+  { slug: "mph-vs-kmh", category: "speed", a: "mph", b: "kph",
     title: "MPH vs KM/H",           description: "Miles per hour vs kilometers per hour — full comparison." },
   // Area
   { slug: "acres-vs-hectares", category: "area", a: "acre", b: "hectare",
