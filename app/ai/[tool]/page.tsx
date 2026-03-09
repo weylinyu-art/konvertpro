@@ -35,8 +35,33 @@ export default function AiToolPage({ params }: Props) {
 
   const ToolComponent = TOOL_COMPONENTS[params.tool];
 
+  const BASE_URL = "https://koverts.com";
+  const softwareSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": tool.title,
+    "description": tool.description,
+    "url": `${BASE_URL}/ai/${tool.slug}`,
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "provider": { "@type": "Organization", "name": "Koverts", "url": BASE_URL },
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home",      "item": BASE_URL },
+      { "@type": "ListItem", "position": 2, "name": "AI Tools",  "item": `${BASE_URL}/ai` },
+      { "@type": "ListItem", "position": 3, "name": tool.title,  "item": `${BASE_URL}/ai/${tool.slug}` },
+    ],
+  };
+
   return (
     <main className="relative z-10">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <div className="max-w-4xl mx-auto px-6">
 
         <header className="flex items-center justify-between pt-6 md:pt-8">
