@@ -9,7 +9,6 @@ import {
   slugToUnit, unitToSlug, getAllConversionPaths,
 } from "@/lib/units";
 import ConverterWidget from "@/components/ConverterWidget";
-import SiteHeader from "@/components/SiteHeader";
 
 interface Props {
   params: { category: string; conversion: string };
@@ -75,10 +74,26 @@ export default function ConversionPage({ params }: Props) {
     <main className="relative z-10">
       <div className="max-w-4xl mx-auto px-6">
 
-        <SiteHeader crumbs={[
-          { label: cat.label, href: `/${params.category}` },
-          { label: `${fromSym} → ${toSym}` },
-        ]} />
+        {/* Header */}
+        <header className="flex items-center justify-between pt-6 md:pt-8">
+          <div className="flex items-center gap-1.5 min-w-0 overflow-hidden">
+            <Link href="/" className="flex items-baseline gap-1.5 flex-shrink-0 group">
+              <span className="font-sans font-bold text-[20px] md:text-[24px] tracking-tight text-[#1a1814] group-hover:text-[#3d6b4f] transition-colors">
+                Koverts
+              </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#3d6b4f] mb-0.5" />
+            </Link>
+            <span className="text-[#c5bdb4] text-xs flex-shrink-0">/</span>
+            <Link href={`/${params.category}`}
+              className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f] transition-colors flex-shrink-0">
+              {cat.label}
+            </Link>
+            <span className="text-[#c5bdb4] text-xs flex-shrink-0">/</span>
+            <span className="font-mono text-xs text-[#3d6b4f] truncate max-w-[80px] md:max-w-[160px]">
+              {fromSym} → {toSym}
+            </span>
+          </div>
+        </header>
 
         {/* Hero */}
         <section className="py-12">
@@ -149,11 +164,9 @@ export default function ConversionPage({ params }: Props) {
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {related.map((r) => (
-              <Link
-                key={r.unit}
+              <Link key={r.unit}
                 href={`/${params.category}/${unitToSlug(from)}-to-${unitToSlug(r.unit)}`}
-                className="group bg-white border border-[#e4e0da] rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm text-center"
-              >
+                className="group bg-white border border-[#e4e0da] rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm text-center">
                 <p className="font-mono text-xs text-[#9a948a] group-hover:text-[#3d6b4f]">
                   {fromSym} → {r.sym}
                 </p>
