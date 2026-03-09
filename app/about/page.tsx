@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useLocale } from "@/components/LocaleProvider";
 import LocaleSwitcher from "@/components/LocaleSwitcher";
 import { CATEGORIES } from "@/lib/units";
+import { getTranslations, getCategoryLabel } from "@/lib/i18n";
 
 const STATS = [
   { value: "1,200+", label: "Conversion pages" },
@@ -38,6 +39,7 @@ const VALUES = [
 
 export default function AboutPage() {
   const { locale, setLocale, mounted } = useLocale();
+  const t = getTranslations(locale);
 
   return (
     <main className="relative z-10">
@@ -174,7 +176,7 @@ export default function AboutPage() {
               <Link key={cat.slug} href={`/${cat.slug}`}
                 className="group bg-white border border-[#e4e0da] rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm text-center">
                 <span className="text-xl block mb-1">{cat.icon}</span>
-                <p className="text-xs font-medium text-[#1a1814] group-hover:text-[#3d6b4f]">{cat.label}</p>
+                <p className="text-xs font-medium text-[#1a1814] group-hover:text-[#3d6b4f]">{getCategoryLabel(cat.slug, t)}</p>
               </Link>
             ))}
           </div>
@@ -189,4 +191,3 @@ export default function AboutPage() {
     </main>
   );
 }
-
