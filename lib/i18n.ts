@@ -75,6 +75,18 @@ export interface Translations {
 
   // Footer
   copyright: string;
+
+  // Page section headings (used in server-rendered pages)
+  howToConvert: string;
+  conversionTableHeading: string;
+  frequentlyAsked: string;
+  popularConversionsHeading: string;
+  allConversionsHeading: string;
+  relatedConversionsHeading: string;
+  compareHeading: string;
+  formulaHeading: string;
+  moreComparisons: string;
+  fullConverter: string;
 }
 
 export const TRANSLATIONS: Record<Locale, Translations> = {
@@ -122,6 +134,16 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     aboutTool: "About this tool",
     faq: "Frequently Asked Questions",
     copyright: "© 2025 Koverts",
+    howToConvert: "How to convert",
+    conversionTableHeading: "Conversion table",
+    frequentlyAsked: "Frequently Asked Questions",
+    popularConversionsHeading: "Popular conversions",
+    allConversionsHeading: "All conversions",
+    relatedConversionsHeading: "Related conversions",
+    compareHeading: "Side-by-side comparison table",
+    formulaHeading: "Formula",
+    moreComparisons: "More comparisons",
+    fullConverter: "Full converter",
   },
 
   zh: {
@@ -168,6 +190,16 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     aboutTool: "关于此工具",
     faq: "常见问题",
     copyright: "© 2025 Koverts",
+    howToConvert: "如何换算",
+    conversionTableHeading: "换算表",
+    frequentlyAsked: "常见问题",
+    popularConversionsHeading: "常用换算",
+    allConversionsHeading: "所有换算",
+    relatedConversionsHeading: "相关换算",
+    compareHeading: "对比表格",
+    formulaHeading: "计算公式",
+    moreComparisons: "更多对比",
+    fullConverter: "完整换算器",
   },
 
   es: {
@@ -214,6 +246,16 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     aboutTool: "Sobre esta herramienta",
     faq: "Preguntas frecuentes",
     copyright: "© 2025 Koverts",
+    howToConvert: "Cómo convertir",
+    conversionTableHeading: "Tabla de conversión",
+    frequentlyAsked: "Preguntas frecuentes",
+    popularConversionsHeading: "Conversiones populares",
+    allConversionsHeading: "Todas las conversiones",
+    relatedConversionsHeading: "Conversiones relacionadas",
+    compareHeading: "Tabla comparativa",
+    formulaHeading: "Fórmula",
+    moreComparisons: "Más comparaciones",
+    fullConverter: "Conversor completo",
   },
 
   fr: {
@@ -260,6 +302,16 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     aboutTool: "À propos de cet outil",
     faq: "Questions fréquentes",
     copyright: "© 2025 Koverts",
+    howToConvert: "Comment convertir",
+    conversionTableHeading: "Table de conversion",
+    frequentlyAsked: "Questions fréquentes",
+    popularConversionsHeading: "Conversions populaires",
+    allConversionsHeading: "Toutes les conversions",
+    relatedConversionsHeading: "Conversions associées",
+    compareHeading: "Tableau comparatif",
+    formulaHeading: "Formule",
+    moreComparisons: "Plus de comparaisons",
+    fullConverter: "Convertisseur complet",
   },
 
   ru: {
@@ -306,6 +358,16 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     aboutTool: "Об этом инструменте",
     faq: "Часто задаваемые вопросы",
     copyright: "© 2025 Koverts",
+    howToConvert: "Как конвертировать",
+    conversionTableHeading: "Таблица конвертации",
+    frequentlyAsked: "Часто задаваемые вопросы",
+    popularConversionsHeading: "Популярные конвертации",
+    allConversionsHeading: "Все конвертации",
+    relatedConversionsHeading: "Похожие конвертации",
+    compareHeading: "Сравнительная таблица",
+    formulaHeading: "Формула",
+    moreComparisons: "Больше сравнений",
+    fullConverter: "Полный конвертер",
   },
 
   ar: {
