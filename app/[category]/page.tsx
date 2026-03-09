@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CATEGORIES, convert, formatNumber, getSymbol, unitToSlug } from "@/lib/units";
 import ConverterWidget from "@/components/ConverterWidget";
+import { FAQHeading, PopularHeading, AllConversionsHeading } from "@/components/PageLabels";
 
 const BASE_URL = "https://koverts.com";
 
@@ -141,9 +142,7 @@ export default function CategoryPage({ params }: Props) {
 
         {/* Popular conversions */}
         <section className="mt-14 mb-8">
-          <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-5">
-            // Popular {cat.label.toLowerCase()} conversions
-          </p>
+<PopularHeading />
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {cat.popular.map((p) => {
               const result = convert(p.val, p.from, p.to, params.category);
@@ -165,9 +164,7 @@ export default function CategoryPage({ params }: Props) {
 
         {/* FAQ */}
         <section className="mb-12">
-          <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-5">
-            // Frequently Asked Questions
-          </p>
+<FAQHeading />
           <div className="space-y-2">
             {faqSchema.mainEntity.map((faq, i) => (
               <details key={i} className="group bg-white border border-[#e4e0da] rounded-xl overflow-hidden shadow-sm">
@@ -185,9 +182,7 @@ export default function CategoryPage({ params }: Props) {
 
         {/* All conversions table */}
         <section className="mb-16">
-          <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-5">
-            // All {cat.label.toLowerCase()} conversions
-          </p>
+<AllConversionsHeading />
           <div className="bg-white border border-[#e4e0da] rounded-2xl overflow-hidden shadow-sm">
             <table className="w-full text-sm">
               <thead>
