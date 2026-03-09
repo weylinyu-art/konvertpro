@@ -2,7 +2,6 @@
 // app/ai/page.tsx
 import Link from "next/link";
 import { AI_TOOLS } from "@/lib/ai-units";
-import SiteHeader from "@/components/SiteHeader";
 import { useLocale } from "@/components/LocaleProvider";
 import { getTranslations } from "@/lib/i18n";
 
@@ -14,7 +13,19 @@ export default function AiPage() {
     <main className="relative z-10">
       <div className="max-w-4xl mx-auto px-6">
 
-        <SiteHeader crumbs={[{ label: "AI Tools" }]} />
+        {/* Header */}
+        <header className="flex items-center justify-between pt-6 md:pt-8">
+          <div className="flex items-center gap-1.5 min-w-0 overflow-hidden">
+            <Link href="/" className="flex items-baseline gap-1.5 flex-shrink-0 group">
+              <span className="font-sans font-bold text-[20px] md:text-[24px] tracking-tight text-[#1a1814] group-hover:text-[#3d6b4f] transition-colors">
+                Koverts
+              </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#3d6b4f] mb-0.5" />
+            </Link>
+            <span className="text-[#c5bdb4] text-xs flex-shrink-0">/</span>
+            <span className="font-mono text-xs text-[#3d6b4f]">AI Tools</span>
+          </div>
+        </header>
 
         <section className="py-14 text-center">
           <div className="inline-flex items-center gap-2 bg-[#edf4f0] border border-[#3d6b4f]/20 rounded-full px-4 py-1.5 text-xs font-mono text-[#3d6b4f] tracking-wider mb-7">
@@ -31,11 +42,8 @@ export default function AiPage() {
 
         <div className="grid md:grid-cols-2 gap-4 mb-20">
           {AI_TOOLS.map((tool) => (
-            <Link
-              key={tool.slug}
-              href={`/ai/${tool.slug}`}
-              className="group bg-white border border-[#e4e0da] rounded-2xl p-7 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5"
-            >
+            <Link key={tool.slug} href={`/ai/${tool.slug}`}
+              className="group bg-white border border-[#e4e0da] rounded-2xl p-7 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5">
               <div className="flex items-start gap-4">
                 <span className="text-3xl">{tool.icon}</span>
                 <div>
