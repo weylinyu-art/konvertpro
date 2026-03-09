@@ -8,10 +8,11 @@ import { useLocale } from "@/components/LocaleProvider";
 import { getTranslations, getCategoryLabel } from "@/lib/i18n";
 
 // Ordered by global search volume / popularity (2025–2026)
+// currency and fuel are separate links, not in CATEGORIES
 const CATEGORY_ORDER = [
-  "length", "weight", "temperature", "volume", "cooking",
-  "speed", "area", "time", "data", "shoe",
-  "energy", "pressure", "power", "angle", "numbase",
+  "length", "weight", "temperature", "volume", "speed",
+  "area", "time", "data", "cooking", "energy",
+  "pressure", "power", "angle", "shoe", "numbase", "fuel",
 ];
 
 interface Props {
@@ -78,7 +79,7 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
           <Link href="/currency"
             className="flex items-center gap-1 md:gap-1.5 px-2.5 py-1.5 md:px-4 md:py-2 rounded-full text-xs md:text-[13px] font-medium border bg-white border-[#e4e0da] text-[#9a948a] hover:border-[#3d6b4f] hover:text-[#3d6b4f] hover:bg-[#edf4f0] transition-all">
             <span className="text-sm">💱</span>
-            <span className="hidden sm:inline">Currency</span>
+            <span className="hidden sm:inline">{t.currency}</span>
           </Link>
 
           {/* AI Tools */}
