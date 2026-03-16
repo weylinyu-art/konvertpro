@@ -7,6 +7,7 @@ import {
   CATEGORIES, convert, formatNumber, getSymbol,
   slugToUnit, unitToSlug, getAllConversionPaths,
 } from "@/lib/units";
+import { NUMERIC_INDEX_PAIRS, NUMERIC_INDEX_VALUES } from "@/lib/indexing";
 import ConverterWidget from "@/components/ConverterWidget";
 import { FAQHeading, HowToHeading, ConversionTableHeading, RelatedHeading } from "@/components/PageLabels";
 import { CategoryLabelText, LocaleText, UnitLabelText } from "@/components/LocaleText";
@@ -38,21 +39,9 @@ function parseConversion(conversion: string): { from: string; to: string; prefix
 
 export async function generateStaticParams() {
   const base = getAllConversionPaths();
-  // Also generate popular numeric variants for top conversions
-  const POPULAR_VALUES = [1, 5, 10, 25, 50, 100, 200, 500, 1000];
-  const POPULAR_PAIRS = [
-    { category: "length",      from: "mile",       to: "kilometer" },
-    { category: "length",      from: "foot",       to: "meter" },
-    { category: "length",      from: "inch",       to: "centimeter" },
-    { category: "weight",      from: "pound",      to: "kilogram" },
-    { category: "weight",      from: "ounce",      to: "gram" },
-    { category: "temperature", from: "fahrenheit", to: "celsius" },
-    { category: "volume",      from: "cup",        to: "milliliter" },
-    { category: "volume",      from: "gallon_us",  to: "liter" },
-    { category: "speed",       from: "mph",        to: "kph" },
-  ];
-  const numeric = POPULAR_PAIRS.flatMap(({ category, from, to }) =>
-    POPULAR_VALUES.map((v) => ({
+  // Generate only high-value numeric variants to avoid thin-page bloat
+  const numeric = NUMERIC_INDEX_PAIRS.flatMap(({ category, from, to }) =>
+    NUMERIC_INDEX_VALUES.map((v) => ({
       category,
       conversion: `${v}-${unitToSlug(from)}-to-${unitToSlug(to)}`,
     }))
@@ -315,14 +304,14 @@ export default function ConversionPage({ params }: Props) {
         {/* Hero */}
         <section className="py-12">
           <div className="inline-flex items-center gap-2 bg-[#edf4f0] border border-[#3d6b4f]/20 rounded-full px-4 py-1.5 text-xs font-mono text-[#3d6b4f] tracking-wider mb-6">
-            {cat.icon} <CategoryLabelText slug={cat.slug} fallback={cat.label} /> <LocaleText en="Converter" zh="换算器" />
+            {cat.icon} <CategoryLabelText slug={cat.slug} fallback={cat.label} /> <LocaleText en="Converter" zh="换算器" es="Conversor" fr="Convertisseur" ru="Конвертер" ar="محوّل" />
           </div>
 
           {prefixValue !== null ? (
             // Numeric page hero — direct answer
             <>
               <h1 className="font-sans font-bold text-[clamp(28px,5vw,52px)] tracking-tight leading-tight mb-4">
-                {prefixValue} <UnitLabelText unitKey={from} fallback={fromLabel} /> <LocaleText en="to" zh="转" /> <UnitLabelText unitKey={to} fallback={toLabel} />
+                {prefixValue} <UnitLabelText unitKey={from} fallback={fromLabel} /> <LocaleText en="to" zh="转" es="a" fr="vers" ru="в" ar="إلى" /> <UnitLabelText unitKey={to} fallback={toLabel} />
               </h1>
               <div className="inline-flex items-baseline gap-3 bg-[#edf4f0] border border-[#3d6b4f]/30 rounded-2xl px-6 py-4 mb-4">
                 <span className="font-mono text-[#9a948a] text-sm">{prefixValue} {fromSym} =</span>
@@ -332,14 +321,14 @@ export default function ConversionPage({ params }: Props) {
                 <span className="font-mono text-[#3d6b4f] text-lg">{toSym}</span>
               </div>
               <p className="text-[#9a948a] text-sm leading-relaxed max-w-lg">
-                <LocaleText en="Use the converter below for any value, or see the full table." zh="可在下方输入任意数值进行换算，或查看完整参考表。" />
+                <LocaleText en="Use the converter below for any value, or see the full table." zh="可在下方输入任意数值进行换算，或查看完整参考表。" es="Usa el conversor de abajo para cualquier valor o consulta la tabla completa." fr="Utilisez le convertisseur ci-dessous pour n'importe quelle valeur ou consultez le tableau complet." ru="Используйте конвертер ниже для любого значения или смотрите полную таблицу." ar="استخدم أداة التحويل أدناه لأي قيمة أو راجع الجدول الكامل." />
               </p>
             </>
           ) : (
             // Standard page hero
             <>
               <h1 className="font-sans font-bold text-[clamp(32px,5vw,56px)] tracking-tight leading-tight mb-3">
-                <UnitLabelText unitKey={from} fallback={fromLabel} /> <LocaleText en="to" zh="转" /> <UnitLabelText unitKey={to} fallback={toLabel} />
+                <UnitLabelText unitKey={from} fallback={fromLabel} /> <LocaleText en="to" zh="转" es="a" fr="vers" ru="в" ar="إلى" /> <UnitLabelText unitKey={to} fallback={toLabel} />
               </h1>
               <p className="text-[#9a948a] text-sm leading-relaxed max-w-lg">
                 1 {fromSym} = <strong className="text-[#3d6b4f] font-semibold">{formatNumber(oneResult)} {toSym}</strong>
@@ -351,12 +340,12 @@ export default function ConversionPage({ params }: Props) {
 
         {/* Direct answer block for AEO/GEO extraction */}
         <section className="mb-8 bg-[#edf4f0] border border-[#3d6b4f]/25 rounded-2xl px-5 py-4">
-          <h2 className="font-sans font-semibold text-lg text-[#1a1814] mb-1"><LocaleText en="Direct Answer" zh="直接答案" /></h2>
+          <h2 className="font-sans font-semibold text-lg text-[#1a1814] mb-1"><LocaleText en="Direct Answer" zh="直接答案" es="Respuesta directa" fr="Réponse directe" ru="Прямой ответ" ar="إجابة مباشرة" /></h2>
           <p className="text-sm text-[#3d6b4f] leading-relaxed">
             {prefixValue ?? 1} {fromSym} = {formatNumber(convert(prefixValue ?? 1, from, to, params.category))} {toSym}
           </p>
           <p className="text-xs text-[#6a6460] mt-2 leading-relaxed">
-            <LocaleText en="Formula" zh="公式" />: {toSym} = {fromSym} × {formatNumber(oneResult)}. <LocaleText en="This page supports instant conversion, reference table checks, and related unit links." zh="本页支持即时换算、参考表核对和相关单位跳转。" />
+            <LocaleText en="Formula" zh="公式" es="Fórmula" fr="Formule" ru="Формула" ar="الصيغة" />: {toSym} = {fromSym} × {formatNumber(oneResult)}. <LocaleText en="This page supports instant conversion, reference table checks, and related unit links." zh="本页支持即时换算、参考表核对和相关单位跳转。" es="Esta página admite conversión instantánea, tabla de referencia y enlaces relacionados." fr="Cette page propose une conversion instantanée, un tableau de référence et des liens associés." ru="На странице доступны мгновенная конвертация, проверка по таблице и связанные ссылки." ar="تدعم هذه الصفحة التحويل الفوري والتحقق عبر الجدول وروابط الوحدات ذات الصلة." />
           </p>
         </section>
 
@@ -394,7 +383,7 @@ export default function ConversionPage({ params }: Props) {
           {/* Numeric page link shortcuts */}
           {!prefixValue && (
             <div className="mt-3 flex flex-wrap gap-2">
-              {[1, 5, 10, 25, 50, 100].map((v) => (
+              {[1, 10, 100].map((v) => (
                 <Link key={v}
                   href={`/${params.category}/${v}-${unitToSlug(from)}-to-${unitToSlug(to)}`}
                   className="font-mono text-xs px-3 py-1.5 bg-white border border-[#e4e0da] rounded-lg text-[#9a948a] hover:text-[#3d6b4f] hover:border-[#3d6b4f] transition-all">
@@ -410,14 +399,14 @@ export default function ConversionPage({ params }: Props) {
   <HowToHeading /> 
           <p className="font-sans font-bold text-2xl mb-4"><UnitLabelText unitKey={from} fallback={fromLabel} /> → <UnitLabelText unitKey={to} fallback={toLabel} /></p>
           <p className="text-[#9a948a] text-sm leading-relaxed mb-4">
-            <LocaleText en="To convert from" zh="将" /> <UnitLabelText unitKey={from} fallback={fromLabel} /> ({fromSym}) <LocaleText en="to" zh="换算为" /> <UnitLabelText unitKey={to} fallback={toLabel} /> ({toSym})，<LocaleText en="multiply your value by" zh="将数值乘以" />{" "}
+            <LocaleText en="To convert from" zh="将" es="Para convertir de" fr="Pour convertir de" ru="Чтобы перевести из" ar="للتحويل من" /> <UnitLabelText unitKey={from} fallback={fromLabel} /> ({fromSym}) <LocaleText en="to" zh="换算为" es="a" fr="vers" ru="в" ar="إلى" /> <UnitLabelText unitKey={to} fallback={toLabel} /> ({toSym})，<LocaleText en="multiply your value by" zh="将数值乘以" es="multiplica tu valor por" fr="multipliez votre valeur par" ru="умножьте значение на" ar="اضرب القيمة في" />{" "}
             <strong className="text-[#1a1814]">{formatNumber(oneResult)}</strong>.
           </p>
           <div className="bg-[#f7f5f2] rounded-xl px-6 py-4 font-mono text-sm text-[#3d6b4f]">
             {toSym} = {fromSym} × {formatNumber(oneResult)}
           </div>
           <p className="text-[#9a948a] text-sm leading-relaxed mt-4">
-            <LocaleText en="For example" zh="例如" />，10 {fromSym} = {formatNumber(convert(10, from, to, params.category))} {toSym}.
+            <LocaleText en="For example" zh="例如" es="Por ejemplo" fr="Par exemple" ru="Например" ar="على سبيل المثال" />，10 {fromSym} = {formatNumber(convert(10, from, to, params.category))} {toSym}.
           </p>
         </section>
 
@@ -425,14 +414,59 @@ export default function ConversionPage({ params }: Props) {
         <section className="mb-12">
 <FAQHeading />
           <div className="space-y-2">
-            {faqSchema.mainEntity.map((faq, i) => (
+            {[
+              {
+                enQ: `What is ${prefixValue ?? 1} ${fromSym} in ${toSym}?`,
+                zhQ: `${prefixValue ?? 1} ${fromSym} 等于多少 ${toSym}？`,
+                esQ: `¿Cuánto es ${prefixValue ?? 1} ${fromSym} en ${toSym}?`,
+                frQ: `${prefixValue ?? 1} ${fromSym} équivaut à combien en ${toSym} ?`,
+                ruQ: `Сколько будет ${prefixValue ?? 1} ${fromSym} в ${toSym}?`,
+                arQ: `كم يساوي ${prefixValue ?? 1} ${fromSym} بـ ${toSym}؟`,
+                enA: `${prefixValue ?? 1} ${fromSym} = ${formatNumber(convert(prefixValue ?? 1, from, to, params.category))} ${toSym}.`,
+                zhA: `${prefixValue ?? 1} ${fromSym} = ${formatNumber(convert(prefixValue ?? 1, from, to, params.category))} ${toSym}。`,
+                esA: `${prefixValue ?? 1} ${fromSym} = ${formatNumber(convert(prefixValue ?? 1, from, to, params.category))} ${toSym}.`,
+                frA: `${prefixValue ?? 1} ${fromSym} = ${formatNumber(convert(prefixValue ?? 1, from, to, params.category))} ${toSym}.`,
+                ruA: `${prefixValue ?? 1} ${fromSym} = ${formatNumber(convert(prefixValue ?? 1, from, to, params.category))} ${toSym}.`,
+                arA: `${prefixValue ?? 1} ${fromSym} = ${formatNumber(convert(prefixValue ?? 1, from, to, params.category))} ${toSym}.`,
+              },
+              {
+                enQ: "How is the conversion calculated?",
+                zhQ: "换算是如何计算的？",
+                esQ: "¿Cómo se calcula la conversión?",
+                frQ: "Comment la conversion est-elle calculée ?",
+                ruQ: "Как рассчитывается конвертация?",
+                arQ: "كيف يتم حساب التحويل؟",
+                enA: `${toSym} = ${fromSym} × ${formatNumber(oneResult)}.`,
+                zhA: `公式：${toSym} = ${fromSym} × ${formatNumber(oneResult)}。`,
+                esA: `Fórmula: ${toSym} = ${fromSym} × ${formatNumber(oneResult)}.`,
+                frA: `Formule : ${toSym} = ${fromSym} × ${formatNumber(oneResult)}.`,
+                ruA: `Формула: ${toSym} = ${fromSym} × ${formatNumber(oneResult)}.`,
+                arA: `الصيغة: ${toSym} = ${fromSym} × ${formatNumber(oneResult)}.`,
+              },
+              {
+                enQ: "Can I convert other values?",
+                zhQ: "还能换算其他数值吗？",
+                esQ: "¿Puedo convertir otros valores?",
+                frQ: "Puis-je convertir d'autres valeurs ?",
+                ruQ: "Можно конвертировать другие значения?",
+                arQ: "هل يمكنني تحويل قيم أخرى؟",
+                enA: "Yes. Use the converter box above to enter any value and get instant results.",
+                zhA: "可以。使用上方换算器输入任意数值即可即时得到结果。",
+                esA: "Sí. Usa el conversor de arriba para ingresar cualquier valor y obtener resultados al instante.",
+                frA: "Oui. Utilisez le convertisseur ci-dessus pour saisir n'importe quelle valeur et obtenir un résultat instantané.",
+                ruA: "Да. Используйте конвертер выше, чтобы ввести любое значение и сразу получить результат.",
+                arA: "نعم. استخدم أداة التحويل أعلاه لإدخال أي قيمة والحصول على النتيجة فورًا.",
+              },
+            ].map((faq, i) => (
               <details key={i} className="group bg-white border border-[#e4e0da] rounded-xl overflow-hidden shadow-sm">
                 <summary className="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-[#faf8f5] transition-colors">
-                  <span className="font-medium text-sm text-[#1a1814] pr-4">{faq.name}</span>
+                  <span className="font-medium text-sm text-[#1a1814] pr-4">
+                    <LocaleText en={faq.enQ} zh={faq.zhQ} es={faq.esQ} fr={faq.frQ} ru={faq.ruQ} ar={faq.arQ} />
+                  </span>
                   <span className="text-[#9a948a] flex-shrink-0 group-open:rotate-180 transition-transform duration-200">▼</span>
                 </summary>
                 <div className="px-5 pb-4 pt-3 text-sm text-[#6a6460] leading-relaxed border-t border-[#f0ede8]">
-                  {faq.acceptedAnswer.text}
+                  <LocaleText en={faq.enA} zh={faq.zhA} es={faq.esA} fr={faq.frA} ru={faq.ruA} ar={faq.arA} />
                 </div>
               </details>
             ))}
@@ -456,7 +490,7 @@ export default function ConversionPage({ params }: Props) {
 
         <footer className="border-t border-[#e4e0da] py-8 flex items-center justify-between flex-wrap gap-4 mb-4">
           <Link href={`/${params.category}`} className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f]">
-            ← <CategoryLabelText slug={cat.slug} fallback={cat.label} /> <LocaleText en="converters" zh="换算器" />
+            ← <CategoryLabelText slug={cat.slug} fallback={cat.label} /> <LocaleText en="converters" zh="换算器" es="conversores" fr="convertisseurs" ru="конвертеры" ar="محوّلات" />
           </Link>
           <span className="font-mono text-xs text-[#9a948a]">© 2025 Koverts</span>
         </footer>

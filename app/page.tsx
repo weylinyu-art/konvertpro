@@ -19,73 +19,125 @@ const CATEGORY_ORDER = [
 ];
 
 const HOME_POPULAR_LINKS = [
-  { href: "/length/mile-to-kilometer", en: "Miles to Kilometers", zh: "英里转公里" },
-  { href: "/length/foot-to-meter", en: "Feet to Meters", zh: "英尺转米" },
-  { href: "/weight/pound-to-kilogram", en: "Pounds to Kilograms", zh: "磅转千克" },
-  { href: "/temperature/fahrenheit-to-celsius", en: "Fahrenheit to Celsius", zh: "华氏度转摄氏度" },
-  { href: "/volume/gallon-us-to-liter", en: "US Gallons to Liters", zh: "美制加仑转升" },
-  { href: "/speed/mph-to-kph", en: "MPH to KM/H", zh: "英里/时转千米/时" },
-  { href: "/currency", en: "Currency Converter", zh: "货币汇率换算" },
-  { href: "/ai/token-calculator", en: "AI Token Calculator", zh: "AI Token 计算器" },
+  { href: "/length/mile-to-kilometer", en: "Miles to Kilometers", zh: "英里转公里", es: "Millas a kilómetros", fr: "Miles en kilomètres", ru: "Мили в километры", ar: "أميال إلى كيلومترات" },
+  { href: "/length/foot-to-meter", en: "Feet to Meters", zh: "英尺转米", es: "Pies a metros", fr: "Pieds en mètres", ru: "Футы в метры", ar: "قدم إلى متر" },
+  { href: "/weight/pound-to-kilogram", en: "Pounds to Kilograms", zh: "磅转千克", es: "Libras a kilogramos", fr: "Livres en kilogrammes", ru: "Фунты в килограммы", ar: "رطل إلى كيلوغرام" },
+  { href: "/temperature/fahrenheit-to-celsius", en: "Fahrenheit to Celsius", zh: "华氏度转摄氏度", es: "Fahrenheit a Celsius", fr: "Fahrenheit en Celsius", ru: "Фаренгейт в Цельсий", ar: "فهرنهايت إلى مئوية" },
+  { href: "/volume/gallon-us-to-liter", en: "US Gallons to Liters", zh: "美制加仑转升", es: "Galones US a litros", fr: "Gallons US en litres", ru: "Галлоны США в литры", ar: "غالون أمريكي إلى لتر" },
+  { href: "/speed/mph-to-kph", en: "MPH to KM/H", zh: "英里/时转千米/时", es: "MPH a KM/H", fr: "MPH en KM/H", ru: "Миль/ч в км/ч", ar: "ميل/س إلى كم/س" },
+  { href: "/currency", en: "Currency Converter", zh: "货币汇率换算", es: "Conversor de divisas", fr: "Convertisseur de devises", ru: "Конвертер валют", ar: "محول العملات" },
+  { href: "/ai/token-calculator", en: "AI Token Calculator", zh: "AI Token 计算器", es: "Calculadora de tokens IA", fr: "Calculateur de tokens IA", ru: "Калькулятор токенов AI", ar: "حاسبة رموز الذكاء الاصطناعي" },
 ];
 
 export default function HomePage() {
   const { locale, setLocale, mounted } = useLocale();
   const t = getTranslations(locale);
   const [mobileAllExpanded, setMobileAllExpanded] = useState(false);
+  const localeText = <T,>(m: { en: T; zh: T; es: T; fr: T; ru: T; ar: T }) => m[locale];
 
   const orderedCats = [
     ...CATEGORY_ORDER.filter((s) => CATEGORIES[s]).map((s) => CATEGORIES[s]),
     ...Object.values(CATEGORIES).filter((c) => !CATEGORY_ORDER.includes(c.slug)),
   ];
 
-  const seoText = locale === "zh"
-    ? {
-        introTitle: "为什么选择 Koverts",
-        introBody:
-          "Koverts 是一个可直接使用的在线换算工具，覆盖长度、重量、温度、体积、速度、面积、数据、时间、压强、角度、油耗、鞋码等多个场景。每个分类页都提供单位说明、热门换算和可复用的链接结构，方便搜索引擎抓取与用户快速跳转。",
-        introBody2:
-          "如果你需要高频查询（如英里转公里、磅转千克、华氏度转摄氏度、美元汇率换算），可以直接使用下方热门入口。所有结果均实时计算，无需下载和注册。",
-        guidesTitle: "热门换算入口",
-        faqTitle: "常见问题",
-        faq: [
-          {
-            q: "Koverts 支持哪些单位换算？",
-            a: "支持长度、重量、温度、体积、速度、面积、数据、时间、能量、压强、角度、功率、油耗、烹饪、鞋码与进制转换等常见场景。",
-          },
-          {
-            q: "换算结果是否实时？",
-            a: "是。输入数值并选择单位后会立即计算结果，适合移动端和桌面端快速查询。",
-          },
-          {
-            q: "是否需要注册才能使用？",
-            a: "不需要。Koverts 可直接免费使用，适合日常学习、工作和跨单位协作。",
-          },
-        ],
-      }
-    : {
-        introTitle: "Why Use Koverts",
-        introBody:
-          "Koverts is a fast online unit converter covering length, weight, temperature, volume, speed, area, data, time, pressure, angle, fuel efficiency, shoe size, and more. Each category page includes useful conversion references and linkable routes for quick search access.",
-        introBody2:
-          "For high-frequency queries like miles to kilometers, pounds to kilograms, Fahrenheit to Celsius, or live currency conversion, use the popular links below. No signup and no installation required.",
-        guidesTitle: "Popular Conversion Guides",
-        faqTitle: "FAQ",
-        faq: [
-          {
-            q: "What units can I convert on Koverts?",
-            a: "You can convert across length, weight, temperature, volume, speed, area, data, time, energy, pressure, angle, power, fuel, cooking, shoe size, and number base categories.",
-          },
-          {
-            q: "Are the conversion results instant?",
-            a: "Yes. Results are calculated instantly after entering a value and selecting source and target units.",
-          },
-          {
-            q: "Do I need to create an account?",
-            a: "No. Koverts is free to use with no signup required.",
-          },
-        ],
-      };
+  const seoText = {
+    introTitle: localeText({
+      en: "Why Use Koverts",
+      zh: "为什么选择 Koverts",
+      es: "Por qué usar Koverts",
+      fr: "Pourquoi utiliser Koverts",
+      ru: "Почему выбирают Koverts",
+      ar: "لماذا تستخدم Koverts",
+    }),
+    introBody: localeText({
+      en: "Koverts is a fast online unit converter covering length, weight, temperature, volume, speed, area, data, time, pressure, angle, fuel efficiency, shoe size, and more.",
+      zh: "Koverts 是一个可直接使用的在线换算工具，覆盖长度、重量、温度、体积、速度、面积、数据、时间、压强、角度、油耗、鞋码等多个场景。",
+      es: "Koverts es un conversor online rápido que cubre longitud, peso, temperatura, volumen, velocidad, área, datos, tiempo, presión, ángulo y más.",
+      fr: "Koverts est un convertisseur en ligne rapide couvrant longueur, poids, température, volume, vitesse, surface, données, temps, pression, angle et plus.",
+      ru: "Koverts — быстрый онлайн-конвертер единиц: длина, вес, температура, объем, скорость, площадь, данные, время, давление, углы и другое.",
+      ar: "Koverts أداة تحويل وحدات سريعة عبر الإنترنت تشمل الطول والوزن والحرارة والحجم والسرعة والمساحة والبيانات والوقت والضغط والزوايا وغيرها.",
+    }),
+    introBody2: localeText({
+      en: "Use the popular links below for high-frequency queries. All results are instant and no signup is required.",
+      zh: "如果你需要高频查询（如英里转公里、磅转千克、华氏度转摄氏度、美元汇率换算），可以直接使用下方热门入口。所有结果均实时计算，无需下载和注册。",
+      es: "Para consultas frecuentes, usa los accesos rápidos de abajo. Los resultados son instantáneos y no requieren registro.",
+      fr: "Pour les recherches fréquentes, utilisez les raccourcis ci-dessous. Résultats instantanés, sans inscription.",
+      ru: "Для частых запросов используйте быстрые ссылки ниже. Результаты мгновенные и без регистрации.",
+      ar: "للاستعلامات المتكررة استخدم الروابط الشائعة أدناه. النتائج فورية ولا يلزم التسجيل.",
+    }),
+    guidesTitle: localeText({
+      en: "Popular Conversion Guides",
+      zh: "热门换算入口",
+      es: "Guías de conversión populares",
+      fr: "Guides de conversion populaires",
+      ru: "Популярные конвертации",
+      ar: "أدلة التحويل الشائعة",
+    }),
+    faqTitle: localeText({
+      en: "FAQ",
+      zh: "常见问题",
+      es: "Preguntas frecuentes",
+      fr: "FAQ",
+      ru: "Частые вопросы",
+      ar: "الأسئلة الشائعة",
+    }),
+    faq: [
+      {
+        q: localeText({
+          en: "What units can I convert on Koverts?",
+          zh: "Koverts 支持哪些单位换算？",
+          es: "¿Qué unidades puedo convertir en Koverts?",
+          fr: "Quelles unités puis-je convertir sur Koverts ?",
+          ru: "Какие единицы можно конвертировать в Koverts?",
+          ar: "ما الوحدات التي يمكن تحويلها في Koverts؟",
+        }),
+        a: localeText({
+          en: "You can convert across length, weight, temperature, volume, speed, area, data, time, energy, pressure, angle, power, fuel, cooking, shoe size, and number base.",
+          zh: "支持长度、重量、温度、体积、速度、面积、数据、时间、能量、压强、角度、功率、油耗、烹饪、鞋码与进制转换等常见场景。",
+          es: "Puedes convertir longitud, peso, temperatura, volumen, velocidad, área, datos, tiempo, energía, presión, ángulo, potencia, combustible, cocina, talla y base numérica.",
+          fr: "Vous pouvez convertir longueur, poids, température, volume, vitesse, surface, données, temps, énergie, pression, angle, puissance, carburant, cuisine, pointure et base numérique.",
+          ru: "Поддерживаются длина, вес, температура, объем, скорость, площадь, данные, время, энергия, давление, углы, мощность, топливо, кулинария, размеры обуви и системы счисления.",
+          ar: "يمكنك تحويل الطول والوزن والحرارة والحجم والسرعة والمساحة والبيانات والوقت والطاقة والضغط والزوايا والقدرة والوقود والطبخ ومقاسات الأحذية وأنظمة الأعداد.",
+        }),
+      },
+      {
+        q: localeText({
+          en: "Are the conversion results instant?",
+          zh: "换算结果是否实时？",
+          es: "¿Los resultados son instantáneos?",
+          fr: "Les résultats sont-ils instantanés ?",
+          ru: "Результаты конвертации мгновенные?",
+          ar: "هل نتائج التحويل فورية؟",
+        }),
+        a: localeText({
+          en: "Yes. Results are calculated instantly after entering a value and selecting source and target units.",
+          zh: "是。输入数值并选择单位后会立即计算结果，适合移动端和桌面端快速查询。",
+          es: "Sí. El resultado se calcula al instante al ingresar el valor y elegir las unidades.",
+          fr: "Oui. Le résultat est calculé immédiatement après la saisie et le choix des unités.",
+          ru: "Да. Результат рассчитывается сразу после ввода значения и выбора единиц.",
+          ar: "نعم. يتم حساب النتيجة فور إدخال القيمة واختيار الوحدات.",
+        }),
+      },
+      {
+        q: localeText({
+          en: "Do I need to create an account?",
+          zh: "是否需要注册才能使用？",
+          es: "¿Necesito crear una cuenta?",
+          fr: "Faut-il créer un compte ?",
+          ru: "Нужно ли создавать аккаунт?",
+          ar: "هل أحتاج إلى إنشاء حساب؟",
+        }),
+        a: localeText({
+          en: "No. Koverts is free to use with no signup required.",
+          zh: "不需要。Koverts 可直接免费使用，适合日常学习、工作和跨单位协作。",
+          es: "No. Koverts es gratuito y no requiere registro.",
+          fr: "Non. Koverts est gratuit et sans inscription.",
+          ru: "Нет. Koverts бесплатен и не требует регистрации.",
+          ar: "لا. Koverts مجاني ولا يتطلب تسجيلًا.",
+        }),
+      },
+    ],
+  };
 
   const homeFaqSchema = {
     "@context": "https://schema.org",
@@ -103,7 +155,14 @@ export default function HomePage() {
   const webPageSchema = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: locale === "zh" ? "Koverts 单位换算器" : "Koverts Unit Converter",
+    name: localeText({
+      en: "Koverts Unit Converter",
+      zh: "Koverts 单位换算器",
+      es: "Conversor de unidades Koverts",
+      fr: "Convertisseur d'unités Koverts",
+      ru: "Конвертер единиц Koverts",
+      ar: "محول الوحدات Koverts",
+    }),
     url: BASE_URL,
     inLanguage: locale === "zh" ? "zh-Hans" : locale,
     description: seoText.introBody,
@@ -117,11 +176,11 @@ export default function HomePage() {
   const popularLinksItemListSchema = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: locale === "zh" ? "热门换算入口" : "Popular Conversion Guides",
+    name: seoText.guidesTitle,
     itemListElement: HOME_POPULAR_LINKS.map((item, idx) => ({
       "@type": "ListItem",
       position: idx + 1,
-      name: locale === "zh" ? item.zh : item.en,
+      name: localeText({ en: item.en, zh: item.zh, es: item.es, fr: item.fr, ru: item.ru, ar: item.ar }),
       url: `${BASE_URL}${item.href}`,
     })),
   };
@@ -178,7 +237,7 @@ export default function HomePage() {
                 href={item.href}
                 className="bg-white border border-[#e4e0da] rounded-xl px-4 py-3 text-sm text-[#1a1814] hover:border-[#3d6b4f] hover:text-[#3d6b4f] transition-all shadow-sm"
               >
-                {locale === "zh" ? item.zh : item.en}
+                {localeText({ en: item.en, zh: item.zh, es: item.es, fr: item.fr, ru: item.ru, ar: item.ar })}
               </Link>
             ))}
           </div>
@@ -227,7 +286,7 @@ export default function HomePage() {
               <span className="font-semibold text-sm text-[#1a1814] group-hover:text-[#3d6b4f] transition-colors block">
                 {t.currency}
               </span>
-              <p className="text-xs text-[#9a948a] mt-1">49 {t.units} · live</p>
+              <p className="text-xs text-[#9a948a] mt-1">49 {t.units} · {localeText({ en: "live", zh: "实时", es: "en vivo", fr: "en direct", ru: "онлайн", ar: "مباشر" })}</p>
             </Link>
 
             {orderedCats.map((cat) => (
@@ -248,7 +307,7 @@ export default function HomePage() {
               <span className="font-semibold text-sm text-[#3d6b4f] group-hover:text-white transition-colors block">
                 {t.aiTools}
               </span>
-              <p className="text-xs text-[#3d6b4f]/60 group-hover:text-white/70 mt-1">5 tools</p>
+              <p className="text-xs text-[#3d6b4f]/60 group-hover:text-white/70 mt-1">5 {localeText({ en: "tools", zh: "工具", es: "herramientas", fr: "outils", ru: "инструментов", ar: "أدوات" })}</p>
             </Link>
           </div>
         </section>
@@ -270,7 +329,7 @@ export default function HomePage() {
               {t.aiTools}
             </Link>
             <Link href="/about" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f] transition-colors">
-              About
+              {localeText({ en: "About", zh: "关于", es: "Acerca de", fr: "À propos", ru: "О проекте", ar: "حول" })}
             </Link>
           </div>
         </footer>

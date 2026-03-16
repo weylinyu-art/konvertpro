@@ -167,31 +167,40 @@ export default function ComparePage({ params }: Props) {
               <span className="w-1.5 h-1.5 rounded-full bg-[#3d6b4f] mb-0.5" />
             </Link>
             <span className="text-[#c5bdb4] text-xs flex-shrink-0">/</span>
-            <span className="font-mono text-xs text-[#3d6b4f]"><LocaleText en="Compare" zh="对比" /></span>
+            <span className="font-mono text-xs text-[#3d6b4f]"><LocaleText en="Compare" zh="对比" es="Comparar" fr="Comparer" ru="Сравнение" ar="مقارنة" /></span>
           </div>
         </header>
 
         {/* Hero */}
         <section className="py-12">
           <div className="inline-flex items-center gap-2 bg-[#edf4f0] border border-[#3d6b4f]/20 rounded-full px-4 py-1.5 text-xs font-mono text-[#3d6b4f] tracking-wider mb-6">
-            {cat.icon} <CategoryLabelText slug={cat.slug} fallback={cat.label} /> · <LocaleText en="Comparison" zh="对比" />
+            {cat.icon} <CategoryLabelText slug={cat.slug} fallback={cat.label} /> · <LocaleText en="Comparison" zh="对比" es="Comparación" fr="Comparaison" ru="Сравнение" ar="مقارنة" />
           </div>
           <h1 className="font-sans font-bold text-[clamp(32px,5vw,56px)] tracking-tight leading-tight mb-3">
-            {pair.title}
+            <UnitLabelText unitKey={pair.a} fallback={aLabel} /> vs <UnitLabelText unitKey={pair.b} fallback={bLabel} />
           </h1>
-          <p className="text-[#9a948a] text-sm leading-relaxed max-w-lg">{pair.description}</p>
+          <p className="text-[#9a948a] text-sm leading-relaxed max-w-lg">
+            <LocaleText
+              en="See the key differences, formulas, and conversion table."
+              zh="查看核心差异、换算公式与参考表。"
+              es="Consulta diferencias clave, fórmulas y tabla de conversión."
+              fr="Consultez les différences clés, les formules et le tableau de conversion."
+              ru="Смотрите ключевые различия, формулы и таблицу конвертации."
+              ar="اطّلع على الفروقات الأساسية والصيغ وجدول التحويل."
+            />
+          </p>
         </section>
 
         {/* Quick answer cards */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
           <div className="bg-white border border-[#e4e0da] rounded-2xl p-6 shadow-sm">
-            <p className="font-mono text-[11px] text-[#9a948a] tracking-widest uppercase mb-3">1 {aSym} <LocaleText en="equals" zh="等于" /></p>
+            <p className="font-mono text-[11px] text-[#9a948a] tracking-widest uppercase mb-3">1 {aSym} <LocaleText en="equals" zh="等于" es="equivale a" fr="équivaut à" ru="равно" ar="يساوي" /></p>
             <p className="font-sans font-bold text-3xl text-[#3d6b4f] mb-1">{formatNumber(aToB)} <span className="text-xl">{bSym}</span></p>
             <p className="text-xs text-[#9a948a]"><UnitLabelText unitKey={pair.a} fallback={aLabel} /> → <UnitLabelText unitKey={pair.b} fallback={bLabel} /></p>
 <FullConverterLink href={`/${pair.category}/${unitToSlug(pair.a)}-to-${unitToSlug(pair.b)}`} />
           </div>
           <div className="bg-white border border-[#e4e0da] rounded-2xl p-6 shadow-sm">
-            <p className="font-mono text-[11px] text-[#9a948a] tracking-widest uppercase mb-3">1 {bSym} <LocaleText en="equals" zh="等于" /></p>
+            <p className="font-mono text-[11px] text-[#9a948a] tracking-widest uppercase mb-3">1 {bSym} <LocaleText en="equals" zh="等于" es="equivale a" fr="équivaut à" ru="равно" ar="يساوي" /></p>
             <p className="font-sans font-bold text-3xl text-[#3d6b4f] mb-1">{formatNumber(bToA)} <span className="text-xl">{aSym}</span></p>
             <p className="text-xs text-[#9a948a]"><UnitLabelText unitKey={pair.b} fallback={bLabel} /> → <UnitLabelText unitKey={pair.a} fallback={aLabel} /></p>
 <FullConverterLink href={`/${pair.category}/${unitToSlug(pair.b)}-to-${unitToSlug(pair.a)}`} />
@@ -200,14 +209,14 @@ export default function ComparePage({ params }: Props) {
 
         {/* Comparison table */}
         <section className="mb-12">
-<p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-5">// <LocaleText en="Side-by-side" zh="并排对照" /></p>
+<p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-5">// <LocaleText en="Side-by-side" zh="并排对照" es="Lado a lado" fr="Côte à côte" ru="Бок о бок" ar="جنبًا إلى جنب" /></p>
           <div className="bg-white border border-[#e4e0da] rounded-2xl overflow-hidden shadow-sm">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-[#e4e0da] bg-[#f7f5f2]">
-                  <th className="text-left px-6 py-3 font-mono text-xs text-[#9a948a] tracking-wider">{aLabel} ({aSym})</th>
-                  <th className="text-left px-6 py-3 font-mono text-xs text-[#9a948a] tracking-wider">{bLabel} ({bSym})</th>
-                  <th className="text-left px-6 py-3 font-mono text-xs text-[#9a948a] tracking-wider">{aLabel} ({aSym}) ←</th>
+                  <th className="text-left px-6 py-3 font-mono text-xs text-[#9a948a] tracking-wider"><UnitLabelText unitKey={pair.a} fallback={aLabel} /> ({aSym})</th>
+                  <th className="text-left px-6 py-3 font-mono text-xs text-[#9a948a] tracking-wider"><UnitLabelText unitKey={pair.b} fallback={bLabel} /> ({bSym})</th>
+                  <th className="text-left px-6 py-3 font-mono text-xs text-[#9a948a] tracking-wider"><UnitLabelText unitKey={pair.a} fallback={aLabel} /> ({aSym}) ←</th>
                 </tr>
               </thead>
               <tbody>
@@ -230,13 +239,13 @@ export default function ComparePage({ params }: Props) {
         {/* Formulas */}
         <section className="mb-12 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-white border border-[#e4e0da] rounded-2xl p-6 shadow-sm">
-            <h2 className="font-sans font-semibold text-base mb-3">{aLabel} to {bLabel} formula</h2>
+            <h2 className="font-sans font-semibold text-base mb-3"><UnitLabelText unitKey={pair.a} fallback={aLabel} /> <LocaleText en="to" zh="转" es="a" fr="vers" ru="в" ar="إلى" /> <UnitLabelText unitKey={pair.b} fallback={bLabel} /> <LocaleText en="formula" zh="公式" es="fórmula" fr="formule" ru="формула" ar="الصيغة" /></h2>
             <div className="bg-[#f7f5f2] rounded-xl px-5 py-3 font-mono text-sm text-[#3d6b4f]">
               {bSym} = {aSym} × {formatNumber(aToB)}
             </div>
           </div>
           <div className="bg-white border border-[#e4e0da] rounded-2xl p-6 shadow-sm">
-            <h2 className="font-sans font-semibold text-base mb-3">{bLabel} to {aLabel} formula</h2>
+            <h2 className="font-sans font-semibold text-base mb-3"><UnitLabelText unitKey={pair.b} fallback={bLabel} /> <LocaleText en="to" zh="转" es="a" fr="vers" ru="в" ar="إلى" /> <UnitLabelText unitKey={pair.a} fallback={aLabel} /> <LocaleText en="formula" zh="公式" es="fórmula" fr="formule" ru="формула" ar="الصيغة" /></h2>
             <div className="bg-[#f7f5f2] rounded-xl px-5 py-3 font-mono text-sm text-[#3d6b4f]">
               {aSym} = {bSym} × {formatNumber(bToA)}
             </div>
@@ -268,15 +277,18 @@ export default function ComparePage({ params }: Props) {
             {COMPARE_PAIRS.filter((p) => p.slug !== params.slug).slice(0, 6).map((p) => (
               <Link key={p.slug} href={`/compare/${p.slug}`}
                 className="group bg-white border border-[#e4e0da] rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm">
-                <p className="font-sans font-medium text-sm text-[#1a1814] group-hover:text-[#3d6b4f]">{p.title}</p>
-                <p className="text-xs text-[#9a948a] mt-0.5">{CATEGORIES[p.category]?.label}</p>
+                <p className="font-sans font-medium text-sm text-[#1a1814] group-hover:text-[#3d6b4f]">
+                  <UnitLabelText unitKey={p.a} fallback={CATEGORIES[p.category]?.units[p.a]?.label || p.a} /> vs{" "}
+                  <UnitLabelText unitKey={p.b} fallback={CATEGORIES[p.category]?.units[p.b]?.label || p.b} />
+                </p>
+                <p className="text-xs text-[#9a948a] mt-0.5"><CategoryLabelText slug={p.category} fallback={CATEGORIES[p.category]?.label || p.category} /></p>
               </Link>
             ))}
           </div>
         </section>
 
         <footer className="border-t border-[#e4e0da] py-8 flex items-center justify-between flex-wrap gap-4 mb-4">
-          <Link href="/" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f]">← <LocaleText en="All converters" zh="所有换算器" /></Link>
+          <Link href="/" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f]">← <LocaleText en="All converters" zh="所有换算器" es="Todos los conversores" fr="Tous les convertisseurs" ru="Все конвертеры" ar="كل المحوّلات" /></Link>
           <span className="font-mono text-xs text-[#9a948a]">© 2025 Koverts</span>
         </footer>
       </div>

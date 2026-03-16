@@ -151,7 +151,14 @@ export default function CategoryPage({ params }: Props) {
             <CategoryTitleText slug={cat.slug} fallback={cat.title} />
           </h1>
           <p className="text-[#9a948a] max-w-md mx-auto text-sm leading-relaxed">
-            {cat.description}
+            <LocaleText
+              en="Use this converter for fast and accurate unit conversion in this category."
+              zh="使用此换算器可快速、准确地完成本分类下的单位换算。"
+              es="Usa este conversor para obtener conversiones rápidas y precisas en esta categoría."
+              fr="Utilisez ce convertisseur pour des conversions rapides et précises dans cette catégorie."
+              ru="Используйте этот конвертер для быстрых и точных преобразований в данной категории."
+              ar="استخدم هذا المحوّل لإجراء تحويلات سريعة ودقيقة ضمن هذه الفئة."
+            />
           </p>
         </section>
 
@@ -183,14 +190,59 @@ export default function CategoryPage({ params }: Props) {
         <section className="mb-12">
 <FAQHeading />
           <div className="space-y-2">
-            {faqSchema.mainEntity.map((faq, i) => (
+            {[
+              {
+                enQ: "How does this converter work?",
+                zhQ: "这个换算器如何使用？",
+                esQ: "¿Cómo funciona este conversor?",
+                frQ: "Comment fonctionne ce convertisseur ?",
+                ruQ: "Как работает этот конвертер?",
+                arQ: "كيف يعمل هذا المحوّل؟",
+                enA: "Enter a value, choose source and target units, and the result appears instantly.",
+                zhA: "输入数值并选择起始单位与目标单位后，结果会即时显示。",
+                esA: "Ingresa un valor, selecciona unidades de origen y destino, y obtendrás el resultado al instante.",
+                frA: "Entrez une valeur, choisissez les unités de départ et d'arrivée, et le résultat s'affiche instantanément.",
+                ruA: "Введите значение, выберите исходную и целевую единицы — результат появится сразу.",
+                arA: "أدخل القيمة واختر وحدة المصدر والهدف، وستظهر النتيجة فورًا.",
+              },
+              {
+                enQ: "Are these conversions accurate?",
+                zhQ: "这些换算结果准确吗？",
+                esQ: "¿Son precisas estas conversiones?",
+                frQ: "Ces conversions sont-elles précises ?",
+                ruQ: "Точны ли эти преобразования?",
+                arQ: "هل هذه التحويلات دقيقة؟",
+                enA: "Yes. Conversion factors are standardized and the calculator performs direct numerical conversion.",
+                zhA: "是的。换算因子采用标准值，并通过直接计算得出结果。",
+                esA: "Sí. Los factores de conversión son estandarizados y el cálculo es directo.",
+                frA: "Oui. Les facteurs de conversion sont normalisés et le calcul est direct.",
+                ruA: "Да. Используются стандартные коэффициенты и прямой числовой расчет.",
+                arA: "نعم. تعتمد على معاملات تحويل معيارية مع حساب مباشر.",
+              },
+              {
+                enQ: "Can I use it on mobile devices?",
+                zhQ: "手机上可以使用吗？",
+                esQ: "¿Puedo usarlo en móvil?",
+                frQ: "Puis-je l'utiliser sur mobile ?",
+                ruQ: "Можно ли пользоваться на телефоне?",
+                arQ: "هل يمكن استخدامه على الهاتف؟",
+                enA: "Yes. The interface is optimized for both mobile and desktop usage.",
+                zhA: "可以，页面已针对手机和桌面端做了适配优化。",
+                esA: "Sí. La interfaz está optimizada para móvil y escritorio.",
+                frA: "Oui. L'interface est optimisée pour mobile et bureau.",
+                ruA: "Да. Интерфейс оптимизирован для мобильных устройств и ПК.",
+                arA: "نعم. الواجهة محسّنة للهواتف والأجهزة المكتبية.",
+              },
+            ].map((faq, i) => (
               <details key={i} className="group bg-white border border-[#e4e0da] rounded-xl overflow-hidden shadow-sm">
                 <summary className="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-[#faf8f5] transition-colors">
-                  <span className="font-medium text-sm text-[#1a1814] pr-4">{faq.name}</span>
+                  <span className="font-medium text-sm text-[#1a1814] pr-4">
+                    <LocaleText en={faq.enQ} zh={faq.zhQ} es={faq.esQ} fr={faq.frQ} ru={faq.ruQ} ar={faq.arQ} />
+                  </span>
                   <span className="text-[#9a948a] flex-shrink-0 group-open:rotate-180 transition-transform duration-200">▼</span>
                 </summary>
                 <div className="px-5 pb-4 pt-3 text-sm text-[#6a6460] leading-relaxed border-t border-[#f0ede8]">
-                  {faq.acceptedAnswer.text}
+                  <LocaleText en={faq.enA} zh={faq.zhA} es={faq.esA} fr={faq.frA} ru={faq.ruA} ar={faq.arA} />
                 </div>
               </details>
             ))}
@@ -204,9 +256,9 @@ export default function CategoryPage({ params }: Props) {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-[#e4e0da] bg-[#f7f5f2]">
-                  <th className="text-left px-5 py-3 font-mono text-xs text-[#9a948a] tracking-wider"><LocaleText en="FROM" zh="从" /></th>
-                  <th className="text-left px-5 py-3 font-mono text-xs text-[#9a948a] tracking-wider"><LocaleText en="TO" zh="到" /></th>
-                  <th className="text-right px-5 py-3 font-mono text-xs text-[#9a948a] tracking-wider"><LocaleText en="LINK" zh="链接" /></th>
+                  <th className="text-left px-5 py-3 font-mono text-xs text-[#9a948a] tracking-wider"><LocaleText en="FROM" zh="从" es="DE" fr="DE" ru="ИЗ" ar="من" /></th>
+                  <th className="text-left px-5 py-3 font-mono text-xs text-[#9a948a] tracking-wider"><LocaleText en="TO" zh="到" es="A" fr="À" ru="В" ar="إلى" /></th>
+                  <th className="text-right px-5 py-3 font-mono text-xs text-[#9a948a] tracking-wider"><LocaleText en="LINK" zh="链接" es="ENLACE" fr="LIEN" ru="ССЫЛКА" ar="رابط" /></th>
                 </tr>
               </thead>
               <tbody>
@@ -218,7 +270,7 @@ export default function CategoryPage({ params }: Props) {
                       <td className="px-5 py-3 text-right">
                         <Link href={`/${params.category}/${unitToSlug(from)}-to-${unitToSlug(to)}`}
                           className="text-[#3d6b4f] font-mono text-xs hover:underline">
-                          <LocaleText en="Convert" zh="换算" /> →
+                          <LocaleText en="Convert" zh="换算" es="Convertir" fr="Convertir" ru="Конвертировать" ar="تحويل" /> →
                         </Link>
                       </td>
                     </tr>
@@ -231,9 +283,9 @@ export default function CategoryPage({ params }: Props) {
 
         {/* Related category links for crawl depth */}
         <section className="mb-16 bg-white border border-[#e4e0da] rounded-2xl p-6 md:p-8 shadow-sm">
-          <h2 className="font-sans font-bold text-xl md:text-2xl mb-3"><LocaleText en="Explore More Converter Categories" zh="探索更多换算分类" /></h2>
+          <h2 className="font-sans font-bold text-xl md:text-2xl mb-3"><LocaleText en="Explore More Converter Categories" zh="探索更多换算分类" es="Explora más categorías de conversión" fr="Explorer plus de catégories de conversion" ru="Изучите больше категорий конвертации" ar="استكشف المزيد من فئات التحويل" /></h2>
           <p className="text-[#6a6460] text-sm leading-relaxed mb-4">
-            <LocaleText en="Looking for other conversion tools? Browse more categories below to find the exact unit converter you need." zh="如果你还需要其他换算工具，可在下方浏览更多分类，快速找到对应换算器。" />
+            <LocaleText en="Looking for other conversion tools? Browse more categories below to find the exact unit converter you need." zh="如果你还需要其他换算工具，可在下方浏览更多分类，快速找到对应换算器。" es="¿Buscas otras herramientas? Explora más categorías para encontrar el conversor exacto que necesitas." fr="Vous cherchez d'autres outils ? Parcourez plus de catégories ci-dessous pour trouver le convertisseur exact dont vous avez besoin." ru="Нужны другие инструменты? Просмотрите дополнительные категории ниже и найдите нужный конвертер." ar="هل تبحث عن أدوات تحويل أخرى؟ تصفح المزيد من الفئات أدناه للعثور على المحوّل الذي تحتاجه." />
           </p>
           <div className="flex flex-wrap gap-2">
             {relatedCategories.map((c) => (
@@ -249,7 +301,7 @@ export default function CategoryPage({ params }: Props) {
         </section>
 
         <footer className="border-t border-[#e4e0da] py-8 flex items-center justify-between flex-wrap gap-4 mb-4">
-          <Link href="/" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f]">← <LocaleText en="All converters" zh="所有换算器" /></Link>
+          <Link href="/" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f]">← <LocaleText en="All converters" zh="所有换算器" es="Todos los conversores" fr="Tous les convertisseurs" ru="Все конвертеры" ar="كل المحوّلات" /></Link>
           <span className="font-mono text-xs text-[#9a948a]">© 2025 Koverts</span>
         </footer>
       </div>

@@ -12,6 +12,44 @@ import { LocaleText, TransKey } from "@/components/LocaleText";
 
 interface Props { params: { tool: string } }
 
+const TOOL_I18N = {
+  "token-calculator": {
+    zh: { title: "Token 计算器", desc: "快速估算文本 token 数，支持常见 LLM 场景。" },
+    es: { title: "Calculadora de tokens", desc: "Estimación rápida de tokens para texto y LLM." },
+    fr: { title: "Calculateur de tokens", desc: "Estimation rapide du nombre de tokens pour les LLM." },
+    ru: { title: "Калькулятор токенов", desc: "Быстрая оценка количества токенов для LLM." },
+    ar: { title: "حاسبة الرموز", desc: "تقدير سريع لعدد الرموز لنصوص نماذج اللغة." },
+  },
+  "model-size": {
+    zh: { title: "模型显存估算", desc: "按参数量与精度估算模型运行所需显存。" },
+    es: { title: "Estimador de memoria del modelo", desc: "Calcula la memoria necesaria por parámetros y precisión." },
+    fr: { title: "Estimateur de mémoire modèle", desc: "Estime la mémoire requise selon paramètres et précision." },
+    ru: { title: "Оценка памяти модели", desc: "Оценка потребления памяти по параметрам и точности." },
+    ar: { title: "تقدير ذاكرة النموذج", desc: "تقدير الذاكرة المطلوبة حسب عدد المعاملات والدقة." },
+  },
+  "api-cost": {
+    zh: { title: "API 成本计算", desc: "按 token 与调用量估算不同模型 API 成本。" },
+    es: { title: "Calculadora de coste API", desc: "Estima costes API por tokens y volumen de llamadas." },
+    fr: { title: "Calculateur de coût API", desc: "Estimez les coûts API selon tokens et volume." },
+    ru: { title: "Калькулятор стоимости API", desc: "Оценка стоимости API по токенам и объему." },
+    ar: { title: "حاسبة تكلفة API", desc: "تقدير تكلفة API بناءً على الرموز وحجم الاستدعاءات." },
+  },
+  "context-window": {
+    zh: { title: "上下文窗口", desc: "对比不同模型上下文窗口容量与可处理文本规模。" },
+    es: { title: "Ventana de contexto", desc: "Compara tamaños de contexto y capacidad de texto por modelo." },
+    fr: { title: "Fenêtre de contexte", desc: "Compare les tailles de contexte et la capacité de texte." },
+    ru: { title: "Контекстное окно", desc: "Сравнение размеров контекста и объема текста." },
+    ar: { title: "نافذة السياق", desc: "مقارنة أحجام نافذة السياق وسعة النص في النماذج." },
+  },
+  "compute-units": {
+    zh: { title: "算力单位换算", desc: "FLOPS、TFLOPS、PFLOPS 等算力单位快速换算。" },
+    es: { title: "Conversor de unidades de cómputo", desc: "Convierte FLOPS, TFLOPS, PFLOPS y más." },
+    fr: { title: "Convertisseur d'unités de calcul", desc: "Conversion rapide FLOPS, TFLOPS, PFLOPS, etc." },
+    ru: { title: "Конвертер вычислительных единиц", desc: "Быстрое преобразование FLOPS, TFLOPS, PFLOPS и др." },
+    ar: { title: "محول وحدات القدرة الحاسوبية", desc: "تحويل سريع بين FLOPS وTFLOPS وPFLOPS وغيرها." },
+  },
+} as const;
+
 export async function generateStaticParams() {
   return AI_TOOLS.map((t) => ({ tool: t.slug }));
 }
@@ -86,12 +124,28 @@ export default function AiToolPage({ params }: Props) {
 
         <section className="py-12">
           <div className="inline-flex items-center gap-2 bg-[#edf4f0] border border-[#3d6b4f]/20 rounded-full px-4 py-1.5 text-xs font-mono text-[#3d6b4f] tracking-wider mb-6">
-            {tool.icon} <LocaleText en="AI Tool" zh="AI 工具" />
+            {tool.icon} <LocaleText en="AI Tool" zh="AI 工具" es="Herramienta IA" fr="Outil IA" ru="AI-инструмент" ar="أداة ذكاء اصطناعي" />
           </div>
           <h1 className="font-sans font-bold text-[clamp(32px,5vw,52px)] tracking-tight leading-tight mb-3">
-            {tool.title}
+            <LocaleText
+              en={tool.title}
+              zh={TOOL_I18N[tool.slug as keyof typeof TOOL_I18N]?.zh?.title ?? tool.title}
+              es={TOOL_I18N[tool.slug as keyof typeof TOOL_I18N]?.es?.title ?? tool.title}
+              fr={TOOL_I18N[tool.slug as keyof typeof TOOL_I18N]?.fr?.title ?? tool.title}
+              ru={TOOL_I18N[tool.slug as keyof typeof TOOL_I18N]?.ru?.title ?? tool.title}
+              ar={TOOL_I18N[tool.slug as keyof typeof TOOL_I18N]?.ar?.title ?? tool.title}
+            />
           </h1>
-          <p className="text-[#9a948a] text-sm max-w-lg leading-relaxed">{tool.description}</p>
+          <p className="text-[#9a948a] text-sm max-w-lg leading-relaxed">
+            <LocaleText
+              en={tool.description}
+              zh={TOOL_I18N[tool.slug as keyof typeof TOOL_I18N]?.zh?.desc ?? tool.description}
+              es={TOOL_I18N[tool.slug as keyof typeof TOOL_I18N]?.es?.desc ?? tool.description}
+              fr={TOOL_I18N[tool.slug as keyof typeof TOOL_I18N]?.fr?.desc ?? tool.description}
+              ru={TOOL_I18N[tool.slug as keyof typeof TOOL_I18N]?.ru?.desc ?? tool.description}
+              ar={TOOL_I18N[tool.slug as keyof typeof TOOL_I18N]?.ar?.desc ?? tool.description}
+            />
+          </p>
         </section>
 
         <ToolComponent />

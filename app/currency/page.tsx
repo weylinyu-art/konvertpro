@@ -74,10 +74,20 @@ function formatCurrency(n: number, currency: string): string {
   }
 }
 
+function getCurrencyDisplayName(code: string, locale: string): string {
+  try {
+    const lang = locale === "zh" ? "zh-Hans" : locale;
+    const display = new Intl.DisplayNames([lang], { type: "currency" }).of(code);
+    return display || CURRENCY_NAMES[code] || code;
+  } catch {
+    return CURRENCY_NAMES[code] || code;
+  }
+}
+
 export default function CurrencyPage() {
   const { locale, setLocale, mounted } = useLocale();
   const t = getTranslations(locale);
-  const isZh = locale === "zh";
+  const localeText = <T,>(m: { en: T; zh: T; es: T; fr: T; ru: T; ar: T }) => m[locale];
 
   const [from,     setFrom]     = useState("USD");
   const [to,       setTo]       = useState("CNY");
@@ -124,7 +134,14 @@ export default function CurrencyPage() {
         localStorage.setItem(CACHE_KEY, JSON.stringify({ rates, date: data.date, ts: Date.now() }));
       } catch {}
       } catch {
-      setError(isZh ? "汇率获取失败，请稍后重试。" : "Unable to fetch rates. Please try again.");
+      setError(localeText({
+        en: "Unable to fetch rates. Please try again.",
+        zh: "汇率获取失败，请稍后重试。",
+        es: "No se pudieron obtener las tasas. Inténtalo de nuevo.",
+        fr: "Impossible de récupérer les taux. Veuillez réessayer.",
+        ru: "Не удалось получить курсы. Попробуйте снова.",
+        ar: "تعذر جلب أسعار الصرف. حاول مرة أخرى.",
+      }));
     } finally {
       setLoading(false);
     }
@@ -179,11 +196,25 @@ export default function CurrencyPage() {
               💱 {t.currency}
             </span>
             <div className="flex items-center gap-2">
-              {loading && <span className="font-mono text-[10px] text-[#3d6b4f] animate-pulse">{isZh ? "正在获取汇率..." : "fetching rates..."}</span>}
+              {loading && <span className="font-mono text-[10px] text-[#3d6b4f] animate-pulse">{localeText({
+                en: "fetching rates...",
+                zh: "正在获取汇率...",
+                es: "obteniendo tasas...",
+                fr: "récupération des taux...",
+                ru: "получение курсов...",
+                ar: "جارٍ جلب الأسعار...",
+              })}</span>}
               {updated && !loading && <span className="font-mono text-[10px] text-[#9a948a]">ECB · {updated}</span>}
               <button onClick={() => { localStorage.removeItem('koverts_rates_v1'); fetchAllRates(); }}
                 className="font-mono text-[10px] text-[#9a948a] hover:text-[#3d6b4f] transition-colors px-2 py-1 rounded border border-[#e4e0da] hover:border-[#3d6b4f]">
-                ↻ {isZh ? "刷新" : "refresh"}
+                ↻ {localeText({
+                  en: "refresh",
+                  zh: "刷新",
+                  es: "actualizar",
+                  fr: "actualiser",
+                  ru: "обновить",
+                  ar: "تحديث",
+                })}
               </button>
             </div>
           </div>
@@ -197,7 +228,7 @@ export default function CurrencyPage() {
               <select value={from} onChange={(e) => setFrom(e.target.value)}
                 className="mt-2 w-full bg-[#f2f0ed] border border-[#e4e0da] rounded-xl px-4 py-2.5 text-sm font-medium text-[#1a1814] outline-none cursor-pointer appearance-none">
                 {CURRENCIES.map((c) => (
-                  (allRates && (allRates[c] || c === "USD")) ? <option key={c} value={c}>{CURRENCY_FLAGS[c]} {c} — {CURRENCY_NAMES[c]}</option> : null
+                  (allRates && (allRates[c] || c === "USD")) ? <option key={c} value={c}>{CURRENCY_FLAGS[c]} {c} — {getCurrencyDisplayName(c, locale)}</option> : null
                 ))}
               </select>
             </div>
@@ -215,7 +246,7 @@ export default function CurrencyPage() {
               <select value={to} onChange={(e) => setTo(e.target.value)}
                 className="mt-2 w-full bg-[#f2f0ed] border border-[#e4e0da] rounded-xl px-4 py-2.5 text-sm font-medium text-[#1a1814] outline-none cursor-pointer appearance-none">
                 {CURRENCIES.map((c) => (
-                  (allRates && (allRates[c] || c === "USD")) ? <option key={c} value={c}>{CURRENCY_FLAGS[c]} {c} — {CURRENCY_NAMES[c]}</option> : null
+                  (allRates && (allRates[c] || c === "USD")) ? <option key={c} value={c}>{CURRENCY_FLAGS[c]} {c} — {getCurrencyDisplayName(c, locale)}</option> : null
                 ))}
               </select>
             </div>
@@ -230,7 +261,7 @@ export default function CurrencyPage() {
               <select value={from} onChange={(e) => setFrom(e.target.value)}
                 className="mt-2.5 w-full bg-[#f2f0ed] border border-[#e4e0da] rounded-xl px-5 py-3 text-sm font-medium text-[#1a1814] outline-none cursor-pointer appearance-none transition-all">
                 {CURRENCIES.map((c) => (
-                  (allRates && (allRates[c] || c === "USD")) ? <option key={c} value={c}>{CURRENCY_FLAGS[c]} {c} — {CURRENCY_NAMES[c]}</option> : null
+                  (allRates && (allRates[c] || c === "USD")) ? <option key={c} value={c}>{CURRENCY_FLAGS[c]} {c} — {getCurrencyDisplayName(c, locale)}</option> : null
                 ))}
               </select>
             </div>
@@ -246,7 +277,7 @@ export default function CurrencyPage() {
               <select value={to} onChange={(e) => setTo(e.target.value)}
                 className="mt-2.5 w-full bg-[#f2f0ed] border border-[#e4e0da] rounded-xl px-5 py-3 text-sm font-medium text-[#1a1814] outline-none cursor-pointer appearance-none transition-all">
                 {CURRENCIES.map((c) => (
-                  (allRates && (allRates[c] || c === "USD")) ? <option key={c} value={c}>{CURRENCY_FLAGS[c]} {c} — {CURRENCY_NAMES[c]}</option> : null
+                  (allRates && (allRates[c] || c === "USD")) ? <option key={c} value={c}>{CURRENCY_FLAGS[c]} {c} — {getCurrencyDisplayName(c, locale)}</option> : null
                 ))}
               </select>
             </div>
@@ -258,7 +289,14 @@ export default function CurrencyPage() {
             {error ? (
               <p className="text-sm text-red-500">{error}</p>
             ) : loading ? (
-              <p className="font-mono text-[#9a948a] animate-pulse">{isZh ? "正在加载汇率..." : "Loading rates..."}</p>
+              <p className="font-mono text-[#9a948a] animate-pulse">{localeText({
+                en: "Loading rates...",
+                zh: "正在加载汇率...",
+                es: "Cargando tasas...",
+                fr: "Chargement des taux...",
+                ru: "Загрузка курсов...",
+                ar: "جارٍ تحميل الأسعار...",
+              })}</p>
             ) : (
               <>
                 <div className="flex items-baseline gap-2 flex-wrap">
@@ -294,7 +332,7 @@ export default function CurrencyPage() {
                   {CURRENCY_FLAGS[p.from]} {p.from} → {CURRENCY_FLAGS[p.to]} {p.to}
                 </p>
                 <p className="text-xs text-[#9a948a] mt-0.5 truncate group-hover:text-[#3d6b4f]">
-                  {CURRENCY_NAMES[p.from].split(" ")[0]} → {CURRENCY_NAMES[p.to].split(" ")[0]}
+                  {getCurrencyDisplayName(p.from, locale)} → {getCurrencyDisplayName(p.to, locale)}
                 </p>
               </button>
             ))}
@@ -304,7 +342,14 @@ export default function CurrencyPage() {
         {/* All currencies reference table */}
         <section className="mb-16">
           <p className="font-mono text-[10px] md:text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-4">
-            // {isZh ? `全部货币（基于 ${from}）` : `All currencies vs ${from}`}
+            // {localeText({
+              en: `All currencies vs ${from}`,
+              zh: `全部货币（基于 ${from}）`,
+              es: `Todas las divisas frente a ${from}`,
+              fr: `Toutes les devises vs ${from}`,
+              ru: `Все валюты относительно ${from}`,
+              ar: `جميع العملات مقابل ${from}`,
+            })}
           </p>
           <div className="bg-white border border-[#e4e0da] rounded-2xl overflow-hidden shadow-sm">
             <table className="w-full text-sm">
@@ -322,7 +367,7 @@ export default function CurrencyPage() {
                     <td className="px-4 md:px-6 py-3">
                       <span className="mr-2">{CURRENCY_FLAGS[c]}</span>
                       <span className="font-medium text-[#1a1814]">{c}</span>
-                      <span className="text-[#9a948a] ml-2 text-xs hidden md:inline">{CURRENCY_NAMES[c]}</span>
+                      <span className="text-[#9a948a] ml-2 text-xs hidden md:inline">{getCurrencyDisplayName(c, locale)}</span>
                     </td>
                     <td className="px-4 md:px-6 py-3 font-mono text-[#3d6b4f] font-medium">
                       {loading ? (
@@ -330,7 +375,14 @@ export default function CurrencyPage() {
                       ) : c === to && rate !== null ? (
                         rate.toFixed(4)
                       ) : (
-                        <span className="text-[#9a948a] text-xs">{isZh ? "点击换算" : "click to convert"}</span>
+                        <span className="text-[#9a948a] text-xs">{localeText({
+                          en: "click to convert",
+                          zh: "点击换算",
+                          es: "haz clic para convertir",
+                          fr: "cliquez pour convertir",
+                          ru: "нажмите для конвертации",
+                          ar: "اضغط للتحويل",
+                        })}</span>
                       )}
                     </td>
                   </tr>
@@ -343,7 +395,14 @@ export default function CurrencyPage() {
         {/* FAQ Section */}
         <section className="mb-10">
           <p className="font-mono text-[10px] md:text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-4">
-            // {isZh ? "常见问题" : "Frequently Asked Questions"}
+            // {localeText({
+              en: "Frequently Asked Questions",
+              zh: "常见问题",
+              es: "Preguntas frecuentes",
+              fr: "Questions fréquentes",
+              ru: "Часто задаваемые вопросы",
+              ar: "الأسئلة الشائعة",
+            })}
           </p>
           <div className="space-y-2">
             {currencyFaqSchema.mainEntity.map((faq, i) => (
@@ -363,7 +422,21 @@ export default function CurrencyPage() {
         {/* Disclaimer */}
         <section className="mb-16">
           <div className="bg-[#faf8f4] border border-[#e4e0da] rounded-2xl p-5 text-xs text-[#9a948a] leading-relaxed">
-            <strong className="text-[#6a6460]">{isZh ? "免责声明：" : "Disclaimer:"}</strong> {isZh ? "汇率数据来自欧洲央行（经 frankfurter.app 提供），按日更新。页面数据仅供参考，实际汇率以银行或金融机构为准，不构成任何投资建议。" : "Exchange rates are sourced from the European Central Bank via frankfurter.app and are updated daily. Rates are for informational purposes only and may differ from rates offered by banks or financial institutions. Not financial advice."}
+            <strong className="text-[#6a6460]">{localeText({
+              en: "Disclaimer:",
+              zh: "免责声明：",
+              es: "Aviso:",
+              fr: "Avertissement :",
+              ru: "Отказ от ответственности:",
+              ar: "إخلاء مسؤولية:",
+            })}</strong> {localeText({
+              en: "Exchange rates are sourced from the European Central Bank via frankfurter.app and are updated daily. Rates are for informational purposes only and may differ from rates offered by banks or financial institutions. Not financial advice.",
+              zh: "汇率数据来自欧洲央行（经 frankfurter.app 提供），按日更新。页面数据仅供参考，实际汇率以银行或金融机构为准，不构成任何投资建议。",
+              es: "Los tipos de cambio provienen del Banco Central Europeo a través de frankfurter.app y se actualizan diariamente. Son solo informativos y pueden diferir de los ofrecidos por bancos o instituciones financieras. No constituye asesoramiento financiero.",
+              fr: "Les taux de change proviennent de la Banque centrale européenne via frankfurter.app et sont mis à jour quotidiennement. Ils sont fournis à titre informatif et peuvent différer de ceux des banques ou institutions financières. Ceci ne constitue pas un conseil financier.",
+              ru: "Курсы валют получены от Европейского центрального банка через frankfurter.app и обновляются ежедневно. Данные носят справочный характер и могут отличаться от курсов банков и финансовых организаций. Не является финансовой рекомендацией.",
+              ar: "يتم الحصول على أسعار الصرف من البنك المركزي الأوروبي عبر frankfurter.app ويتم تحديثها يوميًا. هذه الأسعار لأغراض معلوماتية فقط وقد تختلف عن الأسعار المقدمة من البنوك أو المؤسسات المالية. لا تُعد نصيحة مالية.",
+            })}
           </div>
         </section>
 

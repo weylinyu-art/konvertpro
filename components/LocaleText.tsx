@@ -6,12 +6,28 @@ import { getTranslations, getCategoryLabel, getCategoryTitle, getUnitLabel, type
 export function LocaleText({
   en,
   zh,
+  es,
+  fr,
+  ru,
+  ar,
 }: {
   en: string;
   zh: string;
+  es?: string;
+  fr?: string;
+  ru?: string;
+  ar?: string;
 }) {
   const { locale } = useLocale();
-  return <>{locale === "zh" ? zh : en}</>;
+  const map = {
+    en,
+    zh,
+    es: es ?? en,
+    fr: fr ?? en,
+    ru: ru ?? en,
+    ar: ar ?? en,
+  } as const;
+  return <>{map[locale] ?? en}</>;
 }
 
 export function TransKey({
