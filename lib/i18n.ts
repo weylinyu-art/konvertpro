@@ -77,7 +77,6 @@ export interface Translations {
   copyright: string;
 
   // Page section headings (used in server-rendered pages)
-  howToConvert: string;
   conversionTableHeading: string;
   frequentlyAsked: string;
   popularConversionsHeading: string;
@@ -138,7 +137,6 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     aboutTool: "About this tool",
     faq: "Frequently Asked Questions",
     copyright: "© 2025 Koverts",
-    howToConvert: "How to convert",
     conversionTableHeading: "Conversion table",
     frequentlyAsked: "Frequently Asked Questions",
     popularConversionsHeading: "Popular conversions",
@@ -196,7 +194,6 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     aboutTool: "关于此工具",
     faq: "常见问题",
     copyright: "© 2025 Koverts",
-    howToConvert: "如何换算",
     conversionTableHeading: "换算表",
     frequentlyAsked: "常见问题",
     popularConversionsHeading: "常用换算",
@@ -254,7 +251,6 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     aboutTool: "Sobre esta herramienta",
     faq: "Preguntas frecuentes",
     copyright: "© 2025 Koverts",
-    howToConvert: "Cómo convertir",
     conversionTableHeading: "Tabla de conversión",
     frequentlyAsked: "Preguntas frecuentes",
     popularConversionsHeading: "Conversiones populares",
@@ -312,7 +308,6 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     aboutTool: "À propos de cet outil",
     faq: "Questions fréquentes",
     copyright: "© 2025 Koverts",
-    howToConvert: "Comment convertir",
     conversionTableHeading: "Table de conversion",
     frequentlyAsked: "Questions fréquentes",
     popularConversionsHeading: "Conversions populaires",
@@ -370,7 +365,6 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     aboutTool: "Об этом инструменте",
     faq: "Часто задаваемые вопросы",
     copyright: "© 2025 Koverts",
-    howToConvert: "Как конвертировать",
     conversionTableHeading: "Таблица конвертации",
     frequentlyAsked: "Часто задаваемые вопросы",
     popularConversionsHeading: "Популярные конвертации",
@@ -428,7 +422,6 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     aboutTool: "حول هذه الأداة",
     faq: "الأسئلة الشائعة",
     copyright: "© 2025 Koverts",
-    howToConvert: "كيفية التحويل",
     conversionTableHeading: "جدول التحويل",
     frequentlyAsked: "الأسئلة الشائعة",
     popularConversionsHeading: "التحويلات الشائعة",
