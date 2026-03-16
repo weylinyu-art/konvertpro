@@ -61,3 +61,6 @@ Allow: /
 
 # ── Sitemaps ─────────────────────────────────────────────────
 Sitemap: https://koverts.com/sitemap.xml
+Sitemap: https://koverts.com/sitemap-core.xml
+Sitemap: https://koverts.com/sitemap-ai.xml
+Sitemap: https://koverts.com/sitemap-conversion.xml

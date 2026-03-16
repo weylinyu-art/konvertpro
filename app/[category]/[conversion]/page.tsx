@@ -7,7 +7,7 @@ import {
   CATEGORIES, convert, formatNumber, getSymbol,
   slugToUnit, unitToSlug, getAllConversionPaths,
 } from "@/lib/units";
-import { NUMERIC_INDEX_PAIRS, NUMERIC_INDEX_VALUES } from "@/lib/indexing";
+import { NUMERIC_INDEX_PAIRS, NUMERIC_INDEX_VALUES, isWhitelistedNumericPage } from "@/lib/indexing";
 import ConverterWidget from "@/components/ConverterWidget";
 import { FAQHeading, HowToHeading, ConversionTableHeading, RelatedHeading } from "@/components/PageLabels";
 import { CategoryLabelText, LocaleText, UnitLabelText } from "@/components/LocaleText";
@@ -60,11 +60,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const fromSym   = getSymbol(from, params.category);
   const toSym     = getSymbol(to,   params.category);
   const pageUrl   = `${BASE_URL}/${params.category}/${params.conversion}`;
+  const baseCanonicalUrl = `${BASE_URL}/${params.category}/${unitToSlug(from)}-to-${unitToSlug(to)}`;
 
   if (prefixValue !== null) {
     // Numeric page: "100 miles to kilometers"
     const result = convert(prefixValue, from, to, params.category);
     const resultStr = formatNumber(result);
+    const allowIndex = isWhitelistedNumericPage(params.category, from, to, prefixValue);
     return {
       title: `${prefixValue} ${fromLabel} to ${toLabel} — ${resultStr} ${toSym}`,
       description: `${prefixValue} ${fromSym} = ${resultStr} ${toSym}. Instantly convert ${fromLabel} to ${toLabel} with our free online converter. No signup required.`,
@@ -74,7 +76,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         `${prefixValue} ${fromSym} in ${toSym}`,
         `how many ${toSym} is ${prefixValue} ${fromSym}`,
       ],
-      alternates: { canonical: pageUrl },
+      alternates: { canonical: allowIndex ? pageUrl : baseCanonicalUrl },
+      robots: {
+        index: allowIndex,
+        follow: true,
+      },
       openGraph: {
         title: `${prefixValue} ${fromLabel} = ${resultStr} ${toLabel}`,
         description: `${prefixValue} ${fromSym} = ${resultStr} ${toSym}. Free instant converter.`,
