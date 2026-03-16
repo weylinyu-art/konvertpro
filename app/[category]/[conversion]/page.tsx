@@ -11,6 +11,7 @@ import { NUMERIC_INDEX_PAIRS, NUMERIC_INDEX_VALUES, isWhitelistedNumericPage } f
 import ConverterWidget from "@/components/ConverterWidget";
 import { FAQHeading, HowToHeading, ConversionTableHeading, RelatedHeading } from "@/components/PageLabels";
 import { CategoryLabelText, LocaleText, UnitLabelText } from "@/components/LocaleText";
+import { buildPageAlternates } from "@/lib/seo";
 
 const BASE_URL = "https://koverts.com";
 const SUPPORTED_LANGUAGES = ["en", "zh-Hans", "es", "fr", "ru", "ar"];
@@ -76,7 +77,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         `${prefixValue} ${fromSym} in ${toSym}`,
         `how many ${toSym} is ${prefixValue} ${fromSym}`,
       ],
-      alternates: { canonical: allowIndex ? pageUrl : baseCanonicalUrl },
+      alternates: buildPageAlternates(
+        allowIndex
+          ? `/${params.category}/${params.conversion}`
+          : `/${params.category}/${unitToSlug(from)}-to-${unitToSlug(to)}`
+      ),
       robots: {
         index: allowIndex,
         follow: true,
@@ -101,7 +106,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       `${fromLabel} ${toLabel} conversion`,
       `how many ${toSym} in ${fromSym}`,
     ],
-    alternates: { canonical: pageUrl },
+    alternates: buildPageAlternates(`/${params.category}/${params.conversion}`),
     openGraph: {
       title: `${fromLabel} to ${toLabel} Converter`,
       description: `1 ${fromSym} = ${oneResult} ${toSym}. Free instant converter.`,

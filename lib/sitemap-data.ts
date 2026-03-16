@@ -1,24 +1,18 @@
 import { CATEGORIES, getAllConversionPaths } from "@/lib/units";
 import { AI_TOOLS } from "@/lib/ai-units";
 import { NUMERIC_INDEX_PAIRS, NUMERIC_INDEX_VALUES } from "@/lib/indexing";
+import { COMPARE_PAIRS } from "@/lib/compare-pairs";
 
 export const BASE_URL = "https://koverts.com";
-
-export const COMPARE_SLUGS = [
-  "celsius-vs-fahrenheit", "celsius-vs-kelvin",
-  "kg-vs-lbs", "oz-vs-grams",
-  "miles-vs-kilometers", "feet-vs-meters", "inches-vs-centimeters",
-  "cups-vs-ml", "gallons-vs-liters",
-  "mph-vs-kmh", "acres-vs-hectares", "mb-vs-gb", "gb-vs-tb",
-] as const;
 
 export function getCoreUrls() {
   const urls = [
     BASE_URL,
     `${BASE_URL}/about`,
     `${BASE_URL}/currency`,
+    `${BASE_URL}/compare`,
     ...Object.keys(CATEGORIES).map((slug) => `${BASE_URL}/${slug}`),
-    ...COMPARE_SLUGS.map((slug) => `${BASE_URL}/compare/${slug}`),
+    ...COMPARE_PAIRS.map((pair) => `${BASE_URL}/compare/${pair.slug}`),
   ];
   return Array.from(new Set(urls));
 }

@@ -6,12 +6,6 @@ import PWAInit from "@/components/PWAInit";
 import "./globals.css";
 
 const BASE_URL = "https://koverts.com";
-const LOCALES  = ["en", "zh", "es", "fr", "ru", "ar"];
-
-// hreflang locale map — maps our locale codes to BCP 47 tags
-const HREFLANG: Record<string, string> = {
-  en: "en", zh: "zh-Hans", es: "es", fr: "fr", ru: "ru", ar: "ar",
-};
 
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
@@ -126,10 +120,6 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: BASE_URL,
-    // hreflang — tells Google which language version to serve to which users
-    languages: Object.fromEntries(
-      LOCALES.map((l) => [HREFLANG[l], `${BASE_URL}?lang=${l}`])
-    ),
   },
   robots: {
     index: true,
@@ -148,12 +138,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
-        {/* hreflang for all 6 languages (Google, Yandex) */}
-        {LOCALES.map((l) => (
-          <link key={l} rel="alternate" hrefLang={HREFLANG[l]} href={`${BASE_URL}?lang=${l}`} />
-        ))}
-        <link rel="alternate" hrefLang="x-default" href={BASE_URL} />
-
         {/* PWA */}
         <link rel="manifest" href="/manifest.json" />
         <meta name="mobile-web-app-capable" content="yes" />

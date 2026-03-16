@@ -9,6 +9,7 @@ import ApiCostEstimator   from "@/components/ApiCostEstimator";
 import ContextWindow      from "@/components/ContextWindow";
 import ComputeConverter   from "@/components/ComputeConverter";
 import { LocaleText, TransKey } from "@/components/LocaleText";
+import { BASE_URL, buildPageAlternates } from "@/lib/seo";
 
 interface Props { params: { tool: string } }
 
@@ -57,7 +58,19 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const tool = AI_TOOLS.find((t) => t.slug === params.tool);
   if (!tool) return {};
-  return { title: tool.title, description: tool.metaDescription };
+  const pagePath = `/ai/${tool.slug}`;
+  const pageUrl = `${BASE_URL}${pagePath}/`;
+  return {
+    title: tool.title,
+    description: tool.metaDescription,
+    alternates: buildPageAlternates(pagePath),
+    openGraph: {
+      title: tool.title,
+      description: tool.metaDescription,
+      url: pageUrl,
+      type: "website",
+    },
+  };
 }
 
 const TOOL_COMPONENTS: Record<string, React.ComponentType> = {
@@ -74,7 +87,6 @@ export default function AiToolPage({ params }: Props) {
 
   const ToolComponent = TOOL_COMPONENTS[params.tool];
 
-  const BASE_URL = "https://koverts.com";
   const softwareSchema = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
