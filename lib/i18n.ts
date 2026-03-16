@@ -743,3 +743,59 @@ export function getCategoryLabel(slug: string, t: Translations): string {
   const key = map[slug];
   return key ? String(t[key]) : slug;
 }
+
+// Category full title (e.g. "长度换算器" for zh, "Length Converter" for en)
+const CATEGORY_TITLES: Record<Locale, Record<string, string>> = {
+  en: {
+    length: "Length Converter", weight: "Weight & Mass Converter", temperature: "Temperature Converter",
+    volume: "Volume Converter", speed: "Speed Converter", area: "Area Converter",
+    data: "Data Storage Converter", time: "Time Converter", energy: "Energy Converter",
+    pressure: "Pressure Converter", power: "Power Converter", fuel: "Fuel Efficiency Converter",
+    angle: "Angle Converter", cooking: "Cooking Converter", shoe: "Shoe Size Converter",
+    numbase: "Number Base Converter",
+  },
+  zh: {
+    length: "长度换算器", weight: "重量换算器", temperature: "温度换算器",
+    volume: "体积换算器", speed: "速度换算器", area: "面积换算器",
+    data: "数据存储换算器", time: "时间换算器", energy: "能量换算器",
+    pressure: "压强换算器", power: "功率换算器", fuel: "油耗换算器",
+    angle: "角度换算器", cooking: "烹饪换算器", shoe: "鞋码换算器",
+    numbase: "进制换算器",
+  },
+  es: {
+    length: "Conversor de longitud", weight: "Conversor de peso", temperature: "Conversor de temperatura",
+    volume: "Conversor de volumen", speed: "Conversor de velocidad", area: "Conversor de área",
+    data: "Conversor de almacenamiento", time: "Conversor de tiempo", energy: "Conversor de energía",
+    pressure: "Conversor de presión", power: "Conversor de potencia", fuel: "Conversor de combustible",
+    angle: "Conversor de ángulo", cooking: "Conversor de cocina", shoe: "Conversor de talla",
+    numbase: "Conversor de base numérica",
+  },
+  fr: {
+    length: "Convertisseur de longueur", weight: "Convertisseur de poids", temperature: "Convertisseur de température",
+    volume: "Convertisseur de volume", speed: "Convertisseur de vitesse", area: "Convertisseur d'aire",
+    data: "Convertisseur de stockage", time: "Convertisseur de temps", energy: "Convertisseur d'énergie",
+    pressure: "Convertisseur de pression", power: "Convertisseur de puissance", fuel: "Convertisseur de carburant",
+    angle: "Convertisseur d'angle", cooking: "Convertisseur culinaire", shoe: "Convertisseur de pointure",
+    numbase: "Convertisseur de base numérique",
+  },
+  ru: {
+    length: "Конвертер длины", weight: "Конвертер веса", temperature: "Конвертер температуры",
+    volume: "Конвертер объёма", speed: "Конвертер скорости", area: "Конвертер площади",
+    data: "Конвертер хранения данных", time: "Конвертер времени", energy: "Конвертер энергии",
+    pressure: "Конвертер давления", power: "Конвертер мощности", fuel: "Конвертер расхода топлива",
+    angle: "Конвертер углов", cooking: "Кулинарный конвертер", shoe: "Конвертер размера обуви",
+    numbase: "Конвертер систем счисления",
+  },
+  ar: {
+    length: "محوّل الطول", weight: "محوّل الوزن", temperature: "محوّل الحرارة",
+    volume: "محوّل الحجم", speed: "محوّل السرعة", area: "محوّل المساحة",
+    data: "محوّل التخزين", time: "محوّل الوقت", energy: "محوّل الطاقة",
+    pressure: "محوّل الضغط", power: "محوّل القدرة", fuel: "محوّل استهلاك الوقود",
+    angle: "محوّل الزوايا", cooking: "محوّل الطبخ", shoe: "محوّل مقاس الحذاء",
+    numbase: "محوّل نظام الأعداد",
+  },
+};
+
+export function getCategoryTitle(slug: string, locale: Locale): string {
+  return CATEGORY_TITLES[locale]?.[slug] ?? CATEGORY_TITLES.en[slug] ?? slug;
+}

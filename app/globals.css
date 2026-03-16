@@ -25,6 +25,17 @@ html {
 
 body { font-family: var(--font-sans); }
 
+/* 中文界面：使用系统中文字体，优化阅读体验 */
+[lang="zh-Hans"] body,
+[lang^="zh"] body,
+[data-locale="zh"] body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Noto Sans SC", "Source Han Sans SC", sans-serif;
+}
+[lang="zh-Hans"] .leading-relaxed,
+[lang^="zh"] .leading-relaxed { line-height: 1.75; }
+[lang="zh-Hans"] .leading-loose,
+[lang^="zh"] .leading-loose { line-height: 1.85; }
+
 .font-sans { font-family: var(--font-sans); }
 .font-mono { font-family: var(--font-mono); }
 

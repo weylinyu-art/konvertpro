@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { CATEGORIES, convert, formatNumber, getSymbol } from "@/lib/units";
 import { useLocale } from "@/components/LocaleProvider";
-import { getTranslations, getCategoryLabel, getUnitLabel } from "@/lib/i18n";
+import { getTranslations, getCategoryLabel, getCategoryTitle, getUnitLabel } from "@/lib/i18n";
 
 // Ordered by global search volume / popularity (2025–2026)
 const CATEGORY_ORDER = [
@@ -153,8 +153,8 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
 
         {/* Card header */}
         <div className="flex items-center justify-between px-4 md:px-7 py-3 md:py-4 border-b border-[#e4e0da]">
-          <span className="font-mono text-[10px] md:text-[11px] text-[#9a948a] tracking-[0.1em] uppercase">
-            {cat.icon} {cat.title}
+          <span className={`font-mono text-[10px] md:text-[11px] text-[#9a948a] tracking-[0.1em] ${locale === "zh" ? "" : "uppercase"}`}>
+            {cat.icon} {getCategoryTitle(catSlug, locale)}
           </span>
           {defaultFrom && (
             <Link href={`/${catSlug}`} className="font-mono text-[10px] text-[#9a948a] hover:text-[#3d6b4f] transition-colors">

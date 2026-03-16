@@ -35,15 +35,20 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
   const [mounted, setMounted]     = useState(false);
 
   useEffect(() => {
-    setLocaleState(detectLocale());
+    const l = detectLocale();
+    setLocaleState(l);
+    document.documentElement.lang = l === "zh" ? "zh-Hans" : LOCALE_META[l].browserCodes[0];
+    document.documentElement.dir = LOCALE_META[l].dir;
+    document.documentElement.setAttribute("data-locale", l);
     setMounted(true);
   }, []);
 
   const setLocale = (l: Locale) => {
     localStorage.setItem(STORAGE_KEY, l);
     setLocaleState(l);
-    document.documentElement.dir  = LOCALE_META[l].dir;
-    document.documentElement.lang = l;
+    document.documentElement.dir = LOCALE_META[l].dir;
+    document.documentElement.lang = l === "zh" ? "zh-Hans" : LOCALE_META[l].browserCodes[0];
+    document.documentElement.setAttribute("data-locale", l);
   };
 
   return (
