@@ -8,6 +8,7 @@ import ModelSizeEstimator from "@/components/ModelSizeEstimator";
 import ApiCostEstimator   from "@/components/ApiCostEstimator";
 import ContextWindow      from "@/components/ContextWindow";
 import ComputeConverter   from "@/components/ComputeConverter";
+import { LocaleText, TransKey } from "@/components/LocaleText";
 
 interface Props { params: { tool: string } }
 
@@ -74,7 +75,7 @@ export default function AiToolPage({ params }: Props) {
             </Link>
             <span className="text-[#c5bdb4] text-xs flex-shrink-0">/</span>
             <Link href="/ai" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f] transition-colors flex-shrink-0">
-              AI Tools
+              <TransKey k="aiTools" fallback="AI Tools" />
             </Link>
             <span className="text-[#c5bdb4] text-xs flex-shrink-0">/</span>
             <span className="font-mono text-xs text-[#3d6b4f] truncate max-w-[100px] md:max-w-[200px]">
@@ -85,7 +86,7 @@ export default function AiToolPage({ params }: Props) {
 
         <section className="py-12">
           <div className="inline-flex items-center gap-2 bg-[#edf4f0] border border-[#3d6b4f]/20 rounded-full px-4 py-1.5 text-xs font-mono text-[#3d6b4f] tracking-wider mb-6">
-            {tool.icon} AI Tool
+            {tool.icon} <LocaleText en="AI Tool" zh="AI 工具" />
           </div>
           <h1 className="font-sans font-bold text-[clamp(32px,5vw,52px)] tracking-tight leading-tight mb-3">
             {tool.title}
@@ -96,7 +97,7 @@ export default function AiToolPage({ params }: Props) {
         <ToolComponent />
 
         <footer className="border-t border-[#e4e0da] py-8 mt-16 flex items-center justify-between flex-wrap gap-4 mb-4">
-          <Link href="/ai" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f]">← AI Tools</Link>
+          <Link href="/ai" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f]">← <TransKey k="aiTools" fallback="AI Tools" /></Link>
           <span className="font-mono text-xs text-[#9a948a]">© 2025 Koverts</span>
         </footer>
       </div>

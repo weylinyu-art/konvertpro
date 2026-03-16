@@ -37,5 +37,27 @@ User-agent: *
 Allow: /
 Crawl-delay: 5
 
+# ── AI / Answer Engines (GEO) ───────────────────────────────
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
 # ── Sitemaps ─────────────────────────────────────────────────
 Sitemap: https://koverts.com/sitemap.xml

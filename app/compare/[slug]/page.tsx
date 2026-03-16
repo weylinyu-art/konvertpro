@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CATEGORIES, convert, formatNumber, getSymbol, slugToUnit, unitToSlug } from "@/lib/units";
 import { FAQHeading, MoreComparisonsHeading, FullConverterLink } from "@/components/PageLabels";
+import { CategoryLabelText, LocaleText, UnitLabelText } from "@/components/LocaleText";
 
 const BASE_URL = "https://koverts.com";
 
@@ -166,14 +167,14 @@ export default function ComparePage({ params }: Props) {
               <span className="w-1.5 h-1.5 rounded-full bg-[#3d6b4f] mb-0.5" />
             </Link>
             <span className="text-[#c5bdb4] text-xs flex-shrink-0">/</span>
-            <span className="font-mono text-xs text-[#3d6b4f]">Compare</span>
+            <span className="font-mono text-xs text-[#3d6b4f]"><LocaleText en="Compare" zh="对比" /></span>
           </div>
         </header>
 
         {/* Hero */}
         <section className="py-12">
           <div className="inline-flex items-center gap-2 bg-[#edf4f0] border border-[#3d6b4f]/20 rounded-full px-4 py-1.5 text-xs font-mono text-[#3d6b4f] tracking-wider mb-6">
-            {cat.icon} {cat.label} · Comparison
+            {cat.icon} <CategoryLabelText slug={cat.slug} fallback={cat.label} /> · <LocaleText en="Comparison" zh="对比" />
           </div>
           <h1 className="font-sans font-bold text-[clamp(32px,5vw,56px)] tracking-tight leading-tight mb-3">
             {pair.title}
@@ -184,22 +185,22 @@ export default function ComparePage({ params }: Props) {
         {/* Quick answer cards */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
           <div className="bg-white border border-[#e4e0da] rounded-2xl p-6 shadow-sm">
-            <p className="font-mono text-[11px] text-[#9a948a] tracking-widest uppercase mb-3">1 {aSym} equals</p>
+            <p className="font-mono text-[11px] text-[#9a948a] tracking-widest uppercase mb-3">1 {aSym} <LocaleText en="equals" zh="等于" /></p>
             <p className="font-sans font-bold text-3xl text-[#3d6b4f] mb-1">{formatNumber(aToB)} <span className="text-xl">{bSym}</span></p>
-            <p className="text-xs text-[#9a948a]">{aLabel} → {bLabel}</p>
+            <p className="text-xs text-[#9a948a]"><UnitLabelText unitKey={pair.a} fallback={aLabel} /> → <UnitLabelText unitKey={pair.b} fallback={bLabel} /></p>
 <FullConverterLink href={`/${pair.category}/${unitToSlug(pair.a)}-to-${unitToSlug(pair.b)}`} />
           </div>
           <div className="bg-white border border-[#e4e0da] rounded-2xl p-6 shadow-sm">
-            <p className="font-mono text-[11px] text-[#9a948a] tracking-widest uppercase mb-3">1 {bSym} equals</p>
+            <p className="font-mono text-[11px] text-[#9a948a] tracking-widest uppercase mb-3">1 {bSym} <LocaleText en="equals" zh="等于" /></p>
             <p className="font-sans font-bold text-3xl text-[#3d6b4f] mb-1">{formatNumber(bToA)} <span className="text-xl">{aSym}</span></p>
-            <p className="text-xs text-[#9a948a]">{bLabel} → {aLabel}</p>
+            <p className="text-xs text-[#9a948a]"><UnitLabelText unitKey={pair.b} fallback={bLabel} /> → <UnitLabelText unitKey={pair.a} fallback={aLabel} /></p>
 <FullConverterLink href={`/${pair.category}/${unitToSlug(pair.b)}-to-${unitToSlug(pair.a)}`} />
           </div>
         </section>
 
         {/* Comparison table */}
         <section className="mb-12">
-<p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-5">// Side-by-side</p>
+<p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-5">// <LocaleText en="Side-by-side" zh="并排对照" /></p>
           <div className="bg-white border border-[#e4e0da] rounded-2xl overflow-hidden shadow-sm">
             <table className="w-full text-sm">
               <thead>
@@ -275,7 +276,7 @@ export default function ComparePage({ params }: Props) {
         </section>
 
         <footer className="border-t border-[#e4e0da] py-8 flex items-center justify-between flex-wrap gap-4 mb-4">
-          <Link href="/" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f]">← All converters</Link>
+          <Link href="/" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f]">← <LocaleText en="All converters" zh="所有换算器" /></Link>
           <span className="font-mono text-xs text-[#9a948a]">© 2025 Koverts</span>
         </footer>
       </div>

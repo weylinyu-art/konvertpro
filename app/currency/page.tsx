@@ -77,6 +77,7 @@ function formatCurrency(n: number, currency: string): string {
 export default function CurrencyPage() {
   const { locale, setLocale, mounted } = useLocale();
   const t = getTranslations(locale);
+  const isZh = locale === "zh";
 
   const [from,     setFrom]     = useState("USD");
   const [to,       setTo]       = useState("CNY");
@@ -122,8 +123,8 @@ export default function CurrencyPage() {
       try {
         localStorage.setItem(CACHE_KEY, JSON.stringify({ rates, date: data.date, ts: Date.now() }));
       } catch {}
-    } catch {
-      setError("Unable to fetch rates. Please try again.");
+      } catch {
+      setError(isZh ? "汇率获取失败，请稍后重试。" : "Unable to fetch rates. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -178,11 +179,11 @@ export default function CurrencyPage() {
               💱 {t.currency}
             </span>
             <div className="flex items-center gap-2">
-              {loading && <span className="font-mono text-[10px] text-[#3d6b4f] animate-pulse">fetching rates...</span>}
+              {loading && <span className="font-mono text-[10px] text-[#3d6b4f] animate-pulse">{isZh ? "正在获取汇率..." : "fetching rates..."}</span>}
               {updated && !loading && <span className="font-mono text-[10px] text-[#9a948a]">ECB · {updated}</span>}
               <button onClick={() => { localStorage.removeItem('koverts_rates_v1'); fetchAllRates(); }}
                 className="font-mono text-[10px] text-[#9a948a] hover:text-[#3d6b4f] transition-colors px-2 py-1 rounded border border-[#e4e0da] hover:border-[#3d6b4f]">
-                ↻ refresh
+                ↻ {isZh ? "刷新" : "refresh"}
               </button>
             </div>
           </div>
@@ -257,7 +258,7 @@ export default function CurrencyPage() {
             {error ? (
               <p className="text-sm text-red-500">{error}</p>
             ) : loading ? (
-              <p className="font-mono text-[#9a948a] animate-pulse">Loading rates...</p>
+              <p className="font-mono text-[#9a948a] animate-pulse">{isZh ? "正在加载汇率..." : "Loading rates..."}</p>
             ) : (
               <>
                 <div className="flex items-baseline gap-2 flex-wrap">
@@ -303,7 +304,7 @@ export default function CurrencyPage() {
         {/* All currencies reference table */}
         <section className="mb-16">
           <p className="font-mono text-[10px] md:text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-4">
-            // All currencies vs {from}
+            // {isZh ? `全部货币（基于 ${from}）` : `All currencies vs ${from}`}
           </p>
           <div className="bg-white border border-[#e4e0da] rounded-2xl overflow-hidden shadow-sm">
             <table className="w-full text-sm">
@@ -329,7 +330,7 @@ export default function CurrencyPage() {
                       ) : c === to && rate !== null ? (
                         rate.toFixed(4)
                       ) : (
-                        <span className="text-[#9a948a] text-xs">click to convert</span>
+                        <span className="text-[#9a948a] text-xs">{isZh ? "点击换算" : "click to convert"}</span>
                       )}
                     </td>
                   </tr>
@@ -342,7 +343,7 @@ export default function CurrencyPage() {
         {/* FAQ Section */}
         <section className="mb-10">
           <p className="font-mono text-[10px] md:text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-4">
-            // Frequently Asked Questions
+            // {isZh ? "常见问题" : "Frequently Asked Questions"}
           </p>
           <div className="space-y-2">
             {currencyFaqSchema.mainEntity.map((faq, i) => (
@@ -362,7 +363,7 @@ export default function CurrencyPage() {
         {/* Disclaimer */}
         <section className="mb-16">
           <div className="bg-[#faf8f4] border border-[#e4e0da] rounded-2xl p-5 text-xs text-[#9a948a] leading-relaxed">
-            <strong className="text-[#6a6460]">Disclaimer:</strong> Exchange rates are sourced from the European Central Bank via frankfurter.app and are updated daily. Rates are for informational purposes only and may differ from rates offered by banks or financial institutions. Not financial advice.
+            <strong className="text-[#6a6460]">{isZh ? "免责声明：" : "Disclaimer:"}</strong> {isZh ? "汇率数据来自欧洲央行（经 frankfurter.app 提供），按日更新。页面数据仅供参考，实际汇率以银行或金融机构为准，不构成任何投资建议。" : "Exchange rates are sourced from the European Central Bank via frankfurter.app and are updated daily. Rates are for informational purposes only and may differ from rates offered by banks or financial institutions. Not financial advice."}
           </div>
         </section>
 

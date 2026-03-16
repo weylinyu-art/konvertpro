@@ -9,8 +9,10 @@ import {
 } from "@/lib/units";
 import ConverterWidget from "@/components/ConverterWidget";
 import { FAQHeading, HowToHeading, ConversionTableHeading, RelatedHeading } from "@/components/PageLabels";
+import { CategoryLabelText, LocaleText, UnitLabelText } from "@/components/LocaleText";
 
 const BASE_URL = "https://koverts.com";
+const SUPPORTED_LANGUAGES = ["en", "zh-Hans", "es", "fr", "ru", "ar"];
 
 interface Props {
   params: { category: string; conversion: string };
@@ -231,6 +233,51 @@ export default function ConversionPage({ params }: Props) {
       "encodingFormat": "text/html",
       "contentUrl": baseConversionUrl,
     },
+    "inLanguage": SUPPORTED_LANGUAGES,
+    "isAccessibleForFree": true,
+  };
+
+  const quickAnswerSchema = {
+    "@context": "https://schema.org",
+    "@type": "QAPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": `What is ${prefixValue ?? 1} ${fromLabel} in ${toLabel}?`,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": `${prefixValue ?? 1} ${fromSym} = ${formatNumber(convert(prefixValue ?? 1, from, to, params.category))} ${toSym}.`,
+        },
+      },
+      {
+        "@type": "Question",
+        "name": `What is the conversion formula from ${fromLabel} to ${toLabel}?`,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": `${toSym} = ${fromSym} × ${formatNumber(oneResult)}.`,
+        },
+      },
+    ],
+  };
+
+  const unitTermsSchema = {
+    "@context": "https://schema.org",
+    "@type": "DefinedTermSet",
+    "name": `${fromLabel} and ${toLabel} definitions`,
+    "url": baseConversionUrl,
+    "inLanguage": "en",
+    "hasDefinedTerm": [
+      {
+        "@type": "DefinedTerm",
+        "name": fromLabel,
+        "description": `${fromLabel} is a ${cat.label.toLowerCase()} unit represented as ${fromSym}.`,
+      },
+      {
+        "@type": "DefinedTerm",
+        "name": toLabel,
+        "description": `${toLabel} is a ${cat.label.toLowerCase()} unit represented as ${toSym}.`,
+      },
+    ],
   };
 
   return (
@@ -239,6 +286,8 @@ export default function ConversionPage({ params }: Props) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(datasetSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(quickAnswerSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(unitTermsSchema) }} />
 
       <div className="max-w-4xl mx-auto px-6">
 
@@ -254,7 +303,7 @@ export default function ConversionPage({ params }: Props) {
             <span className="text-[#c5bdb4] text-xs flex-shrink-0">/</span>
             <Link href={`/${params.category}`}
               className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f] transition-colors flex-shrink-0">
-              {cat.label}
+              <CategoryLabelText slug={cat.slug} fallback={cat.label} />
             </Link>
             <span className="text-[#c5bdb4] text-xs flex-shrink-0">/</span>
             <span className="font-mono text-xs text-[#3d6b4f] truncate max-w-[80px] md:max-w-[160px]">
@@ -266,14 +315,14 @@ export default function ConversionPage({ params }: Props) {
         {/* Hero */}
         <section className="py-12">
           <div className="inline-flex items-center gap-2 bg-[#edf4f0] border border-[#3d6b4f]/20 rounded-full px-4 py-1.5 text-xs font-mono text-[#3d6b4f] tracking-wider mb-6">
-            {cat.icon} {cat.label} Converter
+            {cat.icon} <CategoryLabelText slug={cat.slug} fallback={cat.label} /> <LocaleText en="Converter" zh="换算器" />
           </div>
 
           {prefixValue !== null ? (
             // Numeric page hero — direct answer
             <>
               <h1 className="font-sans font-bold text-[clamp(28px,5vw,52px)] tracking-tight leading-tight mb-4">
-                {prefixValue} {fromLabel} to {toLabel}
+                {prefixValue} <UnitLabelText unitKey={from} fallback={fromLabel} /> <LocaleText en="to" zh="转" /> <UnitLabelText unitKey={to} fallback={toLabel} />
               </h1>
               <div className="inline-flex items-baseline gap-3 bg-[#edf4f0] border border-[#3d6b4f]/30 rounded-2xl px-6 py-4 mb-4">
                 <span className="font-mono text-[#9a948a] text-sm">{prefixValue} {fromSym} =</span>
@@ -283,14 +332,14 @@ export default function ConversionPage({ params }: Props) {
                 <span className="font-mono text-[#3d6b4f] text-lg">{toSym}</span>
               </div>
               <p className="text-[#9a948a] text-sm leading-relaxed max-w-lg">
-                Use the converter below for any value, or see the full table.
+                <LocaleText en="Use the converter below for any value, or see the full table." zh="可在下方输入任意数值进行换算，或查看完整参考表。" />
               </p>
             </>
           ) : (
             // Standard page hero
             <>
               <h1 className="font-sans font-bold text-[clamp(32px,5vw,56px)] tracking-tight leading-tight mb-3">
-                {fromLabel} to {toLabel}
+                <UnitLabelText unitKey={from} fallback={fromLabel} /> <LocaleText en="to" zh="转" /> <UnitLabelText unitKey={to} fallback={toLabel} />
               </h1>
               <p className="text-[#9a948a] text-sm leading-relaxed max-w-lg">
                 1 {fromSym} = <strong className="text-[#3d6b4f] font-semibold">{formatNumber(oneResult)} {toSym}</strong>
@@ -298,6 +347,17 @@ export default function ConversionPage({ params }: Props) {
               </p>
             </>
           )}
+        </section>
+
+        {/* Direct answer block for AEO/GEO extraction */}
+        <section className="mb-8 bg-[#edf4f0] border border-[#3d6b4f]/25 rounded-2xl px-5 py-4">
+          <h2 className="font-sans font-semibold text-lg text-[#1a1814] mb-1"><LocaleText en="Direct Answer" zh="直接答案" /></h2>
+          <p className="text-sm text-[#3d6b4f] leading-relaxed">
+            {prefixValue ?? 1} {fromSym} = {formatNumber(convert(prefixValue ?? 1, from, to, params.category))} {toSym}
+          </p>
+          <p className="text-xs text-[#6a6460] mt-2 leading-relaxed">
+            <LocaleText en="Formula" zh="公式" />: {toSym} = {fromSym} × {formatNumber(oneResult)}. <LocaleText en="This page supports instant conversion, reference table checks, and related unit links." zh="本页支持即时换算、参考表核对和相关单位跳转。" />
+          </p>
         </section>
 
         <ConverterWidget defaultCategory={params.category} defaultFrom={from} defaultTo={to} />
@@ -310,8 +370,8 @@ export default function ConversionPage({ params }: Props) {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-[#e4e0da] bg-[#f7f5f2]">
-                  <th className="text-left px-6 py-3 font-mono text-xs text-[#9a948a] tracking-wider">{fromLabel} ({fromSym})</th>
-                  <th className="text-left px-6 py-3 font-mono text-xs text-[#9a948a] tracking-wider">{toLabel} ({toSym})</th>
+                  <th className="text-left px-6 py-3 font-mono text-xs text-[#9a948a] tracking-wider"><UnitLabelText unitKey={from} fallback={fromLabel} /> ({fromSym})</th>
+                  <th className="text-left px-6 py-3 font-mono text-xs text-[#9a948a] tracking-wider"><UnitLabelText unitKey={to} fallback={toLabel} /> ({toSym})</th>
                 </tr>
               </thead>
               <tbody>
@@ -348,16 +408,16 @@ export default function ConversionPage({ params }: Props) {
         {/* How to convert */}
         <section className="mb-12 bg-white border border-[#e4e0da] rounded-2xl p-8 shadow-sm">
   <HowToHeading /> 
-          <p className="font-sans font-bold text-2xl mb-4">{fromLabel} → {toLabel}</p>
+          <p className="font-sans font-bold text-2xl mb-4"><UnitLabelText unitKey={from} fallback={fromLabel} /> → <UnitLabelText unitKey={to} fallback={toLabel} /></p>
           <p className="text-[#9a948a] text-sm leading-relaxed mb-4">
-            To convert from {fromLabel} ({fromSym}) to {toLabel} ({toSym}), multiply your value by{" "}
+            <LocaleText en="To convert from" zh="将" /> <UnitLabelText unitKey={from} fallback={fromLabel} /> ({fromSym}) <LocaleText en="to" zh="换算为" /> <UnitLabelText unitKey={to} fallback={toLabel} /> ({toSym})，<LocaleText en="multiply your value by" zh="将数值乘以" />{" "}
             <strong className="text-[#1a1814]">{formatNumber(oneResult)}</strong>.
           </p>
           <div className="bg-[#f7f5f2] rounded-xl px-6 py-4 font-mono text-sm text-[#3d6b4f]">
             {toSym} = {fromSym} × {formatNumber(oneResult)}
           </div>
           <p className="text-[#9a948a] text-sm leading-relaxed mt-4">
-            For example, 10 {fromSym} = {formatNumber(convert(10, from, to, params.category))} {toSym}.
+            <LocaleText en="For example" zh="例如" />，10 {fromSym} = {formatNumber(convert(10, from, to, params.category))} {toSym}.
           </p>
         </section>
 
@@ -388,7 +448,7 @@ export default function ConversionPage({ params }: Props) {
                 href={`/${params.category}/${unitToSlug(from)}-to-${unitToSlug(r.unit)}`}
                 className="group bg-white border border-[#e4e0da] rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm text-center">
                 <p className="font-mono text-xs text-[#9a948a] group-hover:text-[#3d6b4f]">{fromSym} → {r.sym}</p>
-                <p className="text-xs text-[#1a1814] mt-1 truncate">{r.label}</p>
+                <p className="text-xs text-[#1a1814] mt-1 truncate"><UnitLabelText unitKey={r.unit} fallback={r.label} /></p>
               </Link>
             ))}
           </div>
@@ -396,7 +456,7 @@ export default function ConversionPage({ params }: Props) {
 
         <footer className="border-t border-[#e4e0da] py-8 flex items-center justify-between flex-wrap gap-4 mb-4">
           <Link href={`/${params.category}`} className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f]">
-            ← {cat.label} converters
+            ← <CategoryLabelText slug={cat.slug} fallback={cat.label} /> <LocaleText en="converters" zh="换算器" />
           </Link>
           <span className="font-mono text-xs text-[#9a948a]">© 2025 Koverts</span>
         </footer>

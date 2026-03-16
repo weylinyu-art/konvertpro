@@ -9,6 +9,7 @@ import { getTranslations } from "@/lib/i18n";
 export default function AiPage() {
   const { locale, setLocale, mounted } = useLocale();
   const t = getTranslations(locale);
+  const isZh = locale === "zh";
 
   return (
     <main className="relative z-10">
@@ -32,13 +33,15 @@ export default function AiPage() {
         <section className="py-14 text-center">
           <div className="inline-flex items-center gap-2 bg-[#edf4f0] border border-[#3d6b4f]/20 rounded-full px-4 py-1.5 text-xs font-mono text-[#3d6b4f] tracking-wider mb-7">
             <span className="w-1.5 h-1.5 rounded-full bg-[#3d6b4f] animate-pulse" />
-            Built for LLM developers & AI enthusiasts
+            {isZh ? "为 LLM 开发者与 AI 从业者打造" : "Built for LLM developers & AI enthusiasts"}
           </div>
           <h1 className="font-sans font-bold text-[clamp(36px,6vw,64px)] leading-[1.05] tracking-tight mb-4">
-            AI & LLM <em className="italic text-[#3d6b4f]">Calculators</em>
+            {isZh ? <>AI 与 LLM <em className="italic text-[#3d6b4f]">工具集</em></> : <>AI & LLM <em className="italic text-[#3d6b4f]">Calculators</em></>}
           </h1>
           <p className="text-[#9a948a] text-base font-light max-w-md mx-auto leading-relaxed">
-            Token counts, model memory, API costs, context windows — everything you need when working with large language models.
+            {isZh
+              ? "Token 计数、模型显存、API 成本、上下文窗口等，覆盖大模型开发常用计算场景。"
+              : "Token counts, model memory, API costs, context windows — everything you need when working with large language models."}
           </p>
         </section>
 
@@ -56,7 +59,7 @@ export default function AiPage() {
                 </div>
               </div>
               <div className="mt-4 flex items-center gap-1 font-mono text-xs text-[#3d6b4f] opacity-0 group-hover:opacity-100 transition-opacity">
-                Open tool →
+                {isZh ? "打开工具" : "Open tool"} →
               </div>
             </Link>
           ))}

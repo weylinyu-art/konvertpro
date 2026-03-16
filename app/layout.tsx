@@ -42,6 +42,21 @@ const orgSchema = {
     "email": "hello@koverts.com",
     "contactType": "customer support",
   },
+  "knowsLanguage": ["en", "zh-Hans", "es", "fr", "ru", "ar"],
+  "areaServed": [
+    { "@type": "Country", "name": "United States" },
+    { "@type": "Country", "name": "China" },
+    { "@type": "Country", "name": "United Kingdom" },
+    { "@type": "Country", "name": "Canada" },
+    { "@type": "Country", "name": "Australia" },
+    { "@type": "Country", "name": "India" },
+    { "@type": "Country", "name": "Russia" },
+    { "@type": "Country", "name": "France" },
+    { "@type": "Country", "name": "Spain" },
+    { "@type": "Country", "name": "Germany" },
+    { "@type": "Country", "name": "Saudi Arabia" },
+    { "@type": "Country", "name": "United Arab Emirates" },
+  ],
   "sameAs": [],
 };
 
@@ -52,6 +67,23 @@ const websiteSchema = {
   "name": "Koverts",
   "url": BASE_URL,
   "description": "Free unit converter and AI tools",
+  "inLanguage": ["en", "zh-Hans", "es", "fr", "ru", "ar"],
+  "availableLanguage": [
+    { "@type": "Language", "name": "English" },
+    { "@type": "Language", "name": "Chinese (Simplified)" },
+    { "@type": "Language", "name": "Spanish" },
+    { "@type": "Language", "name": "French" },
+    { "@type": "Language", "name": "Russian" },
+    { "@type": "Language", "name": "Arabic" },
+  ],
+  "audience": {
+    "@type": "Audience",
+    "audienceType": "global users needing unit conversion",
+    "geographicArea": {
+      "@type": "AdministrativeArea",
+      "name": "Global",
+    },
+  },
   "potentialAction": {
     "@type": "SearchAction",
     "target": {

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { CATEGORIES, convert, formatNumber, getSymbol, unitToSlug } from "@/lib/units";
 import ConverterWidget from "@/components/ConverterWidget";
 import { FAQHeading, PopularHeading, AllConversionsHeading } from "@/components/PageLabels";
+import { CategoryLabelText, CategoryTitleText, LocaleText, UnitLabelText } from "@/components/LocaleText";
 
 const BASE_URL = "https://koverts.com";
 
@@ -138,7 +139,7 @@ export default function CategoryPage({ params }: Props) {
             </Link>
             <span className="text-[#c5bdb4] text-xs flex-shrink-0">/</span>
             <span className="font-mono text-xs text-[#3d6b4f] truncate max-w-[120px] md:max-w-[200px]">
-              {cat.label}
+              <CategoryLabelText slug={cat.slug} fallback={cat.label} />
             </span>
           </div>
         </header>
@@ -147,7 +148,7 @@ export default function CategoryPage({ params }: Props) {
         <section className="py-12 text-center">
           <div className="text-4xl mb-4">{cat.icon}</div>
           <h1 className="font-sans font-bold text-[clamp(36px,6vw,60px)] tracking-tight mb-3">
-            {cat.title}
+            <CategoryTitleText slug={cat.slug} fallback={cat.title} />
           </h1>
           <p className="text-[#9a948a] max-w-md mx-auto text-sm leading-relaxed">
             {cat.description}
@@ -203,21 +204,21 @@ export default function CategoryPage({ params }: Props) {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-[#e4e0da] bg-[#f7f5f2]">
-                  <th className="text-left px-5 py-3 font-mono text-xs text-[#9a948a] tracking-wider">FROM</th>
-                  <th className="text-left px-5 py-3 font-mono text-xs text-[#9a948a] tracking-wider">TO</th>
-                  <th className="text-right px-5 py-3 font-mono text-xs text-[#9a948a] tracking-wider">LINK</th>
+                  <th className="text-left px-5 py-3 font-mono text-xs text-[#9a948a] tracking-wider"><LocaleText en="FROM" zh="从" /></th>
+                  <th className="text-left px-5 py-3 font-mono text-xs text-[#9a948a] tracking-wider"><LocaleText en="TO" zh="到" /></th>
+                  <th className="text-right px-5 py-3 font-mono text-xs text-[#9a948a] tracking-wider"><LocaleText en="LINK" zh="链接" /></th>
                 </tr>
               </thead>
               <tbody>
                 {unitKeys.flatMap((from) =>
                   unitKeys.filter((to) => to !== from).slice(0, 3).map((to) => (
                     <tr key={`${from}-${to}`} className="border-b border-[#f0ede8] hover:bg-[#faf8f5]">
-                      <td className="px-5 py-3 text-[#1a1814]">{cat.units[from].label}</td>
-                      <td className="px-5 py-3 text-[#9a948a]">{cat.units[to].label}</td>
+                      <td className="px-5 py-3 text-[#1a1814]"><UnitLabelText unitKey={from} fallback={cat.units[from].label} /></td>
+                      <td className="px-5 py-3 text-[#9a948a]"><UnitLabelText unitKey={to} fallback={cat.units[to].label} /></td>
                       <td className="px-5 py-3 text-right">
                         <Link href={`/${params.category}/${unitToSlug(from)}-to-${unitToSlug(to)}`}
                           className="text-[#3d6b4f] font-mono text-xs hover:underline">
-                          Convert →
+                          <LocaleText en="Convert" zh="换算" /> →
                         </Link>
                       </td>
                     </tr>
@@ -230,9 +231,9 @@ export default function CategoryPage({ params }: Props) {
 
         {/* Related category links for crawl depth */}
         <section className="mb-16 bg-white border border-[#e4e0da] rounded-2xl p-6 md:p-8 shadow-sm">
-          <h2 className="font-sans font-bold text-xl md:text-2xl mb-3">Explore More Converter Categories</h2>
+          <h2 className="font-sans font-bold text-xl md:text-2xl mb-3"><LocaleText en="Explore More Converter Categories" zh="探索更多换算分类" /></h2>
           <p className="text-[#6a6460] text-sm leading-relaxed mb-4">
-            Looking for other conversion tools? Browse more categories below to find the exact unit converter you need.
+            <LocaleText en="Looking for other conversion tools? Browse more categories below to find the exact unit converter you need." zh="如果你还需要其他换算工具，可在下方浏览更多分类，快速找到对应换算器。" />
           </p>
           <div className="flex flex-wrap gap-2">
             {relatedCategories.map((c) => (
@@ -241,14 +242,14 @@ export default function CategoryPage({ params }: Props) {
                 href={`/${c.slug}`}
                 className="px-3 py-2 text-xs md:text-sm rounded-lg bg-[#f7f5f2] border border-[#e4e0da] text-[#1a1814] hover:border-[#3d6b4f] hover:text-[#3d6b4f] transition-all"
               >
-                {c.icon} {c.label}
+                {c.icon} <CategoryLabelText slug={c.slug} fallback={c.label} />
               </Link>
             ))}
           </div>
         </section>
 
         <footer className="border-t border-[#e4e0da] py-8 flex items-center justify-between flex-wrap gap-4 mb-4">
-          <Link href="/" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f]">← All converters</Link>
+          <Link href="/" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f]">← <LocaleText en="All converters" zh="所有换算器" /></Link>
           <span className="font-mono text-xs text-[#9a948a]">© 2025 Koverts</span>
         </footer>
       </div>
