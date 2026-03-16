@@ -87,6 +87,10 @@ export interface Translations {
   formulaHeading: string;
   moreComparisons: string;
   fullConverter: string;
+
+  // Category expand/collapse (mobile)
+  moreCategories: string;
+  showLess: string;
 }
 
 export const TRANSLATIONS: Record<Locale, Translations> = {
@@ -144,6 +148,8 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     formulaHeading: "Formula",
     moreComparisons: "More comparisons",
     fullConverter: "Full converter",
+    moreCategories: "More",
+    showLess: "Show less",
   },
 
   zh: {
@@ -200,6 +206,8 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     formulaHeading: "计算公式",
     moreComparisons: "更多对比",
     fullConverter: "完整换算器",
+    moreCategories: "更多",
+    showLess: "收起",
   },
 
   es: {
@@ -256,6 +264,8 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     formulaHeading: "Fórmula",
     moreComparisons: "Más comparaciones",
     fullConverter: "Conversor completo",
+    moreCategories: "Más",
+    showLess: "Ver menos",
   },
 
   fr: {
@@ -312,6 +322,8 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     formulaHeading: "Formule",
     moreComparisons: "Plus de comparaisons",
     fullConverter: "Convertisseur complet",
+    moreCategories: "Plus",
+    showLess: "Réduire",
   },
 
   ru: {
@@ -368,6 +380,8 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     formulaHeading: "Формула",
     moreComparisons: "Больше сравнений",
     fullConverter: "Полный конвертер",
+    moreCategories: "Ещё",
+    showLess: "Свернуть",
   },
 
   ar: {
@@ -414,6 +428,18 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     aboutTool: "حول هذه الأداة",
     faq: "الأسئلة الشائعة",
     copyright: "© 2025 Koverts",
+    howToConvert: "كيفية التحويل",
+    conversionTableHeading: "جدول التحويل",
+    frequentlyAsked: "الأسئلة الشائعة",
+    popularConversionsHeading: "التحويلات الشائعة",
+    allConversionsHeading: "جميع التحويلات",
+    relatedConversionsHeading: "تحويلات ذات صلة",
+    compareHeading: "جدول مقارنة",
+    formulaHeading: "الصيغة",
+    moreComparisons: "مزيد من المقارنات",
+    fullConverter: "المحوّل الكامل",
+    moreCategories: "المزيد",
+    showLess: "إظهار أقل",
   },
 };
 
