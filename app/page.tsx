@@ -1,6 +1,7 @@
 "use client";
 // app/page.tsx
 
+import { useState } from "react";
 import Link from "next/link";
 import { CATEGORIES } from "@/lib/units";
 import ConverterWidget from "@/components/ConverterWidget";
@@ -18,6 +19,7 @@ const CATEGORY_ORDER = [
 export default function HomePage() {
   const { locale, setLocale, mounted } = useLocale();
   const t = getTranslations(locale);
+  const [mobileAllExpanded, setMobileAllExpanded] = useState(false);
 
   const orderedCats = [
     ...CATEGORY_ORDER.filter((s) => CATEGORIES[s]).map((s) => CATEGORIES[s]),
@@ -61,7 +63,18 @@ export default function HomePage() {
           <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-5">
             // {t.allConverters}
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+
+          {/* Mobile: collapsed by default */}
+          <div className="md:hidden mb-4 flex justify-center">
+            <button
+              onClick={() => setMobileAllExpanded((v) => !v)}
+              className="px-4 py-2 rounded-full text-xs font-medium border border-[#e4e0da] bg-[#f8f6f2] text-[#9a948a] hover:border-[#3d6b4f] hover:text-[#3d6b4f] transition-all"
+            >
+              {mobileAllExpanded ? t.showLess : t.moreCategories}
+            </button>
+          </div>
+
+          <div className={`${mobileAllExpanded ? "grid" : "hidden"} md:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3`}>
 
             {/* Currency - highest traffic */}
             <Link href="/currency"
