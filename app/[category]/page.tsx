@@ -46,6 +46,9 @@ export default function CategoryPage({ params }: Props) {
 
   const unitKeys = Object.keys(cat.units);
   const pageUrl  = `${BASE_URL}/${params.category}`;
+  const relatedCategories = Object.values(CATEGORIES)
+    .filter((c) => c.slug !== params.category)
+    .slice(0, 8);
 
   // ── Structured Data ──────────────────────────────────────────
 
@@ -102,12 +105,25 @@ export default function CategoryPage({ params }: Props) {
     ],
   };
 
+  const relatedCategoriesSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": `Related ${cat.label} conversion categories`,
+    "itemListElement": relatedCategories.map((c, idx) => ({
+      "@type": "ListItem",
+      "position": idx + 1,
+      "name": c.label,
+      "url": `${BASE_URL}/${c.slug}`,
+    })),
+  };
+
   return (
     <main className="relative z-10">
       {/* Structured Data */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(datasetSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(relatedCategoriesSchema) }} />
 
       <div className="max-w-4xl mx-auto px-6">
 
@@ -209,6 +225,25 @@ export default function CategoryPage({ params }: Props) {
                 )}
               </tbody>
             </table>
+          </div>
+        </section>
+
+        {/* Related category links for crawl depth */}
+        <section className="mb-16 bg-white border border-[#e4e0da] rounded-2xl p-6 md:p-8 shadow-sm">
+          <h2 className="font-sans font-bold text-xl md:text-2xl mb-3">Explore More Converter Categories</h2>
+          <p className="text-[#6a6460] text-sm leading-relaxed mb-4">
+            Looking for other conversion tools? Browse more categories below to find the exact unit converter you need.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {relatedCategories.map((c) => (
+              <Link
+                key={c.slug}
+                href={`/${c.slug}`}
+                className="px-3 py-2 text-xs md:text-sm rounded-lg bg-[#f7f5f2] border border-[#e4e0da] text-[#1a1814] hover:border-[#3d6b4f] hover:text-[#3d6b4f] transition-all"
+              >
+                {c.icon} {c.label}
+              </Link>
+            ))}
           </div>
         </section>
 
