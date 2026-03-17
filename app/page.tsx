@@ -338,49 +338,50 @@ export default function HomePage() {
 
         <HomeAiSpotlight />
 
-        <section className="mb-10 grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-4">
-          <div>
-            <div className="flex items-end justify-between gap-3 mb-4">
-              <h2 className="font-sans font-bold text-xl md:text-2xl text-[#1a1814]">
-                {localeText({
-                  en: "Tips picks",
-                  zh: "Tips 精选",
-                  es: "Tips destacados",
-                  fr: "Astuces choisies",
-                  ru: "Выборка Tips",
-                  ar: "مختارات Tips",
-                })}
-              </h2>
-              <Link href="/conversion-tips" className="text-xs font-mono text-[#3d6b4f] hover:underline">
-                {localeText({ en: "View all →", zh: "查看全部 →", es: "Ver todo →", fr: "Tout voir →", ru: "Смотреть все →", ar: "عرض الكل →" })}
-              </Link>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {tipsPreview.map((item) => (
-                <Link key={item.slug} href={`/conversion-tips/${item.slug}`} className="group bg-white border border-[#e4e0da] rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
-                  <p className="text-xs text-[#9a948a] mb-1">{localeText(item.moduleTitle)}</p>
-                  <p className="font-medium text-[#1a1814] group-hover:text-[#3d6b4f] transition-colors mb-2">{localeText(item.title)}</p>
-                  <p className="text-sm text-[#6a6460] leading-relaxed">{localeText(item.summary)}</p>
-                </Link>
-              ))}
-            </div>
+        {/* Tips picks */}
+        <section className="mb-10">
+          <div className="flex items-end justify-between gap-3 mb-4">
+            <h2 className="font-sans font-bold text-xl md:text-2xl text-[#1a1814]">
+              {localeText({
+                en: "Tips picks",
+                zh: "Tips 精选",
+                es: "Tips destacados",
+                fr: "Astuces choisies",
+                ru: "Выборка Tips",
+                ar: "مختارات Tips",
+              })}
+            </h2>
+            <Link href="/conversion-tips" className="text-xs font-mono text-[#3d6b4f] hover:underline">
+              {localeText({ en: "View all →", zh: "查看全部 →", es: "Ver todo →", fr: "Tout voir →", ru: "Смотреть все →", ar: "عرض الكل →" })}
+            </Link>
           </div>
-          <div className="bg-white border border-[#e4e0da] rounded-2xl p-4 shadow-sm">
-            <h3 className="font-semibold text-[#1a1814] mb-3">
-              {localeText({ en: "User reviews", zh: "用户评价", es: "Reseñas", fr: "Avis", ru: "Отзывы", ar: "آراء" })}
-            </h3>
-            <div className="space-y-3">
-              {GLOBAL_TESTIMONIALS.slice(0, 4).map((item) => (
-                <article key={`${item.name}-${item.country.en}`} className="rounded-xl border border-[#ece7e1] bg-[#faf8f5] p-3">
-                  <div className="flex items-center justify-between mb-1">
-                    <p className="text-sm font-semibold text-[#1a1814]">{item.name}</p>
-                    <span className="text-[11px] text-[#8f8880]">{localeText(item.country)}</span>
-                  </div>
-                  <p className="text-xs text-[#8f8880] mb-1">{localeText(item.role)}</p>
-                  <p className="text-sm leading-relaxed text-[#4f4942]">"{localeText(item.quote)}"</p>
-                </article>
-              ))}
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {tipsPreview.map((item) => (
+              <Link key={item.slug} href={`/conversion-tips/${item.slug}`} className="group bg-white border border-[#e4e0da] rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+                <p className="text-xs text-[#9a948a] mb-1">{localeText(item.moduleTitle)}</p>
+                <p className="font-medium text-[#1a1814] group-hover:text-[#3d6b4f] transition-colors mb-2">{localeText(item.title)}</p>
+                <p className="text-sm text-[#6a6460] leading-relaxed">{localeText(item.summary)}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* User reviews - separate module */}
+        <section className="mb-10">
+          <h2 className="font-sans font-bold text-xl md:text-2xl text-[#1a1814] mb-4">
+            {localeText({ en: "User reviews", zh: "用户评价", es: "Reseñas", fr: "Avis", ru: "Отзывы", ar: "آراء" })}
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {GLOBAL_TESTIMONIALS.slice(0, 4).map((item) => (
+              <article key={`${item.name}-${item.country.en}`} className="bg-white border border-[#e4e0da] rounded-2xl p-5 shadow-sm">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-sm font-semibold text-[#1a1814]">{item.name}</p>
+                  <span className="text-[11px] text-[#8f8880]">{localeText(item.country)}</span>
+                </div>
+                <p className="text-xs text-[#8f8880] mb-2">{localeText(item.role)}</p>
+                <p className="text-sm leading-relaxed text-[#4f4942]">"{localeText(item.quote)}"</p>
+              </article>
+            ))}
           </div>
         </section>
 
