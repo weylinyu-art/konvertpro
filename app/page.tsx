@@ -370,7 +370,7 @@ export default function HomePage() {
               {localeText({ en: "User reviews", zh: "用户评价", es: "Reseñas", fr: "Avis", ru: "Отзывы", ar: "آراء" })}
             </h3>
             <div className="space-y-3">
-              {GLOBAL_TESTIMONIALS.slice(0, 2).map((item) => (
+              {GLOBAL_TESTIMONIALS.slice(0, 4).map((item) => (
                 <article key={`${item.name}-${item.country.en}`} className="rounded-xl border border-[#ece7e1] bg-[#faf8f5] p-3">
                   <div className="flex items-center justify-between mb-1">
                     <p className="text-sm font-semibold text-[#1a1814]">{item.name}</p>
@@ -423,15 +423,6 @@ export default function HomePage() {
           <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-5">
             // {t.allConverters}
           </p>
-
-          <div className="mb-4 flex justify-center">
-            <button
-              onClick={() => setAllExpanded((v) => !v)}
-              className="px-4 py-2 rounded-full text-xs font-medium border border-[#e4e0da] bg-[#f8f6f2] text-[#9a948a] hover:border-[#3d6b4f] hover:text-[#3d6b4f] transition-all"
-            >
-              {allExpanded ? t.showLess : t.moreCategories}
-            </button>
-          </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
 

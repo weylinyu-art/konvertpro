@@ -93,7 +93,7 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
         <>
           {/* 高频优先 + 更多折叠（桌面/移动统一） */}
           <div className="space-y-3 mb-6">
-            <div className="flex gap-1.5 md:gap-2 flex-wrap justify-center">
+            <div className="flex gap-1.5 md:gap-2 flex-wrap justify-start">
               {primaryCats.map((c) => (
                 <button key={c.slug} onClick={() => switchCat(c.slug)}
                   className={`flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-full text-xs md:text-[13px] font-medium border transition-all ${
@@ -117,7 +117,7 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
               </Link>
             </div>
             {moreExpanded && (
-              <div className="flex gap-1.5 md:gap-2 flex-wrap justify-center">
+              <div className="flex gap-1.5 md:gap-2 flex-wrap justify-start">
                 {moreCats.map((c) => (
                   <button key={c.slug} onClick={() => switchCat(c.slug)}
                     className={`flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-full text-xs md:text-[13px] font-medium border transition-all ${
@@ -131,7 +131,7 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
                 ))}
               </div>
             )}
-            <div className="flex justify-center">
+            <div className="flex justify-start">
               <button onClick={() => setMoreExpanded(!moreExpanded)}
                 className="px-4 py-2 rounded-full text-xs font-medium border border-[#e4e0da] bg-[#f8f6f2] text-[#9a948a] hover:border-[#3d6b4f] hover:text-[#3d6b4f] transition-all">
                 {moreExpanded ? t.showLess : t.moreCategories}
