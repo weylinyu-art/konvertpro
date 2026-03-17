@@ -128,7 +128,7 @@ export default function CategoryPage({ params }: Props) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(datasetSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(relatedCategoriesSchema) }} />
 
-      <div className="max-w-4xl mx-auto px-6">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6">
 
         {/* Header */}
         <header className="flex items-center justify-between pt-6 md:pt-8">
@@ -169,7 +169,7 @@ export default function CategoryPage({ params }: Props) {
         {/* Popular conversions */}
         <section className="mt-14 mb-8">
 <PopularHeading />
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
             {cat.popular.map((p) => {
               const result = convert(p.val, p.from, p.to, params.category);
               const fromSymbol = getSymbol(p.from, params.category);
@@ -177,9 +177,9 @@ export default function CategoryPage({ params }: Props) {
               return (
                 <Link key={`${p.from}-${p.to}`}
                   href={`/${params.category}/${unitToSlug(p.from)}-to-${unitToSlug(p.to)}`}
-                  className="group bg-white border border-[#e4e0da] rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm">
-                  <p className="font-mono text-sm text-[#1a1814]">{p.val} {fromSymbol} →</p>
-                  <p className="text-xs text-[#9a948a] mt-0.5 group-hover:text-[#3d6b4f] transition-colors">
+                  className="group bg-white border border-[#e4e0da] rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm min-h-[88px] flex flex-col justify-center">
+                  <p className="font-mono text-[15px] sm:text-sm text-[#1a1814] leading-snug">{p.val} {fromSymbol} →</p>
+                  <p className="text-[13px] sm:text-xs text-[#9a948a] mt-1 group-hover:text-[#3d6b4f] transition-colors leading-relaxed">
                     {formatNumber(result)} {toSymbol}
                   </p>
                 </Link>

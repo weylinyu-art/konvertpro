@@ -26,6 +26,9 @@ html {
 body {
   font-family: var(--font-sans);
   line-height: 1.6;
+  /* 刘海屏安全区域，避免内容被遮挡 */
+  padding-left: env(safe-area-inset-left, 0);
+  padding-right: env(safe-area-inset-right, 0);
 }
 
 /* 中文（简体）字体与排版 */
@@ -139,6 +142,14 @@ select {
 details > summary { user-select: none; }
 details > summary::-webkit-details-marker { display: none; }
 
+/* 移动端：触摸目标至少 44px，隐藏横向滚动条 */
 @media (max-width: 768px) {
   a, button { min-height: 44px; }
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }

@@ -1,7 +1,7 @@
 "use client";
 // app/page.tsx
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { CATEGORIES } from "@/lib/units";
 import ConverterWidget from "@/components/ConverterWidget";
@@ -184,6 +184,13 @@ export default function HomePage() {
   const { locale, setLocale, mounted } = useLocale();
   const t = getTranslations(locale);
   const [converterTab, setConverterTab] = useState<"measure" | "life" | "professional" | "more">("measure");
+  const [isMobile, setIsMobile] = useState(true);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
   const localeText = <T,>(m: { en: T; zh: T; es?: T; fr?: T; ru?: T; ar?: T }) =>
     m[locale as keyof typeof m] ?? m.en;
 
@@ -343,7 +350,7 @@ export default function HomePage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(homeFaqSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(popularLinksItemListSchema) }} />
-      <div className="max-w-4xl mx-auto px-6">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6">
 
         {/* Header */}
         <header className="flex items-center justify-between pt-6 md:pt-8">
@@ -370,23 +377,34 @@ export default function HomePage() {
         <ConverterWidget />
 
         <section className="mt-8 mb-10 grid grid-cols-1 md:grid-cols-3 gap-3">
-          <Link href="/conversion-tips" className="group bg-white border border-[#e8e4df] rounded-lg px-4 py-3 hover:border-[#3d6b4f] transition-colors">
+          <Link href="/conversion-tips" className="group bg-white border border-[#e8e4df] rounded-xl px-4 py-4 hover:border-[#3d6b4f] transition-colors min-h-[72px] flex flex-col justify-center">
             <p className="text-xs text-[#3d6b4f] mb-1">📘 {localeText({ en: "Tips", zh: "Tips", es: "Tips", fr: "Astuces", ru: "Советы", ar: "نصائح" })}</p>
-            <p className="text-sm font-medium text-[#1a1814] group-hover:text-[#3d6b4f]">{localeText({ en: "Practical guides", zh: "实用指南", es: "Guías prácticas", fr: "Guides pratiques", ru: "Практические гайды", ar: "أدلة عملية" })}</p>
+            <p className="text-[15px] sm:text-sm font-medium text-[#1a1814] group-hover:text-[#3d6b4f] leading-snug">{localeText({ en: "Practical guides", zh: "实用指南", es: "Guías prácticas", fr: "Guides pratiques", ru: "Практические гайды", ar: "أدلة عملية" })}</p>
           </Link>
-          <Link href="/ai" className="group bg-white border border-[#e8e4df] rounded-lg px-4 py-3 hover:border-[#3d6b4f] transition-colors">
+          <Link href="/ai" className="group bg-white border border-[#e8e4df] rounded-xl px-4 py-4 hover:border-[#3d6b4f] transition-colors min-h-[72px] flex flex-col justify-center">
             <p className="text-xs text-[#3d6b4f] mb-1">🤖 {t.aiTools}</p>
-            <p className="text-sm font-medium text-[#1a1814] group-hover:text-[#3d6b4f]">{localeText({ en: "Token / Cost / Context", zh: "Token / 成本 / 上下文", es: "Token / Coste / Contexto", fr: "Token / Coût / Contexte", ru: "Токены / Стоимость / Контекст", ar: "الرموز / التكلفة / السياق" })}</p>
+            <p className="text-[15px] sm:text-sm font-medium text-[#1a1814] group-hover:text-[#3d6b4f] leading-snug">{localeText({ en: "Token / Cost / Context", zh: "Token / 成本 / 上下文", es: "Token / Coste / Contexto", fr: "Token / Coût / Contexte", ru: "Токены / Стоимость / Контекст", ar: "الرموز / التكلفة / السياق" })}</p>
           </Link>
-          <Link href="/compare" className="group bg-white border border-[#e8e4df] rounded-lg px-4 py-3 hover:border-[#3d6b4f] transition-colors">
+          <Link href="/compare" className="group bg-white border border-[#e8e4df] rounded-xl px-4 py-4 hover:border-[#3d6b4f] transition-colors min-h-[72px] flex flex-col justify-center">
             <p className="text-xs text-[#3d6b4f] mb-1">⚖️ {localeText({ en: "Compare", zh: "对比", es: "Comparar", fr: "Comparer", ru: "Сравнить", ar: "مقارنة" })}</p>
-            <p className="text-sm font-medium text-[#1a1814] group-hover:text-[#3d6b4f]">{localeText({ en: "Popular pairs", zh: "热门单位对比", es: "Pares populares", fr: "Paires populaires", ru: "Популярные пары", ar: "مقارنات شائعة" })}</p>
+            <p className="text-[15px] sm:text-sm font-medium text-[#1a1814] group-hover:text-[#3d6b4f] leading-snug">{localeText({ en: "Popular pairs", zh: "热门单位对比", es: "Pares populares", fr: "Paires populaires", ru: "Популярные пары", ar: "مقارنات شائعة" })}</p>
           </Link>
         </section>
 
-        <HomeAiSpotlight />
+        {/* AI quick tools — 移动端默认收起 */}
+        <details open={!isMobile} className="group mb-10 md:mb-12">
+          <summary className="flex items-center justify-between cursor-pointer list-none py-2 border-b border-[#e8e4df] md:border-0 md:py-0 md:mb-4 [&::-webkit-details-marker]:hidden">
+            <h2 className="font-sans font-bold text-xl md:text-2xl text-[#1a1814]">
+              {localeText({ en: "AI quick tools", zh: "AI 快捷工具", es: "Herramientas IA rápidas", fr: "Outils IA rapides", ru: "Быстрые AI-инструменты", ar: "أدوات ذكاء اصطناعي سريعة" })}
+            </h2>
+            <span className="text-[#c5bdb4] text-sm md:hidden">{localeText({ en: "Expand", zh: "展开", es: "Expandir", fr: "Développer", ru: "Развернуть", ar: "توسيع" })} ▾</span>
+          </summary>
+          <div className="pt-4 md:pt-0">
+            <HomeAiSpotlight />
+          </div>
+        </details>
 
-        {/* Tips picks */}
+        {/* Tips picks — 移动端只展示 1 条 */}
         <section className="mb-10">
           <div className="flex items-end justify-between gap-3 mb-4">
             <h2 className="font-sans font-bold text-xl md:text-2xl text-[#1a1814]">
@@ -404,7 +422,7 @@ export default function HomePage() {
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {tipsPreview.map((item) => (
+            {(isMobile ? tipsPreview.slice(0, 1) : tipsPreview).map((item) => (
               <Link key={item.slug} href={`/conversion-tips/${item.slug}`} className="group bg-white border border-[#e8e4df] rounded-lg p-5 hover:border-[#3d6b4f] transition-colors">
                 <p className="text-xs text-[#9a948a] mb-1">{localeText(item.moduleTitle)}</p>
                 <p className="font-medium text-[#1a1814] group-hover:text-[#3d6b4f] transition-colors mb-2">{localeText(item.title)}</p>
@@ -414,12 +432,15 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* User reviews - separate module */}
-        <section className="mb-10">
-          <h2 className="font-sans font-bold text-xl md:text-2xl text-[#1a1814] mb-4">
-            {localeText({ en: "User reviews", zh: "用户评价", es: "Reseñas", fr: "Avis", ru: "Отзывы", ar: "آراء" })}
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* User reviews — 移动端默认收起 */}
+        <details open={!isMobile} className="group mb-10">
+          <summary className="flex items-center justify-between cursor-pointer list-none py-2 border-b border-[#e8e4df] md:border-0 md:py-0 [&::-webkit-details-marker]:hidden">
+            <h2 className="font-sans font-bold text-xl md:text-2xl text-[#1a1814]">
+              {localeText({ en: "User reviews", zh: "用户评价", es: "Reseñas", fr: "Avis", ru: "Отзывы", ar: "آراء" })}
+            </h2>
+            <span className="text-[#c5bdb4] text-sm md:hidden">{localeText({ en: "Expand", zh: "展开", es: "Expandir", fr: "Développer", ru: "Развернуть", ar: "توسيع" })} ▾</span>
+          </summary>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 md:pt-4">
             {GLOBAL_TESTIMONIALS.slice(0, 4).map((item) => (
               <article key={`${item.name}-${item.country.en}`} className="bg-white border border-[#e8e4df] rounded-lg p-5">
                 <div className="flex items-center justify-between mb-2">
@@ -431,12 +452,17 @@ export default function HomePage() {
               </article>
             ))}
           </div>
-        </section>
+        </details>
 
-        {/* Popular SEO links */}
-        <section className="mb-10">
-          <h2 className="font-sans font-bold text-lg md:text-xl mb-3">{seoText.guidesTitle}</h2>
-          <div className="flex flex-wrap gap-2">
+        {/* Popular SEO links — 移动端默认收起 */}
+        <details open={!isMobile} className="group mb-10">
+          <summary className="flex items-center justify-between cursor-pointer list-none py-2 border-b border-[#e8e4df] md:border-0 md:py-0 [&::-webkit-details-marker]:hidden">
+            <h2 className="font-sans font-bold text-lg md:text-xl text-[#1a1814]">
+              {seoText.guidesTitle}
+            </h2>
+            <span className="text-[#c5bdb4] text-sm md:hidden">{localeText({ en: "Expand", zh: "展开", es: "Expandir", fr: "Développer", ru: "Развернуть", ar: "توسيع" })} ▾</span>
+          </summary>
+          <div className="flex flex-wrap gap-2 pt-4 md:pt-3">
             {HOME_POPULAR_LINKS.map((item) => (
               <Link
                 key={item.href}
@@ -447,14 +473,14 @@ export default function HomePage() {
               </Link>
             ))}
           </div>
-        </section>
+        </details>
 
         {/* Homepage FAQ */}
         <section className="mb-14">
           <h2 className="font-sans font-bold text-xl md:text-2xl mb-4">{seoText.faqTitle}</h2>
           <div className="space-y-2">
             {seoText.faq.map((item, i) => (
-              <details key={i} open={i === 0} className="group bg-white border border-[#e8e4df] rounded-lg overflow-hidden">
+              <details key={i} open={i === 0 && !isMobile} className="group bg-white border border-[#e8e4df] rounded-lg overflow-hidden">
                 <summary className="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-[#fafaf8] transition-colors">
                   <span className="font-medium text-sm text-[#1a1814] pr-4">{item.q}</span>
                   <span className="text-[11px] text-[#c5bdb4] flex-shrink-0 group-open:rotate-180 transition-transform duration-200">▾</span>
@@ -469,15 +495,16 @@ export default function HomePage() {
 
         {/* All converters — 标签切换，精简布局；链接直达分类二级页 */}
         <section className="mt-10 mb-14">
-          <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-4">
+          <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-3 md:mb-4">
             // {t.allConverters}
           </p>
-          <div className="flex gap-1 mb-4">
+          {/* 移动端：横向滚动；桌面端：flex 换行 */}
+          <div className="flex gap-2 mb-4 overflow-x-auto pb-1 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide md:flex-wrap md:overflow-visible">
             {CONVERTER_SCENARIOS.map((scenario) => (
               <button
                 key={scenario.key}
                 onClick={() => setConverterTab(scenario.key as "measure" | "life" | "professional" | "more")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                className={`flex-shrink-0 min-h-[44px] px-4 py-2.5 rounded-lg text-sm font-medium transition-all touch-manipulation ${
                   converterTab === scenario.key
                     ? "bg-[#3d6b4f] text-white"
                     : "bg-white border border-[#e8e4df] text-[#6a6460] hover:border-[#3d6b4f] hover:text-[#3d6b4f]"
@@ -487,26 +514,26 @@ export default function HomePage() {
               </button>
             ))}
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
             {(CONVERTER_SCENARIOS.find((s) => s.key === converterTab)?.items ?? []).map((item) => {
               if (item.type === "currency") {
                 return (
-                  <Link key="currency" href="/currency" className="group bg-white border border-[#e8e4df] rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all flex items-center gap-3">
-                    <span className="text-2xl">💱</span>
-                    <div>
-                      <span className="font-semibold text-[#1a1814] block">{t.currency}</span>
-                      <p className="text-xs text-[#9a948a]">49 {t.units}</p>
+                  <Link key="currency" href="/currency" className="group bg-white border border-[#e8e4df] rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all flex items-center gap-3 min-h-[100px]">
+                    <span className="text-2xl flex-shrink-0">💱</span>
+                    <div className="min-w-0">
+                      <span className="font-semibold text-[15px] sm:text-base text-[#1a1814] block">{t.currency}</span>
+                      <p className="text-xs text-[#9a948a] mt-0.5">49 {t.units}</p>
                     </div>
                   </Link>
                 );
               }
               if (item.type === "ai") {
                 return (
-                  <Link key="ai" href="/ai" className="group bg-[#f8faf8] border border-[#3d6b4f]/20 rounded-lg p-4 hover:border-[#3d6b4f] hover:bg-[#3d6b4f] transition-colors flex items-center gap-3">
-                    <span className="text-2xl">🤖</span>
-                    <div>
-                      <span className="font-semibold text-[#3d6b4f] block group-hover:text-white">{t.aiTools}</span>
-                      <p className="text-xs text-[#3d6b4f]/70">5 {localeText({ en: "tools", zh: "工具", es: "herramientas", fr: "outils", ru: "инструментов", ar: "أدوات" })}</p>
+                  <Link key="ai" href="/ai" className="group bg-[#f8faf8] border border-[#3d6b4f]/20 rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#3d6b4f] transition-colors flex items-center gap-3 min-h-[100px]">
+                    <span className="text-2xl flex-shrink-0">🤖</span>
+                    <div className="min-w-0">
+                      <span className="font-semibold text-[15px] sm:text-base text-[#3d6b4f] block group-hover:text-white">{t.aiTools}</span>
+                      <p className="text-xs text-[#3d6b4f]/70 mt-0.5">5 {localeText({ en: "tools", zh: "工具", es: "herramientas", fr: "outils", ru: "инструментов", ar: "أدوات" })}</p>
                     </div>
                   </Link>
                 );
@@ -518,18 +545,18 @@ export default function HomePage() {
                 label: `${getUnitLabel(p.from, locale)} → ${getUnitLabel(p.to, locale)}`,
               }));
               return (
-                <div key={cat.slug} className="bg-white border border-[#e8e4df] rounded-lg p-4 hover:border-[#3d6b4f] hover:bg-[#f8faf8] transition-colors">
-                  <Link href={`/${cat.slug}`} className="flex items-center gap-3 mb-2 block">
-                    <span className="text-2xl">{cat.icon}</span>
-                    <div className="min-w-0">
-                      <span className="font-semibold text-[#1a1814] block">{getCategoryLabel(cat.slug, t)}</span>
-                      <p className="text-xs text-[#9a948a]">{Object.keys(cat.units).length} {t.units}</p>
+                <div key={cat.slug} className="bg-white border border-[#e8e4df] rounded-xl p-4 sm:p-4 hover:border-[#3d6b4f] hover:bg-[#f8faf8] transition-colors min-h-[120px] flex flex-col">
+                  <Link href={`/${cat.slug}`} className="flex items-center gap-3 mb-2 block min-h-[44px]">
+                    <span className="text-2xl flex-shrink-0">{cat.icon}</span>
+                    <div className="min-w-0 flex-1">
+                      <span className="font-semibold text-[15px] sm:text-base text-[#1a1814] block leading-tight">{getCategoryLabel(cat.slug, t)}</span>
+                      <p className="text-xs text-[#9a948a] mt-0.5">{Object.keys(cat.units).length} {t.units}</p>
                     </div>
                   </Link>
                   {subLinks.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mt-2 pl-11">
+                    <div className="flex flex-col sm:flex-row sm:flex-wrap gap-1.5 sm:gap-2 mt-2 sm:pl-11">
                       {subLinks.map((s) => (
-                        <Link key={s.href} href={s.href} className="text-xs text-[#6a6460] hover:text-[#3d6b4f] border-b border-dotted border-[#c5bdb4] hover:border-[#3d6b4f]">
+                        <Link key={s.href} href={s.href} className="text-[13px] sm:text-xs text-[#6a6460] hover:text-[#3d6b4f] border-b border-dotted border-[#c5bdb4] hover:border-[#3d6b4f] py-0.5 w-fit leading-relaxed">
                           {s.label}
                         </Link>
                       ))}
@@ -541,12 +568,19 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Crawlable SEO content */}
-        <section className="mb-12 bg-white border border-[#e8e4df] rounded-lg p-6 md:p-8">
-          <h2 className="font-sans font-bold text-2xl md:text-3xl mb-4">{seoText.introTitle}</h2>
-          <p className="text-[#6a6460] leading-relaxed text-sm md:text-base mb-3">{seoText.introBody}</p>
-          <p className="text-[#6a6460] leading-relaxed text-sm md:text-base">{seoText.introBody2}</p>
-        </section>
+        {/* Crawlable SEO content — 移动端默认收起 */}
+        <details open={!isMobile} className="group mb-12">
+          <summary className="flex items-center justify-between cursor-pointer list-none py-2 border-b border-[#e8e4df] md:border-0 md:py-0 [&::-webkit-details-marker]:hidden">
+            <h2 className="font-sans font-bold text-lg md:text-2xl text-[#1a1814]">
+              {seoText.introTitle}
+            </h2>
+            <span className="text-[#c5bdb4] text-sm md:hidden">{localeText({ en: "Expand", zh: "展开", es: "Expandir", fr: "Développer", ru: "Развернуть", ar: "توسيع" })} ▾</span>
+          </summary>
+          <section className="bg-white border border-[#e8e4df] rounded-lg p-6 md:p-8 mt-4 md:mt-0">
+            <p className="text-[#6a6460] leading-relaxed text-sm md:text-base mb-3">{seoText.introBody}</p>
+            <p className="text-[#6a6460] leading-relaxed text-sm md:text-base">{seoText.introBody2}</p>
+          </section>
+        </details>
 
         {/* Footer — 移除冗余换算入口，强化 Compare / FAQ / Tips */}
         <footer className="border-t border-[#e4e0da] pt-8 pb-6 mb-4">
