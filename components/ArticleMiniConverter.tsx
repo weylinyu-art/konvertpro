@@ -131,58 +131,102 @@ export default function ArticleMiniConverter({
         </select>
       </div>
 
-      <div className="grid grid-cols-[1fr_auto_1fr] items-end gap-2">
+      {/* Mobile: stacked layout */}
+      <div className="md:hidden space-y-3">
+        <div>
+          <label className="block text-xs text-[#7c756c] mb-1">{t.from}</label>
+          <div className="flex gap-2">
+            <input
+              type="number"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              className="flex-1 min-w-0 h-11 rounded-lg border border-[#e4e0da] bg-[#faf9f7] px-3 font-mono text-base outline-none focus:border-[#3d6b4f]/50"
+            />
+            <select
+              value={from}
+              onChange={(e) => setFrom(e.target.value)}
+              className="shrink-0 w-[110px] h-11 rounded-lg border border-[#e4e0da] bg-[#faf9f7] px-3 text-sm outline-none"
+            >
+              {unitKeys.map((k) => (
+                <option key={k} value={k}>{getUnitLabel(k, locale)}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className="flex justify-center">
+          <button onClick={swap} title={t.swap}
+            className="w-9 h-9 rounded-lg bg-[#f5f3f0] border border-[#e4e0da] text-[#9a948a] flex items-center justify-center hover:bg-[#3d6b4f] hover:text-white transition-colors">
+            ⇄
+          </button>
+        </div>
+        <div>
+          <label className="block text-xs text-[#7c756c] mb-1">{t.result}</label>
+          <div className="flex gap-2 items-center">
+            <input
+              readOnly
+              value={result === null ? "" : formatNumber(result)}
+              className="flex-1 min-w-0 h-11 rounded-lg border border-[#e4e0da] bg-[#faf9f7] px-3 font-mono text-base text-[#3d6b4f] font-semibold outline-none"
+            />
+            <select
+              value={to}
+              onChange={(e) => setTo(e.target.value)}
+              className="shrink-0 w-[110px] h-11 rounded-lg border border-[#e4e0da] bg-[#faf9f7] px-3 text-sm outline-none"
+            >
+              {unitKeys.map((k) => (
+                <option key={k} value={k}>{getUnitLabel(k, locale)}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop: 3-column layout */}
+      <div className="hidden md:grid grid-cols-[1fr_auto_1fr] items-end gap-3">
         <div>
           <label className="block text-xs text-[#7c756c] mb-1">{t.from}</label>
           <input
             type="number"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            className="w-full h-12 rounded-xl border border-[#e4e0da] bg-[#f7f5f2] px-3 text-lg outline-none"
+            className="w-full h-11 rounded-lg border border-[#e4e0da] bg-[#faf9f7] px-3 font-mono text-lg outline-none focus:border-[#3d6b4f]/50"
           />
           <select
             value={from}
             onChange={(e) => setFrom(e.target.value)}
-            className="mt-2 h-11 w-full rounded-xl border border-[#e4e0da] bg-[#f7f5f2] px-3 text-sm outline-none"
+            className="mt-2 h-10 w-full rounded-lg border border-[#e4e0da] bg-[#faf9f7] px-3 text-sm outline-none"
           >
             {unitKeys.map((k) => (
-              <option key={k} value={k}>
-                {getUnitLabel(k, locale)}
-              </option>
+              <option key={k} value={k}>{getUnitLabel(k, locale)}</option>
             ))}
           </select>
         </div>
-
         <button
           onClick={swap}
           title={t.swap}
-          className="h-11 w-11 mb-1 rounded-xl border border-[#e4e0da] bg-[#f0eeeb] text-[#6f6a61] hover:bg-[#e7e3df] transition-colors"
+          className="h-10 w-10 mb-1 rounded-lg border border-[#e4e0da] bg-[#f5f3f0] text-[#9a948a] hover:bg-[#3d6b4f] hover:text-white hover:border-[#3d6b4f] transition-colors shrink-0"
         >
           ⇄
         </button>
-
         <div>
           <label className="block text-xs text-[#7c756c] mb-1">{t.result}</label>
           <input
             readOnly
             value={result === null ? "" : formatNumber(result)}
-            className="w-full h-12 rounded-xl border border-[#e4e0da] bg-[#f7f5f2] px-3 text-lg outline-none"
+            className="w-full h-11 rounded-lg border border-[#e4e0da] bg-[#faf9f7] px-3 font-mono text-lg text-[#3d6b4f] font-semibold outline-none"
           />
           <select
             value={to}
             onChange={(e) => setTo(e.target.value)}
-            className="mt-2 h-11 w-full rounded-xl border border-[#e4e0da] bg-[#f7f5f2] px-3 text-sm outline-none"
+            className="mt-2 h-10 w-full rounded-lg border border-[#e4e0da] bg-[#faf9f7] px-3 text-sm outline-none"
           >
             {unitKeys.map((k) => (
-              <option key={k} value={k}>
-                {getUnitLabel(k, locale)}
-              </option>
+              <option key={k} value={k}>{getUnitLabel(k, locale)}</option>
             ))}
           </select>
         </div>
       </div>
 
-      <div className="mt-3 flex items-center justify-between gap-2 rounded-xl bg-[#f4f2ef] px-3 py-2">
+      <div className="mt-3 flex items-center justify-between gap-2 rounded-lg bg-[#faf9f7] border border-[#ebe8e3] px-3 py-2">
         <p className="text-sm text-[#1a1814]">
           {result === null
             ? "—"
@@ -190,7 +234,7 @@ export default function ArticleMiniConverter({
         </p>
         <button
           onClick={copyLine}
-          className="rounded-lg bg-[#5a9cec] px-3 py-1.5 text-sm text-white hover:bg-[#4a8fe4] transition-colors"
+          className="rounded-lg border border-[#3d6b4f] bg-[#3d6b4f] px-3 py-1.5 text-sm text-white hover:bg-[#345d47] transition-colors"
         >
           {copied ? copyText.ok : copyText.copy}
         </button>
