@@ -22,7 +22,6 @@ function labels(locale: string) {
       desc: "One click to share a practical converter page, with localized preview text.",
       copied: "Copied",
       copy: "Copy share text",
-      native: "System share",
       text: "Still struggling with unit conversions? I found a super useful tool: length, weight, temperature, shoe size, currency and more. Free, no signup, instant results. It also includes practical AI tools - all in one page:",
     },
     zh: {
@@ -30,7 +29,6 @@ function labels(locale: string) {
       desc: "一键分享当前页面，预览文案会按语言自动适配。",
       copied: "已复制",
       copy: "复制链接+文案",
-      native: "系统分享",
       text: "还在为各种单位换算头疼？我发现了一个超好用的工具：长度、重量、温度、鞋码、货币……几乎你能想到的都能换！免费、无需注册、打开即用，秒级出结果。还有实用 AI 工具，一个网页全搞定。",
     },
     es: {
@@ -38,7 +36,6 @@ function labels(locale: string) {
       desc: "Comparte esta pagina con texto de vista previa adaptado al idioma.",
       copied: "Copiado",
       copy: "Copiar texto",
-      native: "Compartir",
       text: "Todavia te complican las conversiones de unidades? Encontre una herramienta muy util: longitud, peso, temperatura, talla de calzado, divisas y mucho mas. Gratis, sin registro y con resultados al instante. Tambien incluye herramientas de IA practicas, todo en una sola pagina:",
     },
     fr: {
@@ -46,7 +43,6 @@ function labels(locale: string) {
       desc: "Partage en un clic avec un texte d'aperçu adapte a la langue.",
       copied: "Copie",
       copy: "Copier le texte",
-      native: "Partager",
       text: "Vous en avez assez des conversions d'unites? J'ai trouve un outil ultra pratique: longueur, poids, temperature, pointures, devises... presque tout y est. Gratuit, sans inscription et resultat instantane. En plus, il propose des outils IA utiles, tout sur une seule page:",
     },
     ru: {
@@ -54,7 +50,6 @@ function labels(locale: string) {
       desc: "Ссылка и превью-текст автоматически подстраиваются под язык.",
       copied: "Скопировано",
       copy: "Копировать текст",
-      native: "Поделиться",
       text: "Устали от постоянных пересчетов единиц? Я нашел очень удобный инструмент: длина, вес, температура, размер обуви, валюты и многое другое. Бесплатно, без регистрации, результат за секунду. Плюс полезные AI-инструменты - все на одной странице:",
     },
     ar: {
@@ -62,7 +57,6 @@ function labels(locale: string) {
       desc: "مشاركة بنقرة واحدة مع نص معاينة مناسب للغة.",
       copied: "تم النسخ",
       copy: "نسخ النص",
-      native: "مشاركة النظام",
       text: "هل ما زلت تعاني مع تحويل الوحدات؟ اكتشفت أداة رائعة: الطول والوزن ودرجة الحرارة ومقاسات الأحذية والعملات وغيرها الكثير. مجانية وبدون تسجيل وتعمل فورًا بنتيجة خلال ثوانٍ. وتضم أيضًا أدوات ذكاء اصطناعي عملية، كل ذلك في صفحة واحدة:",
     },
   } as const;
@@ -84,16 +78,15 @@ export default function SocialShareBar() {
   if (shouldHide) return null;
 
   const text = labels(locale);
-  const canNativeShare = typeof navigator !== "undefined" && "share" in navigator;
   const encodedUrl = encodeURIComponent(shareUrl);
   const encodedMsg = encodeURIComponent(text.text);
 
   const links = [
-    { name: "X", href: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedMsg}` },
-    { name: "Facebook", href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}` },
-    { name: "LinkedIn", href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}` },
-    { name: "Telegram", href: `https://t.me/share/url?url=${encodedUrl}&text=${encodedMsg}` },
-    { name: "WhatsApp", href: `https://wa.me/?text=${encodedMsg}%20${encodedUrl}` },
+    { name: "Facebook", href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`, icon: "f" },
+    { name: "X", href: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedMsg}`, icon: "X" },
+    { name: "LinkedIn", href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`, icon: "in" },
+    { name: "WhatsApp", href: `https://wa.me/?text=${encodedMsg}%20${encodedUrl}`, icon: "wa" },
+    { name: "Telegram", href: `https://t.me/share/url?url=${encodedUrl}&text=${encodedMsg}`, icon: "tg" },
   ];
 
   async function onCopy() {
@@ -107,15 +100,6 @@ export default function SocialShareBar() {
     }
   }
 
-  async function onNativeShare() {
-    if (!shareUrl || typeof navigator === "undefined" || !("share" in navigator)) return;
-    try {
-      await navigator.share({ url: shareUrl, title: "Koverts", text: text.text });
-    } catch {
-      // User cancelled or share failed.
-    }
-  }
-
   return (
     <section className="border-t border-[#e4e0da] bg-[#fbfaf7]">
       <div className="max-w-6xl mx-auto px-4 py-5">
@@ -124,34 +108,29 @@ export default function SocialShareBar() {
             <h3 className="text-sm font-semibold text-[#1a1814]">{text.title}</h3>
             <p className="text-xs text-[#6f6a61] mt-1">{text.desc}</p>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {links.map((item) => (
               <a
                 key={item.name}
                 href={item.href}
                 target="_blank"
                 rel="noreferrer"
-                className="text-xs px-3 py-1.5 rounded-md border border-[#ddd7cf] bg-white hover:bg-[#f3f0eb] transition-colors"
+                aria-label={item.name}
+                title={item.name}
+                className="w-10 h-10 rounded-full bg-[#2f3f58] text-white text-xs font-semibold flex items-center justify-center hover:bg-[#233149] transition-colors"
               >
-                {item.name}
+                {item.icon}
               </a>
             ))}
             <button
               type="button"
               onClick={onCopy}
-              className="text-xs px-3 py-1.5 rounded-md border border-[#ddd7cf] bg-white hover:bg-[#f3f0eb] transition-colors"
+              aria-label={text.copy}
+              title={text.copy}
+              className="w-10 h-10 rounded-full bg-[#3d6b4f] text-white text-sm font-bold flex items-center justify-center hover:bg-[#31563f] transition-colors"
             >
-              {copied ? text.copied : text.copy}
+              {copied ? "OK" : "↗"}
             </button>
-            {canNativeShare ? (
-              <button
-                type="button"
-                onClick={onNativeShare}
-                className="text-xs px-3 py-1.5 rounded-md bg-[#edf4f0] text-[#3d6b4f] hover:bg-[#dce9e1] transition-colors"
-              >
-                {text.native}
-              </button>
-            ) : null}
           </div>
         </div>
       </div>
