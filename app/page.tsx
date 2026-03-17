@@ -391,16 +391,21 @@ export default function HomePage() {
           </Link>
         </section>
 
-        {/* AI quick tools — 移动端默认收起 */}
+        {/* AI quick tools — 移动端默认收起；桌面端隐藏 details 内部标题避免重复 */}
         <details open={!isMobile} className="group mb-10 md:mb-12">
           <summary className="flex items-center justify-between cursor-pointer list-none py-2 border-b border-[#e8e4df] md:border-0 md:py-0 md:mb-4 [&::-webkit-details-marker]:hidden">
             <h2 className="font-sans font-bold text-xl md:text-2xl text-[#1a1814]">
               {localeText({ en: "AI quick tools", zh: "AI 快捷工具", es: "Herramientas IA rápidas", fr: "Outils IA rapides", ru: "Быстрые AI-инструменты", ar: "أدوات ذكاء اصطناعي سريعة" })}
             </h2>
-            <span className="text-[#c5bdb4] text-sm md:hidden">{localeText({ en: "Expand", zh: "展开", es: "Expandir", fr: "Développer", ru: "Развернуть", ar: "توسيع" })} ▾</span>
+            <div className="flex items-center gap-2">
+              <Link href="/ai" className="text-xs font-mono text-[#3d6b4f] hover:underline hidden md:inline">
+                {localeText({ en: "All AI →", zh: "全部 AI →", es: "Todo IA →", fr: "Tout IA →", ru: "Все AI →", ar: "كل أدوات AI →" })}
+              </Link>
+              <span className="text-[#c5bdb4] text-sm md:hidden">{localeText({ en: "Expand", zh: "展开", es: "Expandir", fr: "Développer", ru: "Развернуть", ar: "توسيع" })} ▾</span>
+            </div>
           </summary>
           <div className="pt-4 md:pt-0">
-            <HomeAiSpotlight />
+            <HomeAiSpotlight hideHeader />
           </div>
         </details>
 
@@ -570,13 +575,13 @@ export default function HomePage() {
 
         {/* Crawlable SEO content — 移动端默认收起 */}
         <details open={!isMobile} className="group mb-12">
-          <summary className="flex items-center justify-between cursor-pointer list-none py-2 border-b border-[#e8e4df] md:border-0 md:py-0 [&::-webkit-details-marker]:hidden">
+          <summary className="flex items-center justify-between cursor-pointer list-none py-2 border-b border-[#e8e4df] md:border-0 md:py-0 md:mb-4 [&::-webkit-details-marker]:hidden">
             <h2 className="font-sans font-bold text-lg md:text-2xl text-[#1a1814]">
               {seoText.introTitle}
             </h2>
             <span className="text-[#c5bdb4] text-sm md:hidden">{localeText({ en: "Expand", zh: "展开", es: "Expandir", fr: "Développer", ru: "Развернуть", ar: "توسيع" })} ▾</span>
           </summary>
-          <section className="bg-white border border-[#e8e4df] rounded-lg p-6 md:p-8 mt-4 md:mt-0">
+          <section className="bg-white border border-[#e8e4df] rounded-lg p-6 md:p-8 mt-4 md:mt-8">
             <p className="text-[#6a6460] leading-relaxed text-sm md:text-base mb-3">{seoText.introBody}</p>
             <p className="text-[#6a6460] leading-relaxed text-sm md:text-base">{seoText.introBody2}</p>
           </section>

@@ -11,7 +11,9 @@ function formatNum(n: number, digits = 0) {
     : "—";
 }
 
-export default function HomeAiSpotlight() {
+interface Props { hideHeader?: boolean }
+
+export default function HomeAiSpotlight({ hideHeader }: Props) {
   const { locale } = useLocale();
   const localeText = <T,>(m: { en: T; zh: T; es: T; fr: T; ru: T; ar: T }) => m[locale];
 
@@ -50,36 +52,38 @@ export default function HomeAiSpotlight() {
   }, [contextTokens, contextModel, contextModels]);
 
   return (
-    <section className="mt-14 mb-12">
-      <div className="mb-4 flex items-end justify-between gap-3">
-        <div>
-          <h2 className="font-sans font-bold text-xl md:text-2xl text-[#1a1814]">
+    <section className={hideHeader ? "mt-0 mb-0" : "mt-14 mb-12"}>
+      {!hideHeader && (
+        <div className="mb-4 flex items-end justify-between gap-3">
+          <div>
+            <h2 className="font-sans font-bold text-xl md:text-2xl text-[#1a1814]">
+              {localeText({
+                en: "AI quick tools",
+                zh: "AI 快捷工具",
+                es: "Herramientas IA rapidas",
+                fr: "Outils IA rapides",
+                ru: "Быстрые AI-инструменты",
+                ar: "أدوات ذكاء اصطناعي سريعة",
+              })}
+            </h2>
+          </div>
+          <Link
+            href="/ai"
+            className="text-xs font-mono text-[#3d6b4f] hover:underline"
+          >
             {localeText({
-              en: "AI quick tools",
-              zh: "AI 快捷工具",
-              es: "Herramientas IA rapidas",
-              fr: "Outils IA rapides",
-              ru: "Быстрые AI-инструменты",
-              ar: "أدوات ذكاء اصطناعي سريعة",
+              en: "All AI →",
+              zh: "全部 AI →",
+              es: "Todo IA →",
+              fr: "Tout IA →",
+              ru: "Все AI →",
+              ar: "كل أدوات AI →",
             })}
-          </h2>
+          </Link>
         </div>
-        <Link
-          href="/ai"
-          className="text-xs font-mono text-[#3d6b4f] hover:underline"
-        >
-          {localeText({
-            en: "All AI →",
-            zh: "全部 AI →",
-            es: "Todo IA →",
-            fr: "Tout IA →",
-            ru: "Все AI →",
-            ar: "كل أدوات AI →",
-          })}
-        </Link>
-      </div>
+      )}
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div className={`grid grid-cols-1 md:grid-cols-3 gap-3 ${hideHeader ? "mt-0" : ""}`}>
         <article className="bg-white border border-[#e8e4df] rounded-lg p-4">
           <p className="text-sm font-semibold text-[#1a1814] mb-2">
             🔤 {localeText({ en: "Token Calculator", zh: "Token 估算", es: "Tokens", fr: "Tokens", ru: "Токены", ar: "الرموز" })}
