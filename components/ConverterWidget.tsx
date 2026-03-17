@@ -133,108 +133,108 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
         </>
       )}
 
-      {/* Main card — lightweight flat style */}
-      <div className="bg-white/80 backdrop-blur-sm border border-[#e8e4df] rounded-xl overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-        {/* Compact header */}
-        <div className="flex items-center justify-between px-4 py-2 border-b border-[#ebe8e3]">
-          <span className={`font-mono text-[10px] text-[#a39e96] tracking-wider ${locale === "zh" ? "" : "uppercase"}`}>
+      {/* Main card — substantial layout, at least as weighty as ArticleMiniConverter */}
+      <div className="bg-white border border-[#e4e0da] rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
+        {/* Header */}
+        <div className="flex items-center justify-between px-4 md:px-6 py-3 border-b border-[#e8e4df]">
+          <span className={`font-mono text-[11px] text-[#9a948a] tracking-wider ${locale === "zh" ? "" : "uppercase"}`}>
             {cat.icon} {getCategoryTitle(catSlug, locale)}
           </span>
           {defaultFrom && (
-            <Link href={`/${catSlug}`} className="font-mono text-[10px] text-[#a39e96] hover:text-[#3d6b4f] transition-colors">
+            <Link href={`/${catSlug}`} className="font-mono text-[11px] text-[#9a948a] hover:text-[#3d6b4f] transition-colors">
               ← {getCategoryLabel(catSlug, t)}
             </Link>
           )}
         </div>
 
-        {/* MOBILE — compact stacked */}
-        <div className="md:hidden p-3 space-y-2">
+        {/* MOBILE — stacked with clear sections */}
+        <div className="md:hidden p-4 space-y-3">
           <div>
-            <label className="block text-[10px] text-[#a39e96] uppercase tracking-wider mb-1">{t.from}</label>
-            <div className="flex gap-2">
-              <input type="number" value={inputVal} onChange={(e) => setInputVal(e.target.value)}
-                className="flex-1 min-w-0 bg-[#faf9f7] border border-[#ebe8e3] rounded-lg px-3 py-2.5 font-mono text-[18px] text-[#1a1814] outline-none focus:border-[#3d6b4f]/50 focus:ring-1 focus:ring-[#3d6b4f]/20" />
-              <select value={from} onChange={(e) => setFrom(e.target.value)}
-                className="shrink-0 w-[120px] bg-[#faf9f7] border border-[#ebe8e3] rounded-lg px-3 py-2.5 text-sm font-medium text-[#1a1814] outline-none cursor-pointer">
-                {unitKeys.map((k) => <option key={k} value={k}>{getUnitLabel(k, locale)}</option>)}
-              </select>
-            </div>
+            <label className="block text-xs text-[#7c756c] mb-1.5">{t.from}</label>
+            <input type="number" value={inputVal} onChange={(e) => setInputVal(e.target.value)}
+              className="w-full h-12 rounded-xl border border-[#e4e0da] bg-[#f7f5f2] px-4 font-mono text-[20px] text-[#1a1814] outline-none focus:border-[#3d6b4f]/50 focus:ring-2 focus:ring-[#3d6b4f]/10" />
+            <select value={from} onChange={(e) => setFrom(e.target.value)}
+              className="mt-2 w-full h-11 rounded-xl border border-[#e4e0da] bg-[#f7f5f2] px-4 text-sm font-medium text-[#1a1814] outline-none cursor-pointer appearance-none">
+              {unitKeys.map((k) => <option key={k} value={k}>{getUnitLabel(k, locale)}</option>)}
+            </select>
           </div>
           <div className="flex justify-center">
             <button onClick={swap}
-              className="w-9 h-9 rounded-lg bg-[#f5f3f0] border border-[#ebe8e3] text-[#9a948a] flex items-center justify-center hover:bg-[#3d6b4f] hover:text-white hover:border-[#3d6b4f] transition-colors active:scale-95 text-sm"
+              className="w-11 h-11 rounded-xl bg-[#f0eeeb] border border-[#e4e0da] text-[#6f6a61] flex items-center justify-center hover:bg-[#3d6b4f] hover:text-white hover:border-[#3d6b4f] transition-colors active:scale-95"
               title={t.swap}>
               ⇄
             </button>
           </div>
           <div>
-            <label className="block text-[10px] text-[#a39e96] uppercase tracking-wider mb-1">{t.to}</label>
-            <div className="flex gap-2 items-center">
-              <div className="flex-1 min-w-0 bg-[#faf9f7] border border-[#ebe8e3] rounded-lg px-3 py-2.5 font-mono text-[18px] text-[#3d6b4f] font-semibold">
-                {result !== null ? formatNumber(result) : "—"}
-              </div>
-              <select value={to} onChange={(e) => setTo(e.target.value)}
-                className="shrink-0 w-[120px] bg-[#faf9f7] border border-[#ebe8e3] rounded-lg px-3 py-2.5 text-sm font-medium text-[#1a1814] outline-none cursor-pointer">
-                {unitKeys.map((k) => <option key={k} value={k}>{getUnitLabel(k, locale)}</option>)}
-              </select>
-            </div>
-            {result !== null && (
-              <div className="flex items-center justify-between mt-1.5">
-                <span className="text-[11px] text-[#a39e96]">{inputVal} {fromSym} = {formatNumber(result)} {toSym}</span>
-                <button onClick={copyResult}
-                  className="text-[11px] text-[#a39e96] hover:text-[#3d6b4f] px-2 py-0.5 rounded transition-colors">
-                  {copied ? uiText.copied : uiText.copy}
-                </button>
-              </div>
-            )}
+            <label className="block text-xs text-[#7c756c] mb-1.5">{t.to}</label>
+            <input readOnly value={result !== null ? formatNumber(result) : ""}
+              className="w-full h-12 rounded-xl border border-[#e4e0da] bg-[#f7f5f2] px-4 font-mono text-[20px] text-[#3d6b4f] font-semibold outline-none" />
+            <select value={to} onChange={(e) => setTo(e.target.value)}
+              className="mt-2 w-full h-11 rounded-xl border border-[#e4e0da] bg-[#f7f5f2] px-4 text-sm font-medium text-[#1a1814] outline-none cursor-pointer appearance-none">
+              {unitKeys.map((k) => <option key={k} value={k}>{getUnitLabel(k, locale)}</option>)}
+            </select>
           </div>
         </div>
 
-        {/* DESKTOP — inline lightweight */}
-        <div className="hidden md:block p-4">
-          <div className="flex items-center gap-3 flex-wrap">
-            <label className="sr-only">{t.from}</label>
+        {/* DESKTOP — 3-column layout like ArticleMiniConverter */}
+        <div className="hidden md:grid grid-cols-[1fr_auto_1fr] gap-4 p-6 items-start">
+          <div>
+            <label className="block text-xs text-[#7c756c] mb-2">{t.from}</label>
             <input type="number" value={inputVal} onChange={(e) => setInputVal(e.target.value)}
-              className="w-24 bg-[#faf9f7] border border-[#ebe8e3] rounded-lg px-4 py-2.5 font-mono text-xl text-[#1a1814] outline-none focus:border-[#3d6b4f]/50 focus:ring-1 focus:ring-[#3d6b4f]/20" />
+              className="w-full h-12 rounded-xl border border-[#e4e0da] bg-[#f7f5f2] px-4 font-mono text-[24px] text-[#1a1814] outline-none focus:border-[#3d6b4f]/50 focus:ring-2 focus:ring-[#3d6b4f]/10" />
             <select value={from} onChange={(e) => setFrom(e.target.value)}
-              className="bg-[#faf9f7] border border-[#ebe8e3] rounded-lg px-4 py-2.5 text-sm font-medium text-[#1a1814] outline-none cursor-pointer min-w-[140px]">
+              className="mt-2.5 w-full h-11 rounded-xl border border-[#e4e0da] bg-[#f7f5f2] px-4 text-sm font-medium text-[#1a1814] outline-none cursor-pointer appearance-none">
               {unitKeys.map((k) => <option key={k} value={k}>{getUnitLabel(k, locale)}</option>)}
             </select>
-            <button onClick={swap}
-              className="w-9 h-9 rounded-lg bg-[#f5f3f0] border border-[#ebe8e3] text-[#9a948a] flex items-center justify-center hover:bg-[#3d6b4f] hover:text-white hover:border-[#3d6b4f] transition-colors shrink-0"
-              title={t.swap}>
-              ⇄
-            </button>
-            <span className="text-[#d4cfc8] text-sm">→</span>
-            <div className="flex items-center gap-2 min-w-[140px]">
-              <span className="font-mono text-lg font-semibold text-[#3d6b4f]">
-                {result !== null ? formatNumber(result) : "—"}
-              </span>
-              <select value={to} onChange={(e) => setTo(e.target.value)}
-                className="flex-1 bg-[#faf9f7] border border-[#ebe8e3] rounded-lg px-3 py-2 text-sm font-medium text-[#1a1814] outline-none cursor-pointer min-w-0">
-                {unitKeys.map((k) => <option key={k} value={k}>{getUnitLabel(k, locale)}</option>)}
-              </select>
-            </div>
-            {result !== null && (
-              <button onClick={copyResult}
-                className="text-[11px] text-[#a39e96] hover:text-[#3d6b4f] px-2 py-1 rounded transition-colors shrink-0">
-                {copied ? uiText.copied : uiText.copy}
-              </button>
-            )}
           </div>
-          {result !== null && (
-            <p className="text-[11px] text-[#a39e96] mt-2 ml-1">
+          <button onClick={swap}
+            className="mt-[52px] w-12 h-12 rounded-xl bg-[#f0eeeb] border border-[#e4e0da] text-[#6f6a61] flex items-center justify-center hover:bg-[#3d6b4f] hover:text-white hover:border-[#3d6b4f] transition-colors shrink-0"
+            title={t.swap}>
+            ⇄
+          </button>
+          <div>
+            <label className="block text-xs text-[#7c756c] mb-2">{t.to}</label>
+            <input readOnly value={result !== null ? formatNumber(result) : ""}
+              className="w-full h-12 rounded-xl border border-[#e4e0da] bg-[#f7f5f2] px-4 font-mono text-[24px] text-[#3d6b4f] font-semibold outline-none" />
+            <select value={to} onChange={(e) => setTo(e.target.value)}
+              className="mt-2.5 w-full h-11 rounded-xl border border-[#e4e0da] bg-[#f7f5f2] px-4 text-sm font-medium text-[#1a1814] outline-none cursor-pointer appearance-none">
+              {unitKeys.map((k) => <option key={k} value={k}>{getUnitLabel(k, locale)}</option>)}
+            </select>
+          </div>
+        </div>
+
+        {/* Result bar — adds visual weight, more prominent than ArticleMiniConverter */}
+        <div className="border-t border-[#e8e4df] bg-[#f7f5f2] px-4 md:px-6 py-4 md:py-5">
+          <div className="flex items-center justify-between gap-3 mb-2">
+            <p className="font-mono text-[10px] text-[#9a948a] tracking-wider uppercase">{t.result}</p>
+            <button
+              onClick={copyResult}
+              className="px-3 py-1.5 rounded-lg text-xs font-medium bg-white border border-[#e4e0da] text-[#6f6a61] hover:border-[#3d6b4f] hover:text-[#3d6b4f] transition-colors"
+            >
+              {copied ? uiText.copied : uiText.copy}
+            </button>
+          </div>
+          <div className="flex items-baseline gap-2 flex-wrap">
+            <span className="font-sans text-[clamp(28px,5vw,44px)] font-bold text-[#3d6b4f] leading-none tracking-tight">
+              {result !== null ? formatNumber(result) : "—"}
+            </span>
+            <span className="font-mono text-base text-[#9a948a]">{toSym}</span>
+          </div>
+          {result !== null ? (
+            <p className="font-mono text-xs text-[#9a948a] mt-2.5 bg-white/80 border border-[#e4e0da] inline-block px-3 py-1.5 rounded-lg">
               {inputVal} {fromSym} = {formatNumber(result)} {toSym}
             </p>
+          ) : (
+            <p className="text-xs text-[#9a948a] mt-2.5">{uiText.invalid}</p>
           )}
         </div>
       </div>
 
-      {/* Popular conversions — lightweight chips */}
+      {/* Popular conversions — card style for more weight */}
       {cat.popular.length > 0 && (
-        <div className="mt-6">
-          <p className="text-[10px] text-[#a39e96] uppercase tracking-wider mb-2">{t.popularConversions}</p>
-          <div className="flex flex-wrap gap-2">
+        <div className="mt-8">
+          <p className="font-mono text-[10px] text-[#9a948a] tracking-wider uppercase mb-4">{t.popularConversions}</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {cat.popular.map((p) => {
               const r  = convert(p.val, p.from, p.to, catSlug);
               const fs = getSymbol(p.from, catSlug);
@@ -242,8 +242,9 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
               return (
                 <button key={`${p.from}-${p.to}`}
                   onClick={() => { setFrom(p.from); setTo(p.to); setInputVal(String(p.val)); }}
-                  className="px-3 py-1.5 rounded-lg text-xs font-medium bg-[#faf9f7] border border-[#ebe8e3] text-[#6a6460] hover:border-[#3d6b4f] hover:text-[#3d6b4f] transition-colors">
-                  {p.val} {fs} → {formatNumber(r)} {ts}
+                  className="group bg-white border border-[#e4e0da] rounded-xl p-4 text-left hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5">
+                  <p className="font-mono text-sm text-[#1a1814]">{p.val} {fs} →</p>
+                  <p className="text-xs text-[#9a948a] mt-0.5 group-hover:text-[#3d6b4f]">{formatNumber(r)} {ts}</p>
                 </button>
               );
             })}
