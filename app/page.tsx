@@ -1,7 +1,6 @@
 "use client";
 // app/page.tsx
 
-import { useState } from "react";
 import Link from "next/link";
 import { CATEGORIES } from "@/lib/units";
 import ConverterWidget from "@/components/ConverterWidget";
@@ -133,7 +132,6 @@ const GLOBAL_TESTIMONIALS = [
 export default function HomePage() {
   const { locale, setLocale, mounted } = useLocale();
   const t = getTranslations(locale);
-  const [allExpanded, setAllExpanded] = useState(false);
   const localeText = <T,>(m: { en: T; zh: T; es?: T; fr?: T; ru?: T; ar?: T }) =>
     m[locale as keyof typeof m] ?? m.en;
 
@@ -141,8 +139,6 @@ export default function HomePage() {
     ...CATEGORY_ORDER.filter((s) => CATEGORIES[s]).map((s) => CATEGORIES[s]),
     ...Object.values(CATEGORIES).filter((c) => !CATEGORY_ORDER.includes(c.slug)),
   ];
-  const topCats = orderedCats.slice(0, 8);
-  const shownCats = allExpanded ? orderedCats : topCats;
   const tipsPreview = getAllDetailedTipArticles().slice(0, 2);
 
   const seoText = {
@@ -437,7 +433,7 @@ export default function HomePage() {
               <p className="text-xs text-[#9a948a] mt-1">49 {t.units} · {localeText({ en: "live", zh: "实时", es: "en vivo", fr: "en direct", ru: "онлайн", ar: "مباشر" })}</p>
             </Link>
 
-            {shownCats.map((cat) => (
+            {orderedCats.map((cat) => (
               <Link key={cat.slug} href={`/${cat.slug}`}
                 className="group bg-white border border-[#e4e0da] rounded-2xl p-5 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5">
                 <span className="text-2xl mb-3 block">{cat.icon}</span>

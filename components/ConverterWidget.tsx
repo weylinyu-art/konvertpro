@@ -91,52 +91,44 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
       {/* Category tabs */}
       {!defaultFrom && (
         <>
-          {/* 高频优先 + 更多折叠（桌面/移动统一） */}
-          <div className="space-y-3 mb-6">
-            <div className="flex gap-1.5 md:gap-2 flex-wrap justify-start">
-              {primaryCats.map((c) => (
-                <button key={c.slug} onClick={() => switchCat(c.slug)}
-                  className={`flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-full text-xs md:text-[13px] font-medium border transition-all ${
-                    catSlug === c.slug
-                      ? "bg-[#3d6b4f] border-[#3d6b4f] text-white shadow-md shadow-[#3d6b4f]/20"
-                      : "bg-white border-[#e4e0da] text-[#9a948a] hover:border-[#3d6b4f] hover:text-[#3d6b4f] hover:bg-[#edf4f0]"
-                  }`}>
-                  <span className="text-sm shrink-0">{c.icon}</span>
-                  <span>{getCategoryLabel(c.slug, t)}</span>
-                </button>
-              ))}
-              <Link href="/currency"
-                className="flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-full text-xs md:text-[13px] font-medium border bg-white border-[#e4e0da] text-[#9a948a] hover:border-[#3d6b4f] hover:text-[#3d6b4f] hover:bg-[#edf4f0] transition-all">
-                <span className="text-sm shrink-0">💱</span>
-                <span>{t.currency}</span>
-              </Link>
-              <Link href="/ai"
-                className="flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-full text-xs md:text-[13px] font-medium border bg-[#edf4f0] border-[#3d6b4f]/40 text-[#3d6b4f] hover:bg-[#3d6b4f] hover:text-white transition-all">
-                <span className="text-sm shrink-0">🤖</span>
-                <span>{t.aiTools}</span>
-              </Link>
-            </div>
-            {moreExpanded && (
-              <div className="flex gap-1.5 md:gap-2 flex-wrap justify-start">
-                {moreCats.map((c) => (
-                  <button key={c.slug} onClick={() => switchCat(c.slug)}
-                    className={`flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-full text-xs md:text-[13px] font-medium border transition-all ${
-                      catSlug === c.slug
-                        ? "bg-[#3d6b4f] border-[#3d6b4f] text-white shadow-md shadow-[#3d6b4f]/20"
-                        : "bg-white border-[#e4e0da] text-[#9a948a] hover:border-[#3d6b4f] hover:text-[#3d6b4f] hover:bg-[#edf4f0]"
-                    }`}>
-                    <span className="text-sm shrink-0">{c.icon}</span>
-                    <span>{getCategoryLabel(c.slug, t)}</span>
-                  </button>
-                ))}
-              </div>
-            )}
-            <div className="flex justify-start">
-              <button onClick={() => setMoreExpanded(!moreExpanded)}
-                className="px-4 py-2 rounded-full text-xs font-medium border border-[#e4e0da] bg-[#f8f6f2] text-[#9a948a] hover:border-[#3d6b4f] hover:text-[#3d6b4f] transition-all">
-                {moreExpanded ? t.showLess : t.moreCategories}
+          {/* 单行 flex-wrap：主类 + Currency + AI Tools + 展开项紧随其后 + More 按钮 */}
+          <div className="flex gap-1.5 md:gap-2 flex-wrap justify-start mb-6">
+            {primaryCats.map((c) => (
+              <button key={c.slug} onClick={() => switchCat(c.slug)}
+                className={`flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-full text-xs md:text-[13px] font-medium border transition-all ${
+                  catSlug === c.slug
+                    ? "bg-[#3d6b4f] border-[#3d6b4f] text-white shadow-md shadow-[#3d6b4f]/20"
+                    : "bg-white border-[#e4e0da] text-[#9a948a] hover:border-[#3d6b4f] hover:text-[#3d6b4f] hover:bg-[#edf4f0]"
+                }`}>
+                <span className="text-sm shrink-0">{c.icon}</span>
+                <span>{getCategoryLabel(c.slug, t)}</span>
               </button>
-            </div>
+            ))}
+            <Link href="/currency"
+              className="flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-full text-xs md:text-[13px] font-medium border bg-white border-[#e4e0da] text-[#9a948a] hover:border-[#3d6b4f] hover:text-[#3d6b4f] hover:bg-[#edf4f0] transition-all">
+              <span className="text-sm shrink-0">💱</span>
+              <span>{t.currency}</span>
+            </Link>
+            <Link href="/ai"
+              className="flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-full text-xs md:text-[13px] font-medium border bg-[#edf4f0] border-[#3d6b4f]/40 text-[#3d6b4f] hover:bg-[#3d6b4f] hover:text-white transition-all">
+              <span className="text-sm shrink-0">🤖</span>
+              <span>{t.aiTools}</span>
+            </Link>
+            {moreExpanded && moreCats.map((c) => (
+              <button key={c.slug} onClick={() => switchCat(c.slug)}
+                className={`flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-full text-xs md:text-[13px] font-medium border transition-all ${
+                  catSlug === c.slug
+                    ? "bg-[#3d6b4f] border-[#3d6b4f] text-white shadow-md shadow-[#3d6b4f]/20"
+                    : "bg-white border-[#e4e0da] text-[#9a948a] hover:border-[#3d6b4f] hover:text-[#3d6b4f] hover:bg-[#edf4f0]"
+                }`}>
+                <span className="text-sm shrink-0">{c.icon}</span>
+                <span>{getCategoryLabel(c.slug, t)}</span>
+              </button>
+            ))}
+            <button onClick={() => setMoreExpanded(!moreExpanded)}
+              className="flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-full text-xs md:text-[13px] font-medium border border-[#e4e0da] bg-[#f8f6f2] text-[#9a948a] hover:border-[#3d6b4f] hover:text-[#3d6b4f] transition-all">
+              {moreExpanded ? t.showLess : t.moreCategories}
+            </button>
           </div>
         </>
       )}
