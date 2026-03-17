@@ -38,7 +38,7 @@ export interface TipModule {
 export const TIP_MODULES: TipModule[] = [
   {
     key: "fun-facts",
-    title: { en: "1) Fun facts behind units", zh: "1）单位背后的趣味冷知识" },
+    title: { en: "Fun facts behind units", zh: "单位背后的趣味冷知识" },
     intro: {
       en: "Knowing where units come from helps you avoid mistakes and remember formulas faster.",
       zh: "理解单位来源，能更快记住换算关系，也能减少误用。",
@@ -58,7 +58,7 @@ export const TIP_MODULES: TipModule[] = [
   },
   {
     key: "daily-guides",
-    title: { en: "2) Daily life conversion guides", zh: "2）生活实用换算指南" },
+    title: { en: "Daily life conversion guides", zh: "生活实用换算指南" },
     intro: {
       en: "Practical conversion scenarios for travel, shopping, and cooking.",
       zh: "面向旅行、购物、烹饪等高频生活场景的换算建议。",
@@ -78,7 +78,7 @@ export const TIP_MODULES: TipModule[] = [
   },
   {
     key: "professional",
-    title: { en: "3) Professional scenario conversions", zh: "3）专业场景换算" },
+    title: { en: "Professional scenario conversions", zh: "专业场景换算" },
     intro: {
       en: "In technical work, unit semantics are as important as numeric conversion.",
       zh: "在技术场景中，单位语义与数值换算同样重要。",
@@ -98,7 +98,7 @@ export const TIP_MODULES: TipModule[] = [
   },
   {
     key: "tricks-tools",
-    title: { en: "4) Conversion tricks and mini tools", zh: "4）换算技巧与小工具" },
+    title: { en: "Conversion tricks and mini tools", zh: "换算技巧与小工具" },
     intro: {
       en: "Combine mental math and tools for better speed and reliability.",
       zh: "把心算近似与工具精算结合，效率与准确性更平衡。",

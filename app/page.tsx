@@ -416,16 +416,6 @@ export default function HomePage() {
                 })}
               </h2>
             </div>
-            <Link href="/conversion-tips" className="text-xs font-mono text-[#3d6b4f] hover:underline">
-              {localeText({
-                en: "Join the community →",
-                zh: "加入社区讨论 →",
-                es: "Unete a la comunidad →",
-                fr: "Rejoindre la communaute →",
-                ru: "Присоединиться →",
-                ar: "انضم إلى المجتمع →",
-              })}
-            </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {GLOBAL_TESTIMONIALS.slice(0, 4).map((item) => (
