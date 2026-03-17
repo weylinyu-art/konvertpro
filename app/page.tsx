@@ -6,7 +6,7 @@ import { CATEGORIES } from "@/lib/units";
 import ConverterWidget from "@/components/ConverterWidget";
 import HomeAiSpotlight from "@/components/HomeAiSpotlight";
 import { useLocale } from "@/components/LocaleProvider";
-import { getTranslations, getCategoryLabel } from "@/lib/i18n";
+import { getTranslations, getCategoryLabel, getUnitLabel } from "@/lib/i18n";
 import LocaleSwitcher from "@/components/LocaleSwitcher";
 import { getAllDetailedTipArticles } from "@/lib/conversion-tips-data";
 
@@ -28,6 +28,50 @@ const HOME_POPULAR_LINKS = [
   { href: "/speed/mph-to-kph", en: "MPH to KM/H", zh: "英里/时转千米/时", es: "MPH a KM/H", fr: "MPH en KM/H", ru: "Миль/ч в км/ч", ar: "ميل/س إلى كم/س" },
   { href: "/currency", en: "Currency Converter", zh: "货币汇率换算", es: "Conversor de divisas", fr: "Convertisseur de devises", ru: "Конвертер валют", ar: "محول العملات" },
   { href: "/ai/token-calculator", en: "AI Token Calculator", zh: "AI Token 计算器", es: "Calculadora de tokens IA", fr: "Calculateur de tokens IA", ru: "Калькулятор токенов AI", ar: "حاسبة رموز الذكاء الاصطناعي" },
+];
+
+// 场景分组：生活常用、专业工具、趣味换算（分类导航枢纽）
+const CONVERTER_SCENARIOS: Array<{
+  key: string;
+  title: { en: string; zh: string; es: string; fr: string; ru: string; ar: string };
+  items: Array<{ type: "currency" } | { type: "ai" } | { type: "category"; slug: string }>;
+}> = [
+  {
+    key: "daily",
+    title: { en: "Daily use", zh: "生活常用", es: "Uso diario", fr: "Usage quotidien", ru: "Повседневное", ar: "الاستخدام اليومي" },
+    items: [
+      { type: "currency" },
+      { type: "category", slug: "length" },
+      { type: "category", slug: "weight" },
+      { type: "category", slug: "temperature" },
+      { type: "category", slug: "volume" },
+      { type: "category", slug: "speed" },
+      { type: "category", slug: "area" },
+      { type: "category", slug: "time" },
+      { type: "category", slug: "cooking" },
+      { type: "category", slug: "shoe" },
+    ],
+  },
+  {
+    key: "professional",
+    title: { en: "Professional tools", zh: "专业工具", es: "Herramientas profesionales", fr: "Outils professionnels", ru: "Профессиональные", ar: "أدوات احترافية" },
+    items: [
+      { type: "category", slug: "data" },
+      { type: "category", slug: "energy" },
+      { type: "category", slug: "pressure" },
+      { type: "category", slug: "power" },
+      { type: "category", slug: "fuel" },
+    ],
+  },
+  {
+    key: "more",
+    title: { en: "More tools", zh: "趣味换算", es: "Más herramientas", fr: "Plus d'outils", ru: "Прочее", ar: "المزيد من الأدوات" },
+    items: [
+      { type: "category", slug: "angle" },
+      { type: "category", slug: "numbase" },
+      { type: "ai" },
+    ],
+  },
 ];
 
 const GLOBAL_TESTIMONIALS = [
@@ -317,6 +361,39 @@ export default function HomePage() {
 
         <ConverterWidget />
 
+        {/* 功能展示：Koverts 支持哪些单位？图标+文字可视化 */}
+        <section className="mt-10 mb-10">
+          <h2 className="font-sans font-bold text-lg md:text-xl text-[#1a1814] mb-4">
+            {localeText({
+              en: "What units can Koverts convert?",
+              zh: "Koverts 支持哪些单位换算？",
+              es: "¿Qué unidades convierte Koverts?",
+              fr: "Quelles unités Koverts convertit-il ?",
+              ru: "Какие единицы конвертирует Koverts?",
+              ar: "ما الوحدات التي يحولها Koverts؟",
+            })}
+          </h2>
+          <div className="flex flex-wrap gap-2 md:gap-3">
+            {orderedCats.map((cat) => (
+              <Link key={cat.slug} href={`/${cat.slug}`}
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-[#e4e0da] text-[#1a1814] hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm hover:shadow-md">
+                <span className="text-lg">{cat.icon}</span>
+                <span className="font-medium text-sm">{getCategoryLabel(cat.slug, t)}</span>
+              </Link>
+            ))}
+            <Link href="/currency"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-[#e4e0da] text-[#1a1814] hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm hover:shadow-md">
+              <span className="text-lg">💱</span>
+              <span className="font-medium text-sm">{t.currency}</span>
+            </Link>
+            <Link href="/ai"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#edf4f0] border border-[#3d6b4f]/30 text-[#3d6b4f] hover:bg-[#3d6b4f] hover:text-white transition-all shadow-sm hover:shadow-md">
+              <span className="text-lg">🤖</span>
+              <span className="font-medium text-sm">{t.aiTools}</span>
+            </Link>
+          </div>
+        </section>
+
         <section className="mt-8 mb-10 grid grid-cols-1 md:grid-cols-3 gap-3">
           <Link href="/conversion-tips" className="group bg-white border border-[#e4e0da] rounded-xl px-4 py-3 shadow-sm hover:border-[#3d6b4f] transition-all">
             <p className="text-xs text-[#3d6b4f] mb-1">📘 {localeText({ en: "Tips", zh: "Tips", es: "Tips", fr: "Astuces", ru: "Советы", ar: "نصائح" })}</p>
@@ -415,44 +492,75 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* All categories grid */}
+        {/* All converters — 分类导航枢纽：按场景分组 + 热门子链接 */}
         <section className="mt-10 mb-14">
           <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-5">
             // {t.allConverters}
           </p>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-
-            {/* Currency - highest traffic */}
-            <Link href="/currency"
-              className="group bg-white border border-[#e4e0da] rounded-2xl p-5 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5">
-              <span className="text-2xl mb-3 block">💱</span>
-              <span className="font-semibold text-sm text-[#1a1814] group-hover:text-[#3d6b4f] transition-colors block">
-                {t.currency}
-              </span>
-              <p className="text-xs text-[#9a948a] mt-1">49 {t.units} · {localeText({ en: "live", zh: "实时", es: "en vivo", fr: "en direct", ru: "онлайн", ar: "مباشر" })}</p>
-            </Link>
-
-            {orderedCats.map((cat) => (
-              <Link key={cat.slug} href={`/${cat.slug}`}
-                className="group bg-white border border-[#e4e0da] rounded-2xl p-5 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5">
-                <span className="text-2xl mb-3 block">{cat.icon}</span>
-                <span className="font-semibold text-sm text-[#1a1814] group-hover:text-[#3d6b4f] transition-colors block">
-                  {getCategoryLabel(cat.slug, t)}
-                </span>
-                <p className="text-xs text-[#9a948a] mt-1">{Object.keys(cat.units).length} {t.units}</p>
-              </Link>
+          <div className="space-y-8">
+            {CONVERTER_SCENARIOS.map((scenario) => (
+              <div key={scenario.key}>
+                <h3 className="font-semibold text-[#1a1814] mb-3 text-sm">
+                  {localeText(scenario.title)}
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {scenario.items.map((item) => {
+                    if (item.type === "currency") {
+                      return (
+                        <div key="currency" className="bg-white border border-[#e4e0da] rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all">
+                          <Link href="/currency" className="flex items-center gap-3">
+                            <span className="text-2xl">💱</span>
+                            <div>
+                              <span className="font-semibold text-[#1a1814] block">{t.currency}</span>
+                              <p className="text-xs text-[#9a948a]">49 {t.units} · {localeText({ en: "live", zh: "实时", es: "en vivo", fr: "en direct", ru: "онлайн", ar: "مباشر" })}</p>
+                            </div>
+                          </Link>
+                        </div>
+                      );
+                    }
+                    if (item.type === "ai") {
+                      return (
+                        <div key="ai" className="bg-[#edf4f0] border border-[#3d6b4f]/30 rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#3d6b4f] transition-all">
+                          <Link href="/ai" className="flex items-center gap-3">
+                            <span className="text-2xl">🤖</span>
+                            <div>
+                              <span className="font-semibold text-[#3d6b4f] block group-hover:text-white">{t.aiTools}</span>
+                              <p className="text-xs text-[#3d6b4f]/70">5 {localeText({ en: "tools", zh: "工具", es: "herramientas", fr: "outils", ru: "инструментов", ar: "أدوات" })}</p>
+                            </div>
+                          </Link>
+                        </div>
+                      );
+                    }
+                    const cat = CATEGORIES[item.slug];
+                    if (!cat) return null;
+                    const subLinks = (cat.popular || []).slice(0, 2).map((p) => ({
+                      href: `/${cat.slug}/${String(p.from).replace(/_/g, "-")}-to-${String(p.to).replace(/_/g, "-")}`,
+                      label: `${getUnitLabel(p.from, locale)} → ${getUnitLabel(p.to, locale)}`,
+                    }));
+                    return (
+                      <div key={cat.slug} className="bg-white border border-[#e4e0da] rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all">
+                        <Link href={`/${cat.slug}`} className="flex items-center gap-3 mb-2">
+                          <span className="text-2xl">{cat.icon}</span>
+                          <div>
+                            <span className="font-semibold text-[#1a1814] block">{getCategoryLabel(cat.slug, t)}</span>
+                            <p className="text-xs text-[#9a948a]">{Object.keys(cat.units).length} {t.units}</p>
+                          </div>
+                        </Link>
+                        {subLinks.length > 0 && (
+                          <div className="flex flex-wrap gap-2 mt-2 pl-11">
+                            {subLinks.map((s) => (
+                              <Link key={s.href} href={s.href} className="text-xs text-[#6a6460] hover:text-[#3d6b4f] border-b border-dotted border-[#c5bdb4] hover:border-[#3d6b4f]">
+                                {s.label}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             ))}
-
-            {/* AI Tools */}
-            <Link href="/ai"
-              className="group bg-[#edf4f0] border border-[#3d6b4f]/30 rounded-2xl p-5 hover:border-[#3d6b4f] hover:bg-[#3d6b4f] transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5">
-              <span className="text-2xl mb-3 block">🤖</span>
-              <span className="font-semibold text-sm text-[#3d6b4f] group-hover:text-white transition-colors block">
-                {t.aiTools}
-              </span>
-              <p className="text-xs text-[#3d6b4f]/60 group-hover:text-white/70 mt-1">5 {localeText({ en: "tools", zh: "工具", es: "herramientas", fr: "outils", ru: "инструментов", ar: "أدوات" })}</p>
-            </Link>
           </div>
         </section>
 
