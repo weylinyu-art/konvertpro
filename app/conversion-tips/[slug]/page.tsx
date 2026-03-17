@@ -6,7 +6,7 @@ import { BASE_URL, buildPageAlternates, buildSocialMetadata } from "@/lib/seo";
 import ArticleMiniConverter from "@/components/ArticleMiniConverter";
 import {
   TIP_MODULES,
-  getAllFlatTipArticles,
+  getAllDetailedTipArticles,
   getTipArticleBySlug,
   getTipDetailBySlug,
   getTipWidgetPresetBySlug,
@@ -17,22 +17,22 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return getAllFlatTipArticles().map((a) => ({ slug: a.slug }));
+  return getAllDetailedTipArticles().map((a) => ({ slug: a.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const article = getTipArticleBySlug(params.slug);
-  if (!article) return {};
   const detail = getTipDetailBySlug(params.slug);
+  if (!article || !detail) return {};
   const path = `/conversion-tips/${params.slug}`;
   return {
     title: `${article.title.en} | Koverts`,
-    description: detail?.overview.en ?? article.summary.en,
+    description: detail.overview.en,
     alternates: buildPageAlternates(path),
     ...buildSocialMetadata({
       path,
       title: `${article.title.en} | Koverts`,
-      description: detail?.overview.en ?? article.summary.en,
+      description: detail.overview.en,
       type: "article",
     }),
   };
@@ -40,14 +40,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default function ConversionTipsArticlePage({ params }: Props) {
   const article = getTipArticleBySlug(params.slug);
-  if (!article) notFound();
   const detail = getTipDetailBySlug(params.slug);
+  if (!article || !detail) notFound();
   const widgetPreset = getTipWidgetPresetBySlug(params.slug);
 
-  const related = getAllFlatTipArticles()
+  const related = getAllDetailedTipArticles()
     .filter((a) => a.slug !== article.slug && a.moduleKey === article.moduleKey)
     .slice(0, 6);
-  const relatedCrossModule = getAllFlatTipArticles()
+  const relatedCrossModule = getAllDetailedTipArticles()
     .filter((a) => a.slug !== article.slug && a.moduleKey !== article.moduleKey)
     .slice(0, 4);
 
@@ -67,14 +67,14 @@ export default function ConversionTipsArticlePage({ params }: Props) {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: article.title.en,
-    description: detail?.overview.en ?? article.summary.en,
+    description: detail.overview.en,
     inLanguage: "en",
     author: { "@type": "Organization", name: "Koverts" },
     publisher: { "@type": "Organization", name: "Koverts" },
     mainEntityOfPage: `${BASE_URL}/conversion-tips/${article.slug}`,
   };
 
-  const faqSchema = detail?.faq
+  const faqSchema = detail.faq
     ? {
         "@context": "https://schema.org",
         "@type": "FAQPage",
@@ -104,13 +104,15 @@ export default function ConversionTipsArticlePage({ params }: Props) {
 
         <article className="py-10">
           <p className="text-xs font-mono text-[#9a948a] uppercase tracking-[0.1em] mb-3">
-            <LocaleText en={module?.title.en ?? "Conversion Tips"} zh={module?.title.zh ?? "换算小常识"} />
+            <Link href={module ? `/conversion-tips/module/${module.key}` : "/conversion-tips"} className="hover:text-[#3d6b4f] transition-colors">
+              <LocaleText en={module?.title.en ?? "Conversion Tips"} zh={module?.title.zh ?? "换算小常识"} />
+            </Link>
           </p>
           <h1 className="text-[clamp(30px,5vw,52px)] font-bold leading-[1.1] tracking-tight mb-5">
             <LocaleText en={article.title.en} zh={article.title.zh} />
           </h1>
           <p className="text-base leading-relaxed text-[#5a554d] mb-8">
-            <LocaleText en={detail?.overview.en ?? article.summary.en} zh={detail?.overview.zh ?? article.summary.zh} />
+            <LocaleText en={detail.overview.en} zh={detail.overview.zh} />
           </p>
 
           <ArticleMiniConverter
@@ -120,38 +122,21 @@ export default function ConversionTipsArticlePage({ params }: Props) {
             defaultValue={widgetPreset.value}
           />
 
-          {detail ? (
-            <div className="space-y-6 text-sm leading-relaxed text-[#4a4540]">
-              {detail.sections.map((section, idx) => (
-                <section key={idx}>
-                  <h2 className="text-lg font-semibold text-[#1a1814] mb-2">
-                    <LocaleText en={section.heading.en} zh={section.heading.zh} />
-                  </h2>
-                  <p>
-                    <LocaleText en={section.body.en} zh={section.body.zh} />
-                  </p>
-                </section>
-              ))}
-            </div>
-          ) : (
-            <div className="space-y-4 text-sm leading-relaxed text-[#4a4540]">
-              <p>
-                <LocaleText
-                  en="This article expands one practical conversion theme. You can use it as a quick reference in travel, shopping, engineering, or daily communication."
-                  zh="本文围绕一个实用换算主题展开，适合在旅行、购物、工程协作和日常沟通中快速查阅。"
-                />
-              </p>
-              <p>
-                <LocaleText
-                  en="For high-stakes scenarios, always verify the unit system first (metric vs imperial, mass vs volume, or regional standards) before applying formulas."
-                  zh="在高风险场景中，先确认单位体系（公制/英制、质量/体积、地区标准）再套公式，是避免错误的关键。"
-                />
-              </p>
-            </div>
-          )}
+          <div className="space-y-6 text-sm leading-relaxed text-[#4a4540]">
+            {detail.sections.map((section, idx) => (
+              <section key={idx}>
+                <h2 className="text-lg font-semibold text-[#1a1814] mb-2">
+                  <LocaleText en={section.heading.en} zh={section.heading.zh} />
+                </h2>
+                <p>
+                  <LocaleText en={section.body.en} zh={section.body.zh} />
+                </p>
+              </section>
+            ))}
+          </div>
         </article>
 
-        {detail?.faq ? (
+        {detail.faq ? (
           <section className="mb-12">
             <h2 className="text-xl font-bold mb-4">
               <LocaleText en="FAQ" zh="常见问题" />

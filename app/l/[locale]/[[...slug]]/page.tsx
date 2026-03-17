@@ -8,7 +8,7 @@ import { CATEGORIES, formatNumber, convert, slugToUnit } from "@/lib/units";
 import { AI_TOOLS } from "@/lib/ai-units";
 import { COMPARE_PAIRS } from "@/lib/compare-pairs";
 import { getLocalizedSocialCopy } from "@/lib/social-i18n";
-import { getTipArticleBySlug } from "@/lib/conversion-tips-data";
+import { getTipArticleBySlug, getTipDetailBySlug, getTipModuleByKey } from "@/lib/conversion-tips-data";
 
 interface Props {
   params: { locale: string; slug?: string[] };
@@ -92,12 +92,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           ? "覆盖旅行、购物、工程协作中的高频换算常识与实操技巧。"
           : "Practical conversion knowledge for travel, shopping, and technical workflows.",
     };
-  } else if (segments[0] === "conversion-tips" && segments[1]) {
+  } else if (segments[0] === "conversion-tips" && segments[1] === "module" && segments[2]) {
+    const module = getTipModuleByKey(segments[2]);
+    if (module) {
+      social = {
+        title: locale === "zh" ? `${module.title.zh} | Koverts` : `${module.title.en} | Koverts`,
+        description: locale === "zh" ? module.intro.zh : module.intro.en,
+      };
+    }
+  } else if (segments[0] === "conversion-tips" && segments[1] && segments[1] !== "module") {
     const article = getTipArticleBySlug(segments[1]);
-    if (article) {
+    const detail = getTipDetailBySlug(segments[1]);
+    if (article && detail) {
       social = {
         title: locale === "zh" ? `${article.title.zh} | Koverts` : `${article.title.en} | Koverts`,
-        description: locale === "zh" ? article.summary.zh : article.summary.en,
+        description: locale === "zh" ? detail.overview.zh : detail.overview.en,
       };
     }
   } else if (segments[0] && segments.length === 1 && CATEGORIES[segments[0]]) {

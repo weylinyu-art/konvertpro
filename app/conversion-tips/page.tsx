@@ -4,7 +4,14 @@ import Link from "next/link";
 import { useLocale } from "@/components/LocaleProvider";
 import LocaleSwitcher from "@/components/LocaleSwitcher";
 import { getTranslations } from "@/lib/i18n";
-import { TIP_MODULES, getArticleSlug } from "@/lib/conversion-tips-data";
+import { TIP_MODULES, getDetailedModuleArticles } from "@/lib/conversion-tips-data";
+
+const MODULE_THEME: Record<string, { icon: string; tone: string }> = {
+  "fun-facts": { icon: "🧭", tone: "from-[#eef6f2] to-[#f8f6f2]" },
+  "daily-guides": { icon: "🧳", tone: "from-[#edf4f8] to-[#f8f6f2]" },
+  professional: { icon: "🛠️", tone: "from-[#f3f1fb] to-[#f8f6f2]" },
+  "tricks-tools": { icon: "⚙️", tone: "from-[#f5f3ee] to-[#f8f6f2]" },
+};
 
 export default function ConversionTipsPage() {
   const { locale, setLocale, mounted } = useLocale();
@@ -52,27 +59,87 @@ export default function ConversionTipsPage() {
           </p>
         </section>
 
-        {TIP_MODULES.map((module, idx) => (
-          <section key={idx} className="mb-12">
-            <h2 className="text-xl md:text-2xl font-bold tracking-tight text-[#1a1814] mb-3">{localeText(module.title)}</h2>
-            <p className="text-[#6a6460] text-sm md:text-base leading-relaxed mb-4">{localeText(module.intro)}</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {module.articles.map((tip, i) => (
-                <article key={i} className="bg-white border border-[#e4e0da] rounded-2xl p-6 shadow-sm">
-                  <h3 className="text-base font-semibold text-[#1a1814] mb-2">
-                    <Link href={`/conversion-tips/${getArticleSlug(module.key, i)}`} className="hover:text-[#3d6b4f] transition-colors">
-                      {localeText(tip.title)}
+        {TIP_MODULES.map((module, idx) => {
+          const moduleArticles = getDetailedModuleArticles(module.key);
+          if (moduleArticles.length === 0) return null;
+          const preview = moduleArticles.slice(0, 4);
+          const featured = preview[0];
+          const rest = preview.slice(1);
+          const theme = MODULE_THEME[module.key] ?? MODULE_THEME["fun-facts"];
+          return (
+            <section key={idx} className="mb-12">
+              <div className="rounded-3xl border border-[#e4e0da] bg-white shadow-sm overflow-hidden">
+                <div className={`bg-gradient-to-r ${theme.tone} px-6 pt-6 pb-5 border-b border-[#ece7e1]`}>
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <div className="inline-flex items-center gap-2 rounded-full bg-white/80 border border-[#dfe8e3] px-3 py-1 text-xs font-mono text-[#3d6b4f] mb-3">
+                        <span>{theme.icon}</span>
+                        <span>{localeText({ en: "Module", zh: "专题模块", es: "Modulo", fr: "Module", ru: "Модуль", ar: "وحدة" })}</span>
+                      </div>
+                      <h2 className="text-[clamp(22px,3vw,30px)] font-bold tracking-tight text-[#1a1814] mb-2">
+                        {localeText(module.title)}
+                      </h2>
+                      <p className="text-[#5f5951] text-sm md:text-base leading-relaxed max-w-2xl">
+                        {localeText(module.intro)}
+                      </p>
+                    </div>
+                    <div className="hidden md:flex flex-col items-end gap-2">
+                      <span className="text-xs rounded-full px-3 py-1 border border-[#3d6b4f]/20 bg-white/70 text-[#3d6b4f]">
+                        {moduleArticles.length} {localeText({ en: "articles", zh: "篇文章", es: "articulos", fr: "articles", ru: "статей", ar: "مقالات" })}
+                      </span>
+                      <Link
+                        href={`/conversion-tips/module/${module.key}`}
+                        className="text-xs font-medium px-3 py-1.5 rounded-full bg-[#3d6b4f] text-white hover:bg-[#31563f] transition-colors"
+                      >
+                        {localeText({ en: "View all", zh: "查看全部", es: "Ver todo", fr: "Tout voir", ru: "Смотреть все", ar: "عرض الكل" })} →
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-5 md:p-6">
+                  {featured ? (
+                    <article className="group bg-[#faf8f5] border border-[#ece7e1] rounded-2xl p-5 md:p-6 mb-4">
+                      <h3 className="text-lg md:text-xl font-semibold text-[#1a1814] mb-2 leading-snug group-hover:text-[#3d6b4f] transition-colors">
+                        <Link href={`/conversion-tips/${featured.slug}`}>{localeText(featured.title)}</Link>
+                      </h3>
+                      <p className="text-sm md:text-base text-[#6a6460] leading-relaxed mb-3">{localeText(featured.summary)}</p>
+                      <Link href={`/conversion-tips/${featured.slug}`} className="text-xs text-[#3d6b4f] hover:text-[#31563f] underline">
+                        {localeText({ en: "Read article", zh: "查看全文", es: "Leer articulo", fr: "Lire l'article", ru: "Читать статью", ar: "قراءة المقال" })}
+                      </Link>
+                    </article>
+                  ) : null}
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {rest.map((tip, i) => (
+                      <article key={i} className="group bg-white border border-[#ece7e1] rounded-2xl p-4">
+                        <h3 className="text-[15px] font-semibold text-[#1a1814] mb-2 leading-snug group-hover:text-[#3d6b4f] transition-colors">
+                          <Link href={`/conversion-tips/${tip.slug}`}>{localeText(tip.title)}</Link>
+                        </h3>
+                        <p className="text-sm text-[#6a6460] leading-relaxed mb-3">{localeText(tip.summary)}</p>
+                        <Link href={`/conversion-tips/${tip.slug}`} className="text-xs text-[#3d6b4f] hover:text-[#31563f] underline">
+                          {localeText({ en: "Read article", zh: "查看全文", es: "Leer articulo", fr: "Lire l'article", ru: "Читать статью", ar: "قراءة المقال" })}
+                        </Link>
+                      </article>
+                    ))}
+                  </div>
+
+                  <div className="md:hidden mt-4 flex items-center justify-between">
+                    <span className="text-xs text-[#8f8880]">
+                      {moduleArticles.length} {localeText({ en: "articles", zh: "篇文章", es: "articulos", fr: "articles", ru: "статей", ar: "مقالات" })}
+                    </span>
+                    <Link
+                      href={`/conversion-tips/module/${module.key}`}
+                      className="text-xs font-medium px-3 py-1.5 rounded-full bg-[#3d6b4f] text-white hover:bg-[#31563f] transition-colors"
+                    >
+                      {localeText({ en: "View all", zh: "查看全部", es: "Ver todo", fr: "Tout voir", ru: "Смотреть все", ar: "عرض الكل" })} →
                     </Link>
-                  </h3>
-                  <p className="text-sm text-[#6a6460] leading-relaxed mb-3">{localeText(tip.summary)}</p>
-                  <Link href={`/conversion-tips/${getArticleSlug(module.key, i)}`} className="text-xs text-[#3d6b4f] hover:text-[#31563f] underline">
-                    {localeText({ en: "Read article", zh: "查看全文" })}
-                  </Link>
-                </article>
-              ))}
-            </div>
-          </section>
-        ))}
+                  </div>
+                </div>
+              </div>
+            </section>
+          );
+        })}
 
         <section className="mb-16 bg-[#edf4f0] border border-[#3d6b4f]/20 rounded-2xl p-6">
           <h2 className="text-lg font-bold mb-2 text-[#1a1814]">

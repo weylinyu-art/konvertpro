@@ -5,6 +5,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { CATEGORIES } from "@/lib/units";
 import ConverterWidget from "@/components/ConverterWidget";
+import HomeAiSpotlight from "@/components/HomeAiSpotlight";
 import { useLocale } from "@/components/LocaleProvider";
 import { getTranslations, getCategoryLabel } from "@/lib/i18n";
 import LocaleSwitcher from "@/components/LocaleSwitcher";
@@ -219,6 +220,8 @@ export default function HomePage() {
         </section>
 
         <ConverterWidget />
+
+        <HomeAiSpotlight />
 
         {/* Crawlable SEO content */}
         <section className="mt-14 mb-12 bg-white border border-[#e4e0da] rounded-2xl p-6 md:p-8 shadow-sm">

@@ -143,6 +143,10 @@ export function getTipArticleBySlug(slug: string): FlatTipArticle | undefined {
   return getAllFlatTipArticles().find((a) => a.slug === slug);
 }
 
+export function getTipModuleByKey(moduleKey: string): TipModule | undefined {
+  return TIP_MODULES.find((m) => m.key === moduleKey);
+}
+
 const TIP_DETAILS: Record<string, TipDetailContent> = {
   "fun-facts-01": {
     overview: {
@@ -214,6 +218,35 @@ const TIP_DETAILS: Record<string, TipDetailContent> = {
         body: {
           en: "People often only multiply by 1.8 and forget the offset. That creates large errors around freezing/room temperature ranges.",
           zh: "很多人只乘 1.8 却忘记加减偏移量，尤其在冰点和室温附近会产生明显误差。",
+        },
+      },
+    ],
+  },
+  "fun-facts-02": {
+    overview: {
+      en: "The modern foot started as a human-based reference but is now a strict international engineering unit defined by law and standards.",
+      zh: "英尺最早源于人体尺度，但现代已经成为被法律和标准严格定义的工程单位。",
+    },
+    sections: [
+      {
+        heading: { en: "Body measure origin", zh: "人体尺度的起点" },
+        body: {
+          en: "In ancient systems, length units often came from body parts, including hand, cubit, and foot.",
+          zh: "在古代计量体系中，很多长度单位都来自人体部位，例如掌、肘尺和脚长。",
+        },
+      },
+      {
+        heading: { en: "Why this was not enough", zh: "为什么后来不够用" },
+        body: {
+          en: "Body-based units vary by person and region, which caused trade disputes and design inconsistency.",
+          zh: "人体尺度会随人和地区变化，导致贸易纠纷和工程设计不一致问题。",
+        },
+      },
+      {
+        heading: { en: "Modern precise definition", zh: "现代精确定义" },
+        body: {
+          en: "Today 1 foot equals exactly 0.3048 meters, making imperial-metric conversion stable across industries.",
+          zh: "如今 1 英尺被精确定义为 0.3048 米，使英制与公制换算在各行业保持一致。",
         },
       },
     ],
@@ -508,10 +541,106 @@ const TIP_DETAILS: Record<string, TipDetailContent> = {
       },
     ],
   },
+  "daily-guides-04": {
+    overview: {
+      en: "A personal conversion dashboard turns repetitive conversions into a fast routine and reduces context switching.",
+      zh: "个人换算仪表盘可以把重复换算沉淀成固定动作，显著减少来回切换成本。",
+    },
+    sections: [
+      {
+        heading: { en: "Pick top recurring tasks", zh: "先选最高频任务" },
+        body: {
+          en: "Start with your top 5-10 tasks, such as kg-lb, C-F, or miles-km, before expanding the set.",
+          zh: "先覆盖你的前 5-10 个高频任务，例如 kg-lb、摄氏-华氏、英里-公里，再逐步扩展。",
+        },
+      },
+      {
+        heading: { en: "Use fixed default values", zh: "使用固定默认值" },
+        body: {
+          en: "Preset values like 1, 10, 100 or common business thresholds can speed up daily checks.",
+          zh: "预置 1、10、100 或常见业务阈值，可显著提升日常核对效率。",
+        },
+      },
+      {
+        heading: { en: "Version and review monthly", zh: "按月复盘迭代" },
+        body: {
+          en: "Review dashboard usage monthly and remove low-frequency items to keep it concise and practical.",
+          zh: "建议按月复盘使用情况，移除低频条目，保持仪表盘简洁且实用。",
+        },
+      },
+    ],
+  },
+  "professional-04": {
+    overview: {
+      en: "Explicit unit naming in APIs prevents hidden semantic bugs and improves cross-team integration quality.",
+      zh: "在 API 中显式声明单位可避免语义歧义，显著提升跨团队集成质量。",
+    },
+    sections: [
+      {
+        heading: { en: "Encode units in field names", zh: "单位写进字段名" },
+        body: {
+          en: "Prefer fields like distance_km, weight_kg, and temp_c to avoid guessing at integration time.",
+          zh: "优先使用 distance_km、weight_kg、temp_c 这类字段，避免联调时猜单位。",
+        },
+      },
+      {
+        heading: { en: "Document unit and precision", zh: "文档写清单位与精度" },
+        body: {
+          en: "In API docs, include unit, numeric range, decimal precision, and rounding strategy.",
+          zh: "接口文档中应同时描述单位、取值范围、小数精度与舍入策略。",
+        },
+      },
+      {
+        heading: { en: "Validate on boundaries", zh: "边界值校验" },
+        body: {
+          en: "Run tests on zero, max, min, and conversion boundaries to catch subtle unit mistakes early.",
+          zh: "对 0、最大值、最小值和换算边界做测试，可提前发现隐性单位错误。",
+        },
+      },
+    ],
+  },
+  "tricks-tools-04": {
+    overview: {
+      en: "A curated top-20 conversion set is a practical mini knowledge base for teams handling repeated numeric communication.",
+      zh: "建立 Top20 常用换算集合，本质上是在团队内搭建一个高复用的小型知识库。",
+    },
+    sections: [
+      {
+        heading: { en: "Build by scenario, not by category", zh: "按场景建库，不按学科建库" },
+        body: {
+          en: "Group conversions by travel, e-commerce, engineering, and analytics scenarios for faster retrieval.",
+          zh: "建议按旅行、电商、工程、数据分析场景分组，而不是按学科划分。",
+        },
+      },
+      {
+        heading: { en: "Add confidence labels", zh: "给结果加可信度标签" },
+        body: {
+          en: "Mark entries as rough estimate, business-ready, or contract-grade to avoid misuse.",
+          zh: "可标注“粗估可用/业务可用/合同级精度”，避免不同场景误用同一结果。",
+        },
+      },
+      {
+        heading: { en: "Share as team standard", zh: "沉淀为团队标准" },
+        body: {
+          en: "Publish the set in onboarding docs and internal wikis so everyone uses consistent conversions.",
+          zh: "把这套集合同步到入职文档和团队 wiki，确保全员换算口径一致。",
+        },
+      },
+    ],
+  },
 };
 
 export function getTipDetailBySlug(slug: string): TipDetailContent | undefined {
   return TIP_DETAILS[slug];
+}
+
+export function getAllDetailedTipArticles(): FlatTipArticle[] {
+  const detailedSlugs = new Set(Object.keys(TIP_DETAILS));
+  return getAllFlatTipArticles().filter((a) => detailedSlugs.has(a.slug));
+}
+
+export function getDetailedModuleArticles(moduleKey: string): FlatTipArticle[] {
+  return getAllDetailedTipArticles().filter((a) => a.moduleKey === moduleKey);
 }
 
 export interface TipWidgetPreset {
