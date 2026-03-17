@@ -514,3 +514,56 @@ export function getTipDetailBySlug(slug: string): TipDetailContent | undefined {
   return TIP_DETAILS[slug];
 }
 
+export interface TipWidgetPreset {
+  category: string;
+  from?: string;
+  to?: string;
+  value?: number;
+}
+
+const MODULE_DEFAULT_WIDGET: Record<string, TipWidgetPreset> = {
+  "fun-facts": { category: "length", from: "mile", to: "kilometer", value: 1 },
+  "daily-guides": { category: "temperature", from: "celsius", to: "fahrenheit", value: 25 },
+  professional: { category: "numbase", from: "decimal", to: "binary", value: 255 },
+  "tricks-tools": { category: "length", from: "inch", to: "centimeter", value: 10 },
+};
+
+const ARTICLE_WIDGET_OVERRIDES: Record<string, TipWidgetPreset> = {
+  "fun-facts-03": { category: "temperature", from: "celsius", to: "fahrenheit", value: 0 },
+  "fun-facts-04": { category: "shoe", from: "us_m", to: "eu", value: 9 },
+  "fun-facts-08": { category: "temperature", from: "celsius", to: "kelvin", value: 25 },
+  "fun-facts-09": { category: "volume", from: "cup", to: "milliliter", value: 1 },
+  "fun-facts-10": { category: "cooking", from: "oz_weight", to: "gram", value: 1 },
+
+  "daily-guides-02": { category: "shoe", from: "eu", to: "us_m", value: 42 },
+  "daily-guides-03": { category: "cooking", from: "cup", to: "ml", value: 1 },
+  "daily-guides-05": { category: "weight", from: "kilogram", to: "pound", value: 23 },
+  "daily-guides-06": { category: "temperature", from: "fahrenheit", to: "celsius", value: 77 },
+  "daily-guides-08": { category: "volume", from: "fluid_oz", to: "milliliter", value: 12 },
+  "daily-guides-09": { category: "area", from: "sq_meter", to: "sq_foot", value: 80 },
+
+  "professional-01": { category: "numbase", from: "decimal", to: "hex", value: 255 },
+  "professional-02": { category: "fuel", from: "mpg_us", to: "lper100km", value: 30 },
+  "professional-03": { category: "pressure", from: "psi", to: "bar", value: 35 },
+  "professional-06": { category: "data", from: "byte", to: "bit", value: 1 },
+  "professional-07": { category: "energy", from: "watt_hour", to: "joule", value: 1 },
+  "professional-09": { category: "data", from: "gigabyte", to: "megabyte", value: 1 },
+
+  "tricks-tools-03": { category: "cooking", from: "oz_weight", to: "gram", value: 8 },
+  "tricks-tools-05": { category: "speed", from: "mph", to: "kph", value: 60 },
+  "tricks-tools-06": { category: "weight", from: "pound", to: "kilogram", value: 2.2 },
+  "tricks-tools-07": { category: "pressure", from: "bar", to: "psi", value: 2.3 },
+  "tricks-tools-09": { category: "length", from: "meter", to: "foot", value: 1 },
+};
+
+export function getTipWidgetPresetBySlug(slug: string): TipWidgetPreset {
+  const override = ARTICLE_WIDGET_OVERRIDES[slug];
+  if (override) return override;
+
+  const article = getTipArticleBySlug(slug);
+  if (article) {
+    return MODULE_DEFAULT_WIDGET[article.moduleKey] ?? MODULE_DEFAULT_WIDGET["fun-facts"];
+  }
+  return MODULE_DEFAULT_WIDGET["fun-facts"];
+}
+

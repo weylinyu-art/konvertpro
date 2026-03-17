@@ -3,7 +3,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { LocaleText } from "@/components/LocaleText";
 import { BASE_URL, buildPageAlternates, buildSocialMetadata } from "@/lib/seo";
-import { TIP_MODULES, getAllFlatTipArticles, getTipArticleBySlug, getTipDetailBySlug } from "@/lib/conversion-tips-data";
+import ArticleMiniConverter from "@/components/ArticleMiniConverter";
+import {
+  TIP_MODULES,
+  getAllFlatTipArticles,
+  getTipArticleBySlug,
+  getTipDetailBySlug,
+  getTipWidgetPresetBySlug,
+} from "@/lib/conversion-tips-data";
 
 interface Props {
   params: { slug: string };
@@ -35,6 +42,7 @@ export default function ConversionTipsArticlePage({ params }: Props) {
   const article = getTipArticleBySlug(params.slug);
   if (!article) notFound();
   const detail = getTipDetailBySlug(params.slug);
+  const widgetPreset = getTipWidgetPresetBySlug(params.slug);
 
   const related = getAllFlatTipArticles()
     .filter((a) => a.slug !== article.slug && a.moduleKey === article.moduleKey)
@@ -104,6 +112,13 @@ export default function ConversionTipsArticlePage({ params }: Props) {
           <p className="text-base leading-relaxed text-[#5a554d] mb-8">
             <LocaleText en={detail?.overview.en ?? article.summary.en} zh={detail?.overview.zh ?? article.summary.zh} />
           </p>
+
+          <ArticleMiniConverter
+            defaultCategory={widgetPreset.category}
+            defaultFrom={widgetPreset.from}
+            defaultTo={widgetPreset.to}
+            defaultValue={widgetPreset.value}
+          />
 
           {detail ? (
             <div className="space-y-6 text-sm leading-relaxed text-[#4a4540]">
