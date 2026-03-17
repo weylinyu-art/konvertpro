@@ -1,6 +1,7 @@
 "use client";
 // app/page.tsx
 
+import { useState } from "react";
 import Link from "next/link";
 import { CATEGORIES } from "@/lib/units";
 import ConverterWidget from "@/components/ConverterWidget";
@@ -176,6 +177,7 @@ const GLOBAL_TESTIMONIALS = [
 export default function HomePage() {
   const { locale, setLocale, mounted } = useLocale();
   const t = getTranslations(locale);
+  const [converterTab, setConverterTab] = useState<"daily" | "professional" | "more">("daily");
   const localeText = <T,>(m: { en: T; zh: T; es?: T; fr?: T; ru?: T; ar?: T }) =>
     m[locale as keyof typeof m] ?? m.en;
 
@@ -459,75 +461,77 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* All converters — 分类导航枢纽：按场景分组 + 热门子链接 */}
+        {/* All converters — 标签切换，精简布局；链接直达分类二级页 */}
         <section className="mt-10 mb-14">
-          <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-5">
+          <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-4">
             // {t.allConverters}
           </p>
-          <div className="space-y-8">
+          <div className="flex gap-1 mb-4">
             {CONVERTER_SCENARIOS.map((scenario) => (
-              <div key={scenario.key}>
-                <h3 className="font-semibold text-[#1a1814] mb-3 text-sm">
-                  {localeText(scenario.title)}
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {scenario.items.map((item) => {
-                    if (item.type === "currency") {
-                      return (
-                        <div key="currency" className="bg-white border border-[#e4e0da] rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all">
-                          <Link href="/currency" className="flex items-center gap-3">
-                            <span className="text-2xl">💱</span>
-                            <div>
-                              <span className="font-semibold text-[#1a1814] block">{t.currency}</span>
-                              <p className="text-xs text-[#9a948a]">49 {t.units} · {localeText({ en: "live", zh: "实时", es: "en vivo", fr: "en direct", ru: "онлайн", ar: "مباشر" })}</p>
-                            </div>
-                          </Link>
-                        </div>
-                      );
-                    }
-                    if (item.type === "ai") {
-                      return (
-                        <div key="ai" className="bg-[#edf4f0] border border-[#3d6b4f]/30 rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#3d6b4f] transition-all">
-                          <Link href="/ai" className="flex items-center gap-3">
-                            <span className="text-2xl">🤖</span>
-                            <div>
-                              <span className="font-semibold text-[#3d6b4f] block group-hover:text-white">{t.aiTools}</span>
-                              <p className="text-xs text-[#3d6b4f]/70">5 {localeText({ en: "tools", zh: "工具", es: "herramientas", fr: "outils", ru: "инструментов", ar: "أدوات" })}</p>
-                            </div>
-                          </Link>
-                        </div>
-                      );
-                    }
-                    const cat = CATEGORIES[item.slug];
-                    if (!cat) return null;
-                    const subLinks = (cat.popular || []).slice(0, 2).map((p) => ({
-                      href: `/${cat.slug}/${String(p.from).replace(/_/g, "-")}-to-${String(p.to).replace(/_/g, "-")}`,
-                      label: `${getUnitLabel(p.from, locale)} → ${getUnitLabel(p.to, locale)}`,
-                    }));
-                    return (
-                      <div key={cat.slug} className="bg-white border border-[#e4e0da] rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all">
-                        <Link href={`/${cat.slug}`} className="flex items-center gap-3 mb-2">
-                          <span className="text-2xl">{cat.icon}</span>
-                          <div>
-                            <span className="font-semibold text-[#1a1814] block">{getCategoryLabel(cat.slug, t)}</span>
-                            <p className="text-xs text-[#9a948a]">{Object.keys(cat.units).length} {t.units}</p>
-                          </div>
-                        </Link>
-                        {subLinks.length > 0 && (
-                          <div className="flex flex-wrap gap-2 mt-2 pl-11">
-                            {subLinks.map((s) => (
-                              <Link key={s.href} href={s.href} className="text-xs text-[#6a6460] hover:text-[#3d6b4f] border-b border-dotted border-[#c5bdb4] hover:border-[#3d6b4f]">
-                                {s.label}
-                              </Link>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
+              <button
+                key={scenario.key}
+                onClick={() => setConverterTab(scenario.key as "daily" | "professional" | "more")}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  converterTab === scenario.key
+                    ? "bg-[#3d6b4f] text-white"
+                    : "bg-white border border-[#e4e0da] text-[#6a6460] hover:border-[#3d6b4f] hover:text-[#3d6b4f]"
+                }`}
+              >
+                {localeText(scenario.title)}
+              </button>
             ))}
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+            {(CONVERTER_SCENARIOS.find((s) => s.key === converterTab)?.items ?? []).map((item) => {
+              if (item.type === "currency") {
+                return (
+                  <Link key="currency" href="/currency" className="group bg-white border border-[#e4e0da] rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all flex items-center gap-3">
+                    <span className="text-2xl">💱</span>
+                    <div>
+                      <span className="font-semibold text-[#1a1814] block">{t.currency}</span>
+                      <p className="text-xs text-[#9a948a]">49 {t.units}</p>
+                    </div>
+                  </Link>
+                );
+              }
+              if (item.type === "ai") {
+                return (
+                  <Link key="ai" href="/ai" className="group bg-[#edf4f0] border border-[#3d6b4f]/30 rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#3d6b4f] transition-all flex items-center gap-3">
+                    <span className="text-2xl">🤖</span>
+                    <div>
+                      <span className="font-semibold text-[#3d6b4f] block group-hover:text-white">{t.aiTools}</span>
+                      <p className="text-xs text-[#3d6b4f]/70">5 {localeText({ en: "tools", zh: "工具", es: "herramientas", fr: "outils", ru: "инструментов", ar: "أدوات" })}</p>
+                    </div>
+                  </Link>
+                );
+              }
+              const cat = CATEGORIES[item.slug];
+              if (!cat) return null;
+              const subLinks = (cat.popular || []).slice(0, 2).map((p) => ({
+                href: `/${cat.slug}/${String(p.from).replace(/_/g, "-")}-to-${String(p.to).replace(/_/g, "-")}`,
+                label: `${getUnitLabel(p.from, locale)} → ${getUnitLabel(p.to, locale)}`,
+              }));
+              return (
+                <div key={cat.slug} className="bg-white border border-[#e4e0da] rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all">
+                  <Link href={`/${cat.slug}`} className="flex items-center gap-3 mb-2 block">
+                    <span className="text-2xl">{cat.icon}</span>
+                    <div className="min-w-0">
+                      <span className="font-semibold text-[#1a1814] block">{getCategoryLabel(cat.slug, t)}</span>
+                      <p className="text-xs text-[#9a948a]">{Object.keys(cat.units).length} {t.units}</p>
+                    </div>
+                  </Link>
+                  {subLinks.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-2 pl-11">
+                      {subLinks.map((s) => (
+                        <Link key={s.href} href={s.href} className="text-xs text-[#6a6460] hover:text-[#3d6b4f] border-b border-dotted border-[#c5bdb4] hover:border-[#3d6b4f]">
+                          {s.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </section>
 
