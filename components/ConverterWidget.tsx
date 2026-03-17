@@ -14,8 +14,8 @@ const CATEGORY_ORDER = [
   "pressure", "power", "fuel", "angle", "shoe", "numbase",
 ];
 
-// 常用类别（移动端优先展示，其余折叠）
-const POPULAR_ON_MOBILE = ["length", "weight", "temperature", "volume", "speed", "area"];
+// 首页优先展示高频类别
+const PRIMARY_CATEGORIES = ["length", "weight", "temperature", "volume", "speed", "area"];
 
 interface Props {
   defaultCategory?: string;
@@ -26,6 +26,14 @@ interface Props {
 export default function ConverterWidget({ defaultCategory = "length", defaultFrom, defaultTo }: Props) {
   const { locale } = useLocale();
   const t = getTranslations(locale);
+  const uiText = {
+    en: { copy: "Copy", copied: "Copied", resultHint: "Result shown below", invalid: "Please enter a valid number" },
+    zh: { copy: "复制", copied: "已复制", resultHint: "结果在下方显示", invalid: "请输入有效数字" },
+    es: { copy: "Copiar", copied: "Listo", resultHint: "Resultado abajo", invalid: "Ingresa un numero valido" },
+    fr: { copy: "Copier", copied: "OK", resultHint: "Resultat ci-dessous", invalid: "Saisissez un nombre valide" },
+    ru: { copy: "Копировать", copied: "Готово", resultHint: "Результат ниже", invalid: "Введите корректное число" },
+    ar: { copy: "نسخ", copied: "تم", resultHint: "النتيجة بالأسفل", invalid: "أدخل رقمًا صحيحًا" },
+  }[locale];
 
   const [catSlug, setCatSlug] = useState(defaultCategory);
   const cat = CATEGORIES[catSlug];
@@ -35,17 +43,27 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
   const [to,       setTo]       = useState(defaultTo   ?? unitKeys[1]);
   const [inputVal, setInputVal] = useState("1");
   const [moreExpanded, setMoreExpanded] = useState(false);
+  const [copied, setCopied] = useState(false);
 
-  const result = (() => {
-    const n = parseFloat(inputVal);
-    if (isNaN(n)) return null;
-    return convert(n, from, to, catSlug);
-  })();
+  const inputNum = parseFloat(inputVal);
+  const hasValidInput = !isNaN(inputNum);
+  const result = hasValidInput ? convert(inputNum, from, to, catSlug) : null;
 
   const fromSym = getSymbol(from, catSlug);
   const toSym   = getSymbol(to,   catSlug);
 
   const swap = () => { setFrom(to); setTo(from); };
+  const copyResult = async () => {
+    if (!hasValidInput || result === null) return;
+    const text = `${inputVal} ${fromSym} = ${formatNumber(result)} ${toSym}`;
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1200);
+    } catch {
+      setCopied(false);
+    }
+  };
 
   const switchCat = (slug: string) => {
     setCatSlug(slug);
@@ -59,8 +77,8 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
     ...CATEGORY_ORDER.filter((s) => CATEGORIES[s]).map((s) => CATEGORIES[s]),
     ...Object.values(CATEGORIES).filter((c) => !CATEGORY_ORDER.includes(c.slug)),
   ];
-  const popularCats = orderedCats.filter((c) => POPULAR_ON_MOBILE.includes(c.slug));
-  const moreCats = orderedCats.filter((c) => !POPULAR_ON_MOBILE.includes(c.slug));
+  const primaryCats = orderedCats.filter((c) => PRIMARY_CATEGORIES.includes(c.slug));
+  const moreCats = orderedCats.filter((c) => !PRIMARY_CATEGORIES.includes(c.slug));
 
   // 当选中的类别在「更多」中时，自动展开
   useEffect(() => {
@@ -73,12 +91,12 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
       {/* Category tabs */}
       {!defaultFrom && (
         <>
-          {/* 移动端：常用类别 + 更多折叠 */}
-          <div className="md:hidden space-y-3 mb-6">
-            <div className="flex gap-1.5 flex-wrap justify-center">
-              {popularCats.map((c) => (
+          {/* 高频优先 + 更多折叠（桌面/移动统一） */}
+          <div className="space-y-3 mb-6">
+            <div className="flex gap-1.5 md:gap-2 flex-wrap justify-center">
+              {primaryCats.map((c) => (
                 <button key={c.slug} onClick={() => switchCat(c.slug)}
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-medium border transition-all ${
+                  className={`flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-full text-xs md:text-[13px] font-medium border transition-all ${
                     catSlug === c.slug
                       ? "bg-[#3d6b4f] border-[#3d6b4f] text-white shadow-md shadow-[#3d6b4f]/20"
                       : "bg-white border-[#e4e0da] text-[#9a948a] hover:border-[#3d6b4f] hover:text-[#3d6b4f] hover:bg-[#edf4f0]"
@@ -88,16 +106,21 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
                 </button>
               ))}
               <Link href="/currency"
-                className="flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-medium border bg-white border-[#e4e0da] text-[#9a948a] hover:border-[#3d6b4f] hover:text-[#3d6b4f] hover:bg-[#edf4f0] transition-all">
+                className="flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-full text-xs md:text-[13px] font-medium border bg-white border-[#e4e0da] text-[#9a948a] hover:border-[#3d6b4f] hover:text-[#3d6b4f] hover:bg-[#edf4f0] transition-all">
                 <span className="text-sm shrink-0">💱</span>
                 <span>{t.currency}</span>
               </Link>
+              <Link href="/ai"
+                className="flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-full text-xs md:text-[13px] font-medium border bg-[#edf4f0] border-[#3d6b4f]/40 text-[#3d6b4f] hover:bg-[#3d6b4f] hover:text-white transition-all">
+                <span className="text-sm shrink-0">🤖</span>
+                <span>{t.aiTools}</span>
+              </Link>
             </div>
             {moreExpanded && (
-              <div className="flex gap-1.5 flex-wrap justify-center">
+              <div className="flex gap-1.5 md:gap-2 flex-wrap justify-center">
                 {moreCats.map((c) => (
                   <button key={c.slug} onClick={() => switchCat(c.slug)}
-                    className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-medium border transition-all ${
+                    className={`flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-full text-xs md:text-[13px] font-medium border transition-all ${
                       catSlug === c.slug
                         ? "bg-[#3d6b4f] border-[#3d6b4f] text-white shadow-md shadow-[#3d6b4f]/20"
                         : "bg-white border-[#e4e0da] text-[#9a948a] hover:border-[#3d6b4f] hover:text-[#3d6b4f] hover:bg-[#edf4f0]"
@@ -106,11 +129,6 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
                     <span>{getCategoryLabel(c.slug, t)}</span>
                   </button>
                 ))}
-                <Link href="/ai"
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-medium border bg-[#edf4f0] border-[#3d6b4f]/40 text-[#3d6b4f] hover:bg-[#3d6b4f] hover:text-white transition-all">
-                  <span className="text-sm shrink-0">🤖</span>
-                  <span>{t.aiTools}</span>
-                </Link>
               </div>
             )}
             <div className="flex justify-center">
@@ -119,31 +137,6 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
                 {moreExpanded ? t.showLess : t.moreCategories}
               </button>
             </div>
-          </div>
-
-          {/* 桌面端：全部展示，始终带文字 */}
-          <div className="hidden md:flex gap-2 flex-wrap justify-center mb-6">
-            {orderedCats.map((c) => (
-              <button key={c.slug} onClick={() => switchCat(c.slug)}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-[13px] font-medium border transition-all ${
-                  catSlug === c.slug
-                    ? "bg-[#3d6b4f] border-[#3d6b4f] text-white shadow-md shadow-[#3d6b4f]/20"
-                    : "bg-white border-[#e4e0da] text-[#9a948a] hover:border-[#3d6b4f] hover:text-[#3d6b4f] hover:bg-[#edf4f0]"
-                }`}>
-                <span className="text-sm shrink-0">{c.icon}</span>
-                <span>{getCategoryLabel(c.slug, t)}</span>
-              </button>
-            ))}
-            <Link href="/currency"
-              className="flex items-center gap-1.5 px-4 py-2 rounded-full text-[13px] font-medium border bg-white border-[#e4e0da] text-[#9a948a] hover:border-[#3d6b4f] hover:text-[#3d6b4f] hover:bg-[#edf4f0] transition-all">
-              <span className="text-sm shrink-0">💱</span>
-              <span>{t.currency}</span>
-            </Link>
-            <Link href="/ai"
-              className="flex items-center gap-1.5 px-4 py-2 rounded-full text-[13px] font-medium border bg-[#edf4f0] border-[#3d6b4f]/40 text-[#3d6b4f] hover:bg-[#3d6b4f] hover:text-white transition-all">
-              <span className="text-sm shrink-0">🤖</span>
-              <span>{t.aiTools}</span>
-            </Link>
           </div>
         </>
       )}
@@ -176,14 +169,16 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
           </div>
           <div className="flex justify-center">
             <button onClick={swap}
-              className="w-10 h-10 rounded-full bg-[#f2f0ed] border border-[#e4e0da] text-[#9a948a] flex items-center justify-center hover:bg-[#3d6b4f] hover:text-white transition-all active:scale-95 text-lg">
+              className="w-12 h-12 rounded-full bg-[#f2f0ed] border border-[#e4e0da] text-[#9a948a] flex items-center justify-center hover:bg-[#3d6b4f] hover:text-white transition-all active:scale-95 text-lg"
+              title={t.swap}>
               ↕
             </button>
           </div>
           <div>
             <label className="block font-mono text-[10px] text-[#9a948a] tracking-widest uppercase mb-1.5">{t.to}</label>
-            <input type="number" readOnly value={result !== null ? formatNumber(result) : ""}
-              className="w-full bg-[#edf4f0] border border-[#e4e0da] rounded-xl px-4 py-3 font-mono text-[22px] text-[#3d6b4f] outline-none cursor-default" />
+            <div className="w-full bg-[#f7f5f2] border border-[#e4e0da] rounded-xl px-4 py-3 text-[13px] text-[#9a948a]">
+              {uiText.resultHint}
+            </div>
             <select value={to} onChange={(e) => setTo(e.target.value)}
               className="mt-2 w-full bg-[#f2f0ed] border border-[#e4e0da] rounded-xl px-4 py-2.5 text-sm font-medium text-[#1a1814] outline-none cursor-pointer appearance-none">
               {unitKeys.map((k) => <option key={k} value={k}>{getUnitLabel(k, locale)}</option>)}
@@ -203,14 +198,15 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
             </select>
           </div>
           <button onClick={swap}
-            className="mt-[52px] w-11 h-11 rounded-full bg-[#f2f0ed] border border-[#e4e0da] text-[#9a948a] text-lg flex items-center justify-center hover:bg-[#3d6b4f] hover:border-[#3d6b4f] hover:text-white transition-all hover:rotate-180 duration-300 flex-shrink-0"
+            className="mt-[52px] w-12 h-12 rounded-full bg-[#f2f0ed] border border-[#e4e0da] text-[#9a948a] text-lg flex items-center justify-center hover:bg-[#3d6b4f] hover:border-[#3d6b4f] hover:text-white transition-all hover:rotate-180 duration-300 flex-shrink-0"
             title={t.swap}>
             ⇄
           </button>
           <div>
             <label className="block font-mono text-[11px] text-[#9a948a] tracking-widest uppercase mb-2.5">{t.to}</label>
-            <input type="number" readOnly value={result !== null ? formatNumber(result) : ""}
-              className="w-full bg-[#edf4f0] border border-[#e4e0da] rounded-xl px-5 py-4 font-mono text-[28px] text-[#3d6b4f] outline-none cursor-default transition-all" />
+            <div className="w-full bg-[#f7f5f2] border border-[#e4e0da] rounded-xl px-5 py-4 text-sm text-[#9a948a]">
+              {uiText.resultHint}
+            </div>
             <select value={to} onChange={(e) => setTo(e.target.value)}
               className="mt-2.5 w-full bg-[#f2f0ed] border border-[#e4e0da] rounded-xl px-5 py-3 text-sm font-medium text-[#1a1814] outline-none cursor-pointer appearance-none transition-all">
               {unitKeys.map((k) => <option key={k} value={k}>{getUnitLabel(k, locale)}</option>)}
@@ -220,17 +216,27 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
 
         {/* Result bar */}
         <div className="bg-[#f0ede8] border-t border-[#e4e0da] px-4 md:px-7 py-4 md:py-6">
-          <p className="font-mono text-[10px] md:text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-2 md:mb-3">{t.result}</p>
-          <div className="flex items-baseline gap-3 flex-wrap">
+          <div className="flex items-center justify-between gap-2 mb-2 md:mb-3">
+            <p className="font-mono text-[10px] md:text-[11px] text-[#9a948a] tracking-[0.1em] uppercase">{t.result}</p>
+            <button
+              onClick={copyResult}
+              className="px-3 py-1.5 rounded-lg text-xs font-medium bg-white border border-[#e4e0da] text-[#6f6a61] hover:border-[#3d6b4f] hover:text-[#3d6b4f] transition-all"
+            >
+              {copied ? uiText.copied : uiText.copy}
+            </button>
+          </div>
+          <div className="flex items-baseline gap-3 flex-wrap min-h-[60px]">
             <span className="font-sans text-[clamp(30px,6vw,52px)] font-bold text-[#3d6b4f] leading-none tracking-tight">
               {result !== null ? formatNumber(result) : "—"}
             </span>
             <span className="font-mono text-lg text-[#9a948a]">{toSym}</span>
           </div>
-          {result !== null && (
+          {result !== null ? (
             <p className="font-mono text-xs text-[#9a948a] mt-3 bg-white border border-[#e4e0da] inline-block px-3 py-1.5 rounded-lg">
               {inputVal} {fromSym} = {formatNumber(result)} {toSym}
             </p>
+          ) : (
+            <p className="text-xs text-[#9a948a] mt-3">{uiText.invalid}</p>
           )}
         </div>
       </div>

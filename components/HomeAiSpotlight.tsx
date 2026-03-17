@@ -53,17 +53,14 @@ export default function HomeAiSpotlight() {
     <section className="mt-14 mb-12">
       <div className="mb-4 flex items-end justify-between gap-3">
         <div>
-          <p className="text-xs font-mono tracking-[0.1em] text-[#3d6b4f] uppercase">
-            AI Spotlight
-          </p>
           <h2 className="font-sans font-bold text-xl md:text-2xl text-[#1a1814]">
             {localeText({
-              en: "Try AI tools directly",
-              zh: "首页直接试用 AI 工具",
-              es: "Prueba herramientas de IA al instante",
-              fr: "Essayez les outils IA directement",
-              ru: "Пробуйте AI-инструменты сразу",
-              ar: "جرّب أدوات الذكاء الاصطناعي مباشرة",
+              en: "AI quick tools",
+              zh: "AI 快捷工具",
+              es: "Herramientas IA rapidas",
+              fr: "Outils IA rapides",
+              ru: "Быстрые AI-инструменты",
+              ar: "أدوات ذكاء اصطناعي سريعة",
             })}
           </h2>
         </div>
@@ -72,12 +69,12 @@ export default function HomeAiSpotlight() {
           className="text-xs font-mono text-[#3d6b4f] hover:underline"
         >
           {localeText({
-            en: "All AI tools →",
-            zh: "全部 AI 工具 →",
-            es: "Todas las herramientas →",
-            fr: "Tous les outils →",
-            ru: "Все AI-инструменты →",
-            ar: "كل الأدوات →",
+            en: "All AI →",
+            zh: "全部 AI →",
+            es: "Todo IA →",
+            fr: "Tout IA →",
+            ru: "Все AI →",
+            ar: "كل أدوات AI →",
           })}
         </Link>
       </div>

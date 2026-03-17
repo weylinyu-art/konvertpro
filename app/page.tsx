@@ -376,12 +376,12 @@ export default function HomePage() {
           <div className="flex items-end justify-between gap-3 mb-4">
             <h2 className="font-sans font-bold text-xl md:text-2xl text-[#1a1814]">
               {localeText({
-                en: "Featured from Tips",
-                zh: "Tips 精选阅读",
-                es: "Destacados de Tips",
-                fr: "Sélection des astuces",
-                ru: "Рекомендуем в советах",
-                ar: "مختارات من النصائح",
+                en: "Tips picks",
+                zh: "Tips 精选",
+                es: "Tips destacados",
+                fr: "Astuces choisies",
+                ru: "Выборка Tips",
+                ar: "مختارات Tips",
               })}
             </h2>
             <Link href="/conversion-tips" className="text-xs font-mono text-[#3d6b4f] hover:underline">
@@ -402,17 +402,14 @@ export default function HomePage() {
         <section className="mb-12">
           <div className="mb-4 flex items-end justify-between gap-3">
             <div>
-              <p className="text-xs font-mono tracking-[0.1em] text-[#3d6b4f] uppercase">
-                {localeText({ en: "Community Voices", zh: "用户推荐", es: "Comunidad", fr: "Communaute", ru: "Сообщество", ar: "آراء المجتمع" })}
-              </p>
               <h2 className="font-sans font-bold text-xl md:text-2xl text-[#1a1814]">
                 {localeText({
-                  en: "Loved by users worldwide",
-                  zh: "来自全球用户的真实好评",
-                  es: "Valorado por usuarios globales",
-                  fr: "Adopte par des utilisateurs du monde entier",
-                  ru: "Отзывы пользователей по всему миру",
-                  ar: "موصى به من مستخدمين حول العالم",
+                  en: "User reviews",
+                  zh: "用户评价",
+                  es: "Reseñas de usuarios",
+                  fr: "Avis utilisateurs",
+                  ru: "Отзывы пользователей",
+                  ar: "آراء المستخدمين",
                 })}
               </h2>
             </div>
