@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { LOCALES, type Locale } from "@/lib/i18n";
+import { LOCALES, type Locale, getCategoryTitle, getUnitLabel } from "@/lib/i18n";
 import { BASE_URL, buildSocialMetadata } from "@/lib/seo";
 import { getCoreUrls, getAiUrls, getConversionUrls } from "@/lib/sitemap-data";
 import { CATEGORIES, formatNumber, convert, slugToUnit } from "@/lib/units";
@@ -73,20 +73,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     social = getLocalizedSocialCopy(locale, { kind: "ai" });
   } else if (segments[0] === "ai" && segments[1]) {
     const tool = AI_TOOLS.find((t) => t.slug === segments[1]);
-    social = getLocalizedSocialCopy(locale, { kind: "ai-tool", toolTitle: tool?.title });
+    social = getLocalizedSocialCopy(locale, { kind: "ai-tool", toolSlug: tool?.slug });
   } else if (path === "/compare") {
     social = getLocalizedSocialCopy(locale, { kind: "compare" });
   } else if (segments[0] === "compare" && segments[1]) {
     const pair = COMPARE_PAIRS.find((p) => p.slug === segments[1]);
-    social = getLocalizedSocialCopy(locale, { kind: "compare-detail", compareTitle: pair?.title });
+    social = getLocalizedSocialCopy(locale, {
+      kind: "compare-detail",
+      compareFromLabel: pair ? getUnitLabel(pair.a, locale) : undefined,
+      compareToLabel: pair ? getUnitLabel(pair.b, locale) : undefined,
+    });
   } else if (segments[0] && segments.length === 1 && CATEGORIES[segments[0]]) {
-    social = getLocalizedSocialCopy(locale, { kind: "category", categoryLabel: CATEGORIES[segments[0]].label });
+    social = getLocalizedSocialCopy(locale, { kind: "category", categoryLabel: getCategoryTitle(segments[0], locale) });
   } else if (segments[0] && segments[1] && CATEGORIES[segments[0]]) {
     const parsed = parseConversion(segments[1]);
     if (parsed) {
       const cat = CATEGORIES[segments[0]];
-      const fromLabel = cat.units[parsed.from]?.label;
-      const toLabel = cat.units[parsed.to]?.label;
+      const fromLabel = cat.units[parsed.from] ? getUnitLabel(parsed.from, locale) : undefined;
+      const toLabel = cat.units[parsed.to] ? getUnitLabel(parsed.to, locale) : undefined;
       const value = parsed.value ?? 1;
       const valueText = fromLabel && toLabel
         ? `${value} ${fromLabel} = ${formatNumber(convert(value, parsed.from, parsed.to, cat.slug))} ${toLabel}`
@@ -123,6 +127,15 @@ export default function LocalizedSharePage({ params }: Props) {
   if (!isLocale(locale)) notFound();
   const path = joinSlug(params.slug);
   const targetUrl = `${path}${path.includes("?") ? "&" : "?"}lang=${locale}`;
+  const textMap: Record<Locale, { title: string; desc: string; action: string }> = {
+    en: { title: "Redirecting...", desc: "Opening the localized page now.", action: "Continue manually" },
+    zh: { title: "正在跳转...", desc: "即将打开对应语言页面。", action: "手动继续" },
+    es: { title: "Redirigiendo...", desc: "Abriendo la pagina localizada.", action: "Continuar manualmente" },
+    fr: { title: "Redirection...", desc: "Ouverture de la page localisee.", action: "Continuer manuellement" },
+    ru: { title: "Переадресация...", desc: "Открываем страницу на выбранном языке.", action: "Продолжить вручную" },
+    ar: { title: "جارٍ التحويل...", desc: "سيتم فتح الصفحة باللغة المناسبة.", action: "المتابعة يدويًا" },
+  };
+  const text = textMap[locale];
 
   return (
     <main className="min-h-screen bg-[#faf8f5] text-[#1a1814] grid place-items-center p-6">
@@ -132,10 +145,10 @@ export default function LocalizedSharePage({ params }: Props) {
         }}
       />
       <div className="max-w-lg text-center">
-        <h1 className="text-2xl font-bold mb-3">Redirecting...</h1>
-        <p className="text-[#6f6a61] mb-4">Opening the localized page now.</p>
+        <h1 className="text-2xl font-bold mb-3">{text.title}</h1>
+        <p className="text-[#6f6a61] mb-4">{text.desc}</p>
         <Link href={targetUrl} className="text-[#3d6b4f] underline">
-          Continue manually
+          {text.action}
         </Link>
       </div>
     </main>

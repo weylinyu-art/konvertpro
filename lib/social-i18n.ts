@@ -16,8 +16,9 @@ interface SocialContext {
   categoryLabel?: string;
   fromLabel?: string;
   toLabel?: string;
-  toolTitle?: string;
-  compareTitle?: string;
+  toolSlug?: string;
+  compareFromLabel?: string;
+  compareToLabel?: string;
   conversionValueText?: string;
 }
 
@@ -90,6 +91,49 @@ const COPY: Record<Locale, Record<SocialKind, { title: string; description: stri
   },
 };
 
+const TOOL_TITLE_I18N: Record<string, Record<Locale, string>> = {
+  "token-calculator": {
+    en: "Token Calculator",
+    zh: "Token 计算器",
+    es: "Calculadora de tokens",
+    fr: "Calculateur de tokens",
+    ru: "Калькулятор токенов",
+    ar: "حاسبة الرموز",
+  },
+  "model-size": {
+    en: "Model Size Estimator",
+    zh: "模型显存估算",
+    es: "Estimador de memoria del modelo",
+    fr: "Estimateur de mémoire modèle",
+    ru: "Оценка памяти модели",
+    ar: "تقدير ذاكرة النموذج",
+  },
+  "api-cost": {
+    en: "API Cost Calculator",
+    zh: "API 成本计算",
+    es: "Calculadora de coste API",
+    fr: "Calculateur de coût API",
+    ru: "Калькулятор стоимости API",
+    ar: "حاسبة تكلفة API",
+  },
+  "context-window": {
+    en: "Context Window",
+    zh: "上下文窗口",
+    es: "Ventana de contexto",
+    fr: "Fenêtre de contexte",
+    ru: "Контекстное окно",
+    ar: "نافذة السياق",
+  },
+  "compute-units": {
+    en: "Compute Unit Converter",
+    zh: "算力单位换算",
+    es: "Conversor de unidades de cómputo",
+    fr: "Convertisseur d'unités de calcul",
+    ru: "Конвертер вычислительных единиц",
+    ar: "محول وحدات القدرة الحاسوبية",
+  },
+};
+
 export function getLocalizedSocialCopy(locale: Locale, context: SocialContext) {
   const pack = COPY[locale][context.kind];
   if (context.kind === "category" && context.categoryLabel) {
@@ -104,15 +148,16 @@ export function getLocalizedSocialCopy(locale: Locale, context: SocialContext) {
       description: context.conversionValueText ? `${context.conversionValueText}. ${pack.description}` : pack.description,
     };
   }
-  if (context.kind === "ai-tool" && context.toolTitle) {
+  if (context.kind === "ai-tool" && context.toolSlug) {
+    const localizedToolTitle = TOOL_TITLE_I18N[context.toolSlug]?.[locale] ?? TOOL_TITLE_I18N[context.toolSlug]?.en;
     return {
-      title: `${context.toolTitle} | Koverts`,
+      title: `${localizedToolTitle ?? pack.title} | Koverts`,
       description: pack.description,
     };
   }
-  if (context.kind === "compare-detail" && context.compareTitle) {
+  if (context.kind === "compare-detail" && context.compareFromLabel && context.compareToLabel) {
     return {
-      title: `${context.compareTitle} | Koverts`,
+      title: `${context.compareFromLabel} vs ${context.compareToLabel} | Koverts`,
       description: pack.description,
     };
   }

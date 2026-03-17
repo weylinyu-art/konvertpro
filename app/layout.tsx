@@ -173,8 +173,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-[#f7f5f2] text-[#1a1814] font-sans antialiased min-h-screen">
         <LocaleProvider>
           <PWAInit />
-          <SocialShareBar />
           {children}
+          <SocialShareBar />
         </LocaleProvider>
       </body>
     </html>
