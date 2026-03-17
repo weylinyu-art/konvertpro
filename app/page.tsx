@@ -237,12 +237,12 @@ export default function HomePage() {
           ar: "ما الوحدات التي يمكن تحويلها في Koverts؟",
         }),
         a: localeText({
-          en: "You can convert across length, weight, temperature, volume, speed, area, data, time, energy, pressure, angle, power, fuel, cooking, shoe size, and number base.",
-          zh: "支持长度、重量、温度、体积、速度、面积、数据、时间、能量、压强、角度、功率、油耗、烹饪、鞋码与进制转换等常见场景。",
-          es: "Puedes convertir longitud, peso, temperatura, volumen, velocidad, área, datos, tiempo, energía, presión, ángulo, potencia, combustible, cocina, talla y base numérica.",
-          fr: "Vous pouvez convertir longueur, poids, température, volume, vitesse, surface, données, temps, énergie, pression, angle, puissance, carburant, cuisine, pointure et base numérique.",
-          ru: "Поддерживаются длина, вес, температура, объем, скорость, площадь, данные, время, энергия, давление, углы, мощность, топливо, кулинария, размеры обуви и системы счисления.",
-          ar: "يمكنك تحويل الطول والوزن والحرارة والحجم والسرعة والمساحة والبيانات والوقت والطاقة والضغط والزوايا والقدرة والوقود والطبخ ومقاسات الأحذية وأنظمة الأعداد.",
+          en: "Koverts supports 16+ categories: length, weight, temperature, volume, speed, area, time, data, energy, pressure, angle, power, fuel, cooking, shoe size, and number base. Currency exchange and AI tools (token calculator, cost estimator) are also available. Use the converter hub below to jump to any category.",
+          zh: "Koverts 支持 16+ 种换算：长度、重量、温度、体积、速度、面积、时间、数据、能量、压强、角度、功率、油耗、烹饪、鞋码、进制等。另提供货币汇率与 AI 工具（Token 计算器、成本估算）。请使用下方「所有转换器」导航直达各分类。",
+          es: "Koverts soporta 16+ categorías: longitud, peso, temperatura, volumen, velocidad, área, tiempo, datos, energía, presión, ángulo, potencia, combustible, cocina, talla y base numérica. También divisas y herramientas IA (calculadora de tokens, estimador de costes). Usa el hub de conversores más abajo para acceder a cada categoría.",
+          fr: "Koverts prend en charge 16+ catégories : longueur, poids, température, volume, vitesse, surface, temps, données, énergie, pression, angle, puissance, carburant, cuisine, pointure et base numérique. Devises et outils IA (calculateur de tokens, estimation de coûts) inclus. Utilisez le hub ci-dessous pour accéder à chaque catégorie.",
+          ru: "Koverts поддерживает 16+ категорий: длина, вес, температура, объём, скорость, площадь, время, данные, энергия, давление, углы, мощность, топливо, кулинария, размеры обуви и системы счисления. Также курс валют и AI-инструменты. Используйте навигацию ниже для быстрого доступа.",
+          ar: "يدعم Koverts أكثر من 16 فئة: الطول والوزن والحرارة والحجم والسرعة والمساحة والوقت والبيانات والطاقة والضغط والزوايا والقدرة والوقود والطبخ ومقاسات الأحذية وأنظمة الأعداد. كما يتوفر سعر الصرف وأدوات الذكاء الاصطناعي. استخدم المركز أدناه للانتقال إلى أي فئة.",
         }),
       },
       {
@@ -361,39 +361,6 @@ export default function HomePage() {
 
         <ConverterWidget />
 
-        {/* 功能展示：Koverts 支持哪些单位？图标+文字可视化 */}
-        <section className="mt-10 mb-10">
-          <h2 className="font-sans font-bold text-lg md:text-xl text-[#1a1814] mb-4">
-            {localeText({
-              en: "What units can Koverts convert?",
-              zh: "Koverts 支持哪些单位换算？",
-              es: "¿Qué unidades convierte Koverts?",
-              fr: "Quelles unités Koverts convertit-il ?",
-              ru: "Какие единицы конвертирует Koverts?",
-              ar: "ما الوحدات التي يحولها Koverts؟",
-            })}
-          </h2>
-          <div className="flex flex-wrap gap-2 md:gap-3">
-            {orderedCats.map((cat) => (
-              <Link key={cat.slug} href={`/${cat.slug}`}
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-[#e4e0da] text-[#1a1814] hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm hover:shadow-md">
-                <span className="text-lg">{cat.icon}</span>
-                <span className="font-medium text-sm">{getCategoryLabel(cat.slug, t)}</span>
-              </Link>
-            ))}
-            <Link href="/currency"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-[#e4e0da] text-[#1a1814] hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm hover:shadow-md">
-              <span className="text-lg">💱</span>
-              <span className="font-medium text-sm">{t.currency}</span>
-            </Link>
-            <Link href="/ai"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#edf4f0] border border-[#3d6b4f]/30 text-[#3d6b4f] hover:bg-[#3d6b4f] hover:text-white transition-all shadow-sm hover:shadow-md">
-              <span className="text-lg">🤖</span>
-              <span className="font-medium text-sm">{t.aiTools}</span>
-            </Link>
-          </div>
-        </section>
-
         <section className="mt-8 mb-10 grid grid-cols-1 md:grid-cols-3 gap-3">
           <Link href="/conversion-tips" className="group bg-white border border-[#e4e0da] rounded-xl px-4 py-3 shadow-sm hover:border-[#3d6b4f] transition-all">
             <p className="text-xs text-[#3d6b4f] mb-1">📘 {localeText({ en: "Tips", zh: "Tips", es: "Tips", fr: "Astuces", ru: "Советы", ar: "نصائح" })}</p>
@@ -479,7 +446,7 @@ export default function HomePage() {
           <h2 className="font-sans font-bold text-xl md:text-2xl mb-4">{seoText.faqTitle}</h2>
           <div className="space-y-2">
             {seoText.faq.map((item, i) => (
-              <details key={i} className="group bg-white border border-[#e4e0da] rounded-xl overflow-hidden shadow-sm">
+              <details key={i} open={i === 0} className="group bg-white border border-[#e4e0da] rounded-xl overflow-hidden shadow-sm">
                 <summary className="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-[#faf8f5] transition-colors">
                   <span className="font-medium text-sm text-[#1a1814] pr-4">{item.q}</span>
                   <span className="text-[#9a948a] flex-shrink-0 group-open:rotate-180 transition-transform duration-200">▼</span>
