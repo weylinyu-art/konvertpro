@@ -133,113 +133,108 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
         </>
       )}
 
-      {/* Main card */}
-      <div className="bg-white border border-[#e4e0da] rounded-2xl overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.07)]">
-
-        {/* Card header */}
-        <div className="flex items-center justify-between px-4 md:px-7 py-3 md:py-4 border-b border-[#e4e0da]">
-          <span className={`font-mono text-[10px] md:text-[11px] text-[#9a948a] tracking-[0.1em] ${locale === "zh" ? "" : "uppercase"}`}>
+      {/* Main card — lightweight flat style */}
+      <div className="bg-white/80 backdrop-blur-sm border border-[#e8e4df] rounded-xl overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+        {/* Compact header */}
+        <div className="flex items-center justify-between px-4 py-2 border-b border-[#ebe8e3]">
+          <span className={`font-mono text-[10px] text-[#a39e96] tracking-wider ${locale === "zh" ? "" : "uppercase"}`}>
             {cat.icon} {getCategoryTitle(catSlug, locale)}
           </span>
           {defaultFrom && (
-            <Link href={`/${catSlug}`} className="font-mono text-[10px] text-[#9a948a] hover:text-[#3d6b4f] transition-colors">
+            <Link href={`/${catSlug}`} className="font-mono text-[10px] text-[#a39e96] hover:text-[#3d6b4f] transition-colors">
               ← {getCategoryLabel(catSlug, t)}
             </Link>
           )}
         </div>
 
-        {/* MOBILE — stacked */}
-        <div className="md:hidden p-4 space-y-3">
+        {/* MOBILE — compact stacked */}
+        <div className="md:hidden p-3 space-y-2">
           <div>
-            <label className="block font-mono text-[10px] text-[#9a948a] tracking-widest uppercase mb-1.5">{t.from}</label>
-            <input type="number" value={inputVal} onChange={(e) => setInputVal(e.target.value)}
-              className="w-full bg-[#f2f0ed] border border-[#e4e0da] rounded-xl px-4 py-3 font-mono text-[22px] text-[#1a1814] outline-none focus:border-[#3d6b4f] transition-all" />
-            <select value={from} onChange={(e) => setFrom(e.target.value)}
-              className="mt-2 w-full bg-[#f2f0ed] border border-[#e4e0da] rounded-xl px-4 py-2.5 text-sm font-medium text-[#1a1814] outline-none cursor-pointer appearance-none">
-              {unitKeys.map((k) => <option key={k} value={k}>{getUnitLabel(k, locale)}</option>)}
-            </select>
+            <label className="block text-[10px] text-[#a39e96] uppercase tracking-wider mb-1">{t.from}</label>
+            <div className="flex gap-2">
+              <input type="number" value={inputVal} onChange={(e) => setInputVal(e.target.value)}
+                className="flex-1 min-w-0 bg-[#faf9f7] border border-[#ebe8e3] rounded-lg px-3 py-2.5 font-mono text-[18px] text-[#1a1814] outline-none focus:border-[#3d6b4f]/50 focus:ring-1 focus:ring-[#3d6b4f]/20" />
+              <select value={from} onChange={(e) => setFrom(e.target.value)}
+                className="shrink-0 w-[120px] bg-[#faf9f7] border border-[#ebe8e3] rounded-lg px-3 py-2.5 text-sm font-medium text-[#1a1814] outline-none cursor-pointer">
+                {unitKeys.map((k) => <option key={k} value={k}>{getUnitLabel(k, locale)}</option>)}
+              </select>
+            </div>
           </div>
           <div className="flex justify-center">
             <button onClick={swap}
-              className="w-12 h-12 rounded-full bg-[#f2f0ed] border border-[#e4e0da] text-[#9a948a] flex items-center justify-center hover:bg-[#3d6b4f] hover:text-white transition-all active:scale-95 text-lg"
+              className="w-9 h-9 rounded-lg bg-[#f5f3f0] border border-[#ebe8e3] text-[#9a948a] flex items-center justify-center hover:bg-[#3d6b4f] hover:text-white hover:border-[#3d6b4f] transition-colors active:scale-95 text-sm"
               title={t.swap}>
-              ↕
+              ⇄
             </button>
           </div>
           <div>
-            <label className="block font-mono text-[10px] text-[#9a948a] tracking-widest uppercase mb-1.5">{t.to}</label>
-            <div className="w-full bg-[#f7f5f2] border border-[#e4e0da] rounded-xl px-4 py-3 text-[13px] text-[#9a948a]">
-              {uiText.resultHint}
+            <label className="block text-[10px] text-[#a39e96] uppercase tracking-wider mb-1">{t.to}</label>
+            <div className="flex gap-2 items-center">
+              <div className="flex-1 min-w-0 bg-[#faf9f7] border border-[#ebe8e3] rounded-lg px-3 py-2.5 font-mono text-[18px] text-[#3d6b4f] font-semibold">
+                {result !== null ? formatNumber(result) : "—"}
+              </div>
+              <select value={to} onChange={(e) => setTo(e.target.value)}
+                className="shrink-0 w-[120px] bg-[#faf9f7] border border-[#ebe8e3] rounded-lg px-3 py-2.5 text-sm font-medium text-[#1a1814] outline-none cursor-pointer">
+                {unitKeys.map((k) => <option key={k} value={k}>{getUnitLabel(k, locale)}</option>)}
+              </select>
             </div>
-            <select value={to} onChange={(e) => setTo(e.target.value)}
-              className="mt-2 w-full bg-[#f2f0ed] border border-[#e4e0da] rounded-xl px-4 py-2.5 text-sm font-medium text-[#1a1814] outline-none cursor-pointer appearance-none">
-              {unitKeys.map((k) => <option key={k} value={k}>{getUnitLabel(k, locale)}</option>)}
-            </select>
+            {result !== null && (
+              <div className="flex items-center justify-between mt-1.5">
+                <span className="text-[11px] text-[#a39e96]">{inputVal} {fromSym} = {formatNumber(result)} {toSym}</span>
+                <button onClick={copyResult}
+                  className="text-[11px] text-[#a39e96] hover:text-[#3d6b4f] px-2 py-0.5 rounded transition-colors">
+                  {copied ? uiText.copied : uiText.copy}
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* DESKTOP — side by side */}
-        <div className="hidden md:grid grid-cols-[1fr_auto_1fr] gap-4 p-7 items-start">
-          <div>
-            <label className="block font-mono text-[11px] text-[#9a948a] tracking-widest uppercase mb-2.5">{t.from}</label>
+        {/* DESKTOP — inline lightweight */}
+        <div className="hidden md:block p-4">
+          <div className="flex items-center gap-3 flex-wrap">
+            <label className="sr-only">{t.from}</label>
             <input type="number" value={inputVal} onChange={(e) => setInputVal(e.target.value)}
-              className="w-full bg-[#f2f0ed] border border-[#e4e0da] rounded-xl px-5 py-4 font-mono text-[28px] text-[#1a1814] outline-none focus:border-[#3d6b4f] focus:ring-2 focus:ring-[#3d6b4f]/10 transition-all" />
+              className="w-24 bg-[#faf9f7] border border-[#ebe8e3] rounded-lg px-4 py-2.5 font-mono text-xl text-[#1a1814] outline-none focus:border-[#3d6b4f]/50 focus:ring-1 focus:ring-[#3d6b4f]/20" />
             <select value={from} onChange={(e) => setFrom(e.target.value)}
-              className="mt-2.5 w-full bg-[#f2f0ed] border border-[#e4e0da] rounded-xl px-5 py-3 text-sm font-medium text-[#1a1814] outline-none cursor-pointer appearance-none transition-all">
+              className="bg-[#faf9f7] border border-[#ebe8e3] rounded-lg px-4 py-2.5 text-sm font-medium text-[#1a1814] outline-none cursor-pointer min-w-[140px]">
               {unitKeys.map((k) => <option key={k} value={k}>{getUnitLabel(k, locale)}</option>)}
             </select>
-          </div>
-          <button onClick={swap}
-            className="mt-[52px] w-12 h-12 rounded-full bg-[#f2f0ed] border border-[#e4e0da] text-[#9a948a] text-lg flex items-center justify-center hover:bg-[#3d6b4f] hover:border-[#3d6b4f] hover:text-white transition-all hover:rotate-180 duration-300 flex-shrink-0"
-            title={t.swap}>
-            ⇄
-          </button>
-          <div>
-            <label className="block font-mono text-[11px] text-[#9a948a] tracking-widest uppercase mb-2.5">{t.to}</label>
-            <div className="w-full bg-[#f7f5f2] border border-[#e4e0da] rounded-xl px-5 py-4 text-sm text-[#9a948a]">
-              {uiText.resultHint}
-            </div>
-            <select value={to} onChange={(e) => setTo(e.target.value)}
-              className="mt-2.5 w-full bg-[#f2f0ed] border border-[#e4e0da] rounded-xl px-5 py-3 text-sm font-medium text-[#1a1814] outline-none cursor-pointer appearance-none transition-all">
-              {unitKeys.map((k) => <option key={k} value={k}>{getUnitLabel(k, locale)}</option>)}
-            </select>
-          </div>
-        </div>
-
-        {/* Result bar */}
-        <div className="bg-[#f0ede8] border-t border-[#e4e0da] px-4 md:px-7 py-4 md:py-6">
-          <div className="flex items-center justify-between gap-2 mb-2 md:mb-3">
-            <p className="font-mono text-[10px] md:text-[11px] text-[#9a948a] tracking-[0.1em] uppercase">{t.result}</p>
-            <button
-              onClick={copyResult}
-              className="px-3 py-1.5 rounded-lg text-xs font-medium bg-white border border-[#e4e0da] text-[#6f6a61] hover:border-[#3d6b4f] hover:text-[#3d6b4f] transition-all"
-            >
-              {copied ? uiText.copied : uiText.copy}
+            <button onClick={swap}
+              className="w-9 h-9 rounded-lg bg-[#f5f3f0] border border-[#ebe8e3] text-[#9a948a] flex items-center justify-center hover:bg-[#3d6b4f] hover:text-white hover:border-[#3d6b4f] transition-colors shrink-0"
+              title={t.swap}>
+              ⇄
             </button>
+            <span className="text-[#d4cfc8] text-sm">→</span>
+            <div className="flex items-center gap-2 min-w-[140px]">
+              <span className="font-mono text-lg font-semibold text-[#3d6b4f]">
+                {result !== null ? formatNumber(result) : "—"}
+              </span>
+              <select value={to} onChange={(e) => setTo(e.target.value)}
+                className="flex-1 bg-[#faf9f7] border border-[#ebe8e3] rounded-lg px-3 py-2 text-sm font-medium text-[#1a1814] outline-none cursor-pointer min-w-0">
+                {unitKeys.map((k) => <option key={k} value={k}>{getUnitLabel(k, locale)}</option>)}
+              </select>
+            </div>
+            {result !== null && (
+              <button onClick={copyResult}
+                className="text-[11px] text-[#a39e96] hover:text-[#3d6b4f] px-2 py-1 rounded transition-colors shrink-0">
+                {copied ? uiText.copied : uiText.copy}
+              </button>
+            )}
           </div>
-          <div className="flex items-baseline gap-3 flex-wrap min-h-[60px]">
-            <span className="font-sans text-[clamp(30px,6vw,52px)] font-bold text-[#3d6b4f] leading-none tracking-tight">
-              {result !== null ? formatNumber(result) : "—"}
-            </span>
-            <span className="font-mono text-lg text-[#9a948a]">{toSym}</span>
-          </div>
-          {result !== null ? (
-            <p className="font-mono text-xs text-[#9a948a] mt-3 bg-white border border-[#e4e0da] inline-block px-3 py-1.5 rounded-lg">
+          {result !== null && (
+            <p className="text-[11px] text-[#a39e96] mt-2 ml-1">
               {inputVal} {fromSym} = {formatNumber(result)} {toSym}
             </p>
-          ) : (
-            <p className="text-xs text-[#9a948a] mt-3">{uiText.invalid}</p>
           )}
         </div>
       </div>
 
-      {/* Popular conversions */}
+      {/* Popular conversions — lightweight chips */}
       {cat.popular.length > 0 && (
-        <div className="mt-8">
-          <p className="font-mono text-[10px] md:text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-4">
-            // {t.popularConversions}
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="mt-6">
+          <p className="text-[10px] text-[#a39e96] uppercase tracking-wider mb-2">{t.popularConversions}</p>
+          <div className="flex flex-wrap gap-2">
             {cat.popular.map((p) => {
               const r  = convert(p.val, p.from, p.to, catSlug);
               const fs = getSymbol(p.from, catSlug);
@@ -247,9 +242,8 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
               return (
                 <button key={`${p.from}-${p.to}`}
                   onClick={() => { setFrom(p.from); setTo(p.to); setInputVal(String(p.val)); }}
-                  className="group bg-white border border-[#e4e0da] rounded-xl p-4 text-left hover:border-[#3d6b4f] hover:bg-[#edf4f0] hover:-translate-y-0.5 transition-all shadow-sm hover:shadow-md">
-                  <p className="font-mono text-sm text-[#1a1814]">{p.val} {fs} →</p>
-                  <p className="text-xs text-[#9a948a] mt-0.5 group-hover:text-[#3d6b4f]">{formatNumber(r)} {ts}</p>
+                  className="px-3 py-1.5 rounded-lg text-xs font-medium bg-[#faf9f7] border border-[#ebe8e3] text-[#6a6460] hover:border-[#3d6b4f] hover:text-[#3d6b4f] transition-colors">
+                  {p.val} {fs} → {formatNumber(r)} {ts}
                 </button>
               );
             })}
