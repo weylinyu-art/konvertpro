@@ -6,7 +6,7 @@ import { CATEGORIES, convert, formatNumber, getSymbol, slugToUnit, unitToSlug } 
 import { FAQHeading, MoreComparisonsHeading, FullConverterLink } from "@/components/PageLabels";
 import { CategoryLabelText, LocaleText, UnitLabelText } from "@/components/LocaleText";
 import { COMPARE_PAIRS } from "@/lib/compare-pairs";
-import { buildPageAlternates } from "@/lib/seo";
+import { buildPageAlternates, buildSocialMetadata } from "@/lib/seo";
 
 const BASE_URL = "https://koverts.com";
 
@@ -35,11 +35,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       `${pair.b} to ${pair.a} conversion`,
     ],
     alternates: buildPageAlternates(`/compare/${pair.slug}`),
-    openGraph: {
-      title: `${pair.title} — Full Comparison & Converter`,
-      description: pair.description,
-      url: pageUrl, type: "website",
-    },
+    ...buildSocialMetadata({
+      path: `/compare/${pair.slug}`,
+      title: `${pair.title} - Difference, Formula, Quick Table`,
+      description: `${pair.description} Get instant side-by-side values and one-click converter links.`,
+      imageAlt: `${pair.title} comparison on Koverts`,
+    }),
   };
 }
 

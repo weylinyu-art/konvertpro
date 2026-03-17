@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { LocaleProvider } from "@/components/LocaleProvider";
 import PWAInit from "@/components/PWAInit";
+import SocialShareBar from "@/components/SocialShareBar";
 import "./globals.css";
 
 const BASE_URL = "https://koverts.com";
@@ -104,8 +105,8 @@ export const metadata: Metadata = {
     "конвертер единиц", "конвертер валют", "перевод единиц", "бесплатный конвертер",
   ],
   openGraph: {
-    title: "Koverts — Free Unit Converter & AI Tools",
-    description: "Instant conversions for every unit. Plus AI tools. Free, no signup.",
+    title: "Koverts — Convert Any Unit in Seconds",
+    description: "From miles to km, pounds to kg, and live currencies to AI calculators. Fast results, zero signup.",
     type: "website", url: BASE_URL,
     locale: "en_US",
     alternateLocale: ["zh_CN", "ru_RU", "es_ES", "fr_FR", "ar_SA"],
@@ -114,8 +115,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Koverts — Free Unit Converter & AI Tools",
-    description: "Instant conversions for every unit. Plus AI tools. Free, no signup.",
+    title: "Koverts — Convert Any Unit in Seconds",
+    description: "Try instant unit, currency, and AI conversions. No signup, no clutter.",
     images: [`${BASE_URL}/og-image.png`],
   },
   alternates: {
@@ -172,6 +173,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-[#f7f5f2] text-[#1a1814] font-sans antialiased min-h-screen">
         <LocaleProvider>
           <PWAInit />
+          <SocialShareBar />
           {children}
         </LocaleProvider>
       </body>

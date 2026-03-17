@@ -6,7 +6,7 @@ import { CATEGORIES, convert, formatNumber, getSymbol, unitToSlug } from "@/lib/
 import ConverterWidget from "@/components/ConverterWidget";
 import { FAQHeading, PopularHeading, AllConversionsHeading } from "@/components/PageLabels";
 import { CategoryLabelText, CategoryTitleText, LocaleText, UnitLabelText } from "@/components/LocaleText";
-import { buildPageAlternates } from "@/lib/seo";
+import { buildPageAlternates, buildSocialMetadata } from "@/lib/seo";
 
 const BASE_URL = "https://koverts.com";
 
@@ -34,11 +34,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ...Object.values(cat.units).slice(0, 4).map(u => u.label.toLowerCase()),
     ],
     alternates: buildPageAlternates(`/${params.category}`),
-    openGraph: {
+    ...buildSocialMetadata({
+      path: `/${params.category}`,
       title: `${cat.title} — Free Online ${cat.label} Converter`,
-      description: cat.description,
-      url: pageUrl, type: "website",
-    },
+      description: `Convert ${cat.label.toLowerCase()} units instantly with clean tables and practical examples.`,
+      imageAlt: `${cat.label} converter on Koverts`,
+    }),
   };
 }
 

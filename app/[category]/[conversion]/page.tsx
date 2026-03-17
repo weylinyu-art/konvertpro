@@ -11,7 +11,7 @@ import { NUMERIC_INDEX_PAIRS, NUMERIC_INDEX_VALUES, isWhitelistedNumericPage } f
 import ConverterWidget from "@/components/ConverterWidget";
 import { FAQHeading, HowToHeading, ConversionTableHeading, RelatedHeading } from "@/components/PageLabels";
 import { CategoryLabelText, LocaleText, UnitLabelText } from "@/components/LocaleText";
-import { buildPageAlternates } from "@/lib/seo";
+import { buildPageAlternates, buildSocialMetadata } from "@/lib/seo";
 
 const BASE_URL = "https://koverts.com";
 const SUPPORTED_LANGUAGES = ["en", "zh-Hans", "es", "fr", "ru", "ar"];
@@ -86,12 +86,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         index: allowIndex,
         follow: true,
       },
-      openGraph: {
-        title: `${prefixValue} ${fromLabel} = ${resultStr} ${toLabel}`,
-        description: `${prefixValue} ${fromSym} = ${resultStr} ${toSym}. Free instant converter.`,
-        url: pageUrl, type: "website",
-        images: [{ url: `${BASE_URL}/og-image.png`, width: 1200, height: 630, alt: `${prefixValue} ${fromLabel} to ${toLabel}` }],
-      },
+      ...buildSocialMetadata({
+        path: `/${params.category}/${params.conversion}`,
+        title: `${prefixValue} ${fromLabel} to ${toLabel} - ${resultStr} ${toSym}`,
+        description: `Need a quick answer? ${prefixValue} ${fromSym} equals ${resultStr} ${toSym}. Includes formula and reference table.`,
+        imageAlt: `${prefixValue} ${fromLabel} to ${toLabel} result`,
+      }),
     };
   }
 
@@ -107,12 +107,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       `how many ${toSym} in ${fromSym}`,
     ],
     alternates: buildPageAlternates(`/${params.category}/${params.conversion}`),
-    openGraph: {
+    ...buildSocialMetadata({
+      path: `/${params.category}/${params.conversion}`,
       title: `${fromLabel} to ${toLabel} Converter`,
-      description: `1 ${fromSym} = ${oneResult} ${toSym}. Free instant converter.`,
-      url: pageUrl, type: "website",
-      images: [{ url: `${BASE_URL}/og-image.png`, width: 1200, height: 630, alt: `${fromLabel} to ${toLabel} converter` }],
-    },
+      description: `Convert ${fromSym} to ${toSym} instantly. Live result, formula, and lookup table in one page.`,
+      imageAlt: `${fromLabel} to ${toLabel} converter`,
+    }),
   };
 }
 

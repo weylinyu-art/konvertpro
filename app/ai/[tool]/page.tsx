@@ -9,7 +9,7 @@ import ApiCostEstimator   from "@/components/ApiCostEstimator";
 import ContextWindow      from "@/components/ContextWindow";
 import ComputeConverter   from "@/components/ComputeConverter";
 import { LocaleText, TransKey } from "@/components/LocaleText";
-import { BASE_URL, buildPageAlternates } from "@/lib/seo";
+import { BASE_URL, buildPageAlternates, buildSocialMetadata } from "@/lib/seo";
 
 interface Props { params: { tool: string } }
 
@@ -59,17 +59,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const tool = AI_TOOLS.find((t) => t.slug === params.tool);
   if (!tool) return {};
   const pagePath = `/ai/${tool.slug}`;
-  const pageUrl = `${BASE_URL}${pagePath}/`;
   return {
     title: tool.title,
     description: tool.metaDescription,
     alternates: buildPageAlternates(pagePath),
-    openGraph: {
-      title: tool.title,
-      description: tool.metaDescription,
-      url: pageUrl,
-      type: "website",
-    },
+    ...buildSocialMetadata({
+      path: pagePath,
+      title: `${tool.title} | Koverts AI Tool`,
+      description: `${tool.metaDescription} Fast, free, and ready to use in your workflow.`,
+      imageAlt: `${tool.title} on Koverts`,
+    }),
   };
 }
 

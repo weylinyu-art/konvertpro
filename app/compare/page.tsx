@@ -3,20 +3,20 @@ import Link from "next/link";
 import { COMPARE_PAIRS } from "@/lib/compare-pairs";
 import { CATEGORIES } from "@/lib/units";
 import { CategoryLabelText, UnitLabelText } from "@/components/LocaleText";
-import { buildPageAlternates } from "@/lib/seo";
+import { buildPageAlternates, buildSocialMetadata } from "@/lib/seo";
 
 const BASE_URL = "https://koverts.com";
 
 export const metadata: Metadata = {
   title: "Unit Comparison Hub | Koverts",
-  description: "Compare popular units side by side with formulas and quick conversion links.",
+  description: "Compare popular units side by side with formulas, quick tables, and instant converter shortcuts.",
   alternates: buildPageAlternates("/compare"),
-  openGraph: {
+  ...buildSocialMetadata({
+    path: "/compare",
     title: "Unit Comparison Hub | Koverts",
-    description: "Compare popular units side by side with formulas and quick conversion links.",
-    url: `${BASE_URL}/compare`,
-    type: "website",
-  },
+    description: "Miles vs kilometers, kg vs lbs, celsius vs fahrenheit - all key comparisons in one place.",
+    imageAlt: "Koverts unit comparison hub",
+  }),
 };
 
 export default function CompareIndexPage() {

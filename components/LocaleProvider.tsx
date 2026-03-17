@@ -9,6 +9,11 @@ const STORAGE_KEY = "koverts-locale";
 
 function detectLocale(): Locale {
   if (typeof window === "undefined") return "en";
+  const pathParts = window.location.pathname.split("/").filter(Boolean);
+  const maybePathLocale = (pathParts[0] === "l" ? pathParts[1] : pathParts[0]) as Locale | undefined;
+  if (maybePathLocale && LOCALES.includes(maybePathLocale)) return maybePathLocale;
+  const queryLocale = new URLSearchParams(window.location.search).get("lang") as Locale | null;
+  if (queryLocale && LOCALES.includes(queryLocale)) return queryLocale;
   const saved = localStorage.getItem(STORAGE_KEY) as Locale | null;
   if (saved && LOCALES.includes(saved)) return saved;
   const lang = navigator.language?.toLowerCase() ?? "en";

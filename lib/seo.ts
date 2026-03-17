@@ -33,3 +33,45 @@ export function buildPageAlternates(path: string): NonNullable<Metadata["alterna
   };
 }
 
+interface SocialMetaInput {
+  path: string;
+  title: string;
+  description: string;
+  imagePath?: string;
+  imageAlt?: string;
+  type?: "website" | "article";
+}
+
+export function buildSocialMetadata(input: SocialMetaInput): Pick<Metadata, "openGraph" | "twitter"> {
+  const normalizedPath = normalizePath(input.path);
+  const pageUrl = normalizedPath === "/" ? `${BASE_URL}/` : `${BASE_URL}${normalizedPath}`;
+  const imagePath = input.imagePath ?? "/og-image.png";
+  const imageUrl = imagePath.startsWith("http")
+    ? imagePath
+    : `${BASE_URL}${imagePath.startsWith("/") ? imagePath : `/${imagePath}`}`;
+
+  return {
+    openGraph: {
+      title: input.title,
+      description: input.description,
+      url: pageUrl,
+      type: input.type ?? "website",
+      siteName: "Koverts",
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: input.imageAlt ?? input.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: input.title,
+      description: input.description,
+      images: [imageUrl],
+    },
+  };
+}
+
