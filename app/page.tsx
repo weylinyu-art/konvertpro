@@ -455,9 +455,9 @@ export default function HomePage() {
           <div className="space-y-2">
             {seoText.faq.map((item, i) => (
               <details key={i} open={i === 0} className="group bg-white border border-[#e8e4df] rounded-lg overflow-hidden">
-                <summary className="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-[#faf8f5] transition-colors">
+                <summary className="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-[#fafaf8] transition-colors">
                   <span className="font-medium text-sm text-[#1a1814] pr-4">{item.q}</span>
-                  <span className="text-[#9a948a] flex-shrink-0 group-open:rotate-180 transition-transform duration-200">▼</span>
+                  <span className="text-[11px] text-[#c5bdb4] flex-shrink-0 group-open:rotate-180 transition-transform duration-200">▾</span>
                 </summary>
                 <div className="px-5 pb-4 pt-3 text-sm text-[#6a6460] leading-relaxed border-t border-[#f0ede8]">
                   {item.a}

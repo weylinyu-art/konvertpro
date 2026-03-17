@@ -82,9 +82,23 @@ html[data-locale="ar"] h1, html[data-locale="ar"] h2, html[data-locale="ar"] h3 
 }
 
 /* Mono fallback for locales with limited JetBrains glyph coverage */
-html:lang(zh-Hans) .font-mono, html:lang(ru) .font-mono, html:lang(ar) .font-mono,
-html[data-locale="zh"] .font-mono, html[data-locale="ru"] .font-mono, html[data-locale="ar"] .font-mono {
+html:lang(ru) .font-mono, html:lang(ar) .font-mono,
+html[data-locale="ru"] .font-mono, html[data-locale="ar"] .font-mono {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/* 中文环境：数字与单位使用 CJK 优化字体，提升阅读舒适度 */
+html:lang(zh-Hans) .font-mono, html:lang(zh-Hans) .font-sans,
+html[lang^="zh"] .font-mono, html[lang^="zh"] .font-sans,
+html[data-locale="zh"] .font-mono, html[data-locale="zh"] .font-sans {
+  font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Noto Sans SC", "Source Han Sans SC", sans-serif;
+}
+/* 中文环境下的数字输入与表格保持等宽对齐 */
+html[data-locale="zh"] input[type="number"],
+html[data-locale="zh"] [data-tabular-nums],
+html:lang(zh-Hans) input[type="number"],
+html:lang(zh-Hans) [data-tabular-nums] {
+  font-variant-numeric: tabular-nums;
 }
 
 /* 极简点阵：极弱，扁平风格 */
