@@ -31,23 +31,29 @@ const HOME_POPULAR_LINKS = [
   { href: "/ai/token-calculator", en: "AI Token Calculator", zh: "AI Token 计算器", es: "Calculadora de tokens IA", fr: "Calculateur de tokens IA", ru: "Калькулятор токенов AI", ar: "حاسبة رموز الذكاء الاصطناعي" },
 ];
 
-// 场景分组：生活常用、专业工具、趣味换算（分类导航枢纽）
+// 场景分组：度量 / 生活 / 专业 / 趣味（细分后每类 4–6 项）
 const CONVERTER_SCENARIOS: Array<{
   key: string;
   title: { en: string; zh: string; es: string; fr: string; ru: string; ar: string };
   items: Array<{ type: "currency" } | { type: "ai" } | { type: "category"; slug: string }>;
 }> = [
   {
-    key: "daily",
-    title: { en: "Daily use", zh: "生活常用", es: "Uso diario", fr: "Usage quotidien", ru: "Повседневное", ar: "الاستخدام اليومي" },
+    key: "measure",
+    title: { en: "Measurements", zh: "度量换算", es: "Medidas", fr: "Mesures", ru: "Измерения", ar: "القياسات" },
     items: [
-      { type: "currency" },
       { type: "category", slug: "length" },
       { type: "category", slug: "weight" },
       { type: "category", slug: "temperature" },
       { type: "category", slug: "volume" },
       { type: "category", slug: "speed" },
       { type: "category", slug: "area" },
+    ],
+  },
+  {
+    key: "life",
+    title: { en: "Daily life", zh: "生活换算", es: "Vida diaria", fr: "Quotidien", ru: "Повседневное", ar: "الحياة اليومية" },
+    items: [
+      { type: "currency" },
       { type: "category", slug: "time" },
       { type: "category", slug: "cooking" },
       { type: "category", slug: "shoe" },
@@ -177,7 +183,7 @@ const GLOBAL_TESTIMONIALS = [
 export default function HomePage() {
   const { locale, setLocale, mounted } = useLocale();
   const t = getTranslations(locale);
-  const [converterTab, setConverterTab] = useState<"daily" | "professional" | "more">("daily");
+  const [converterTab, setConverterTab] = useState<"measure" | "life" | "professional" | "more">("measure");
   const localeText = <T,>(m: { en: T; zh: T; es?: T; fr?: T; ru?: T; ar?: T }) =>
     m[locale as keyof typeof m] ?? m.en;
 
@@ -470,7 +476,7 @@ export default function HomePage() {
             {CONVERTER_SCENARIOS.map((scenario) => (
               <button
                 key={scenario.key}
-                onClick={() => setConverterTab(scenario.key as "daily" | "professional" | "more")}
+                onClick={() => setConverterTab(scenario.key as "measure" | "life" | "professional" | "more")}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                   converterTab === scenario.key
                     ? "bg-[#3d6b4f] text-white"
@@ -542,31 +548,39 @@ export default function HomePage() {
           <p className="text-[#6a6460] leading-relaxed text-sm md:text-base">{seoText.introBody2}</p>
         </section>
 
-        {/* Footer */}
-        <footer className="border-t border-[#e4e0da] py-8 flex items-center justify-between flex-wrap gap-4 mb-4">
-          <span className="font-mono text-xs text-[#9a948a]">{t.copyright}</span>
-          <div className="flex gap-4 flex-wrap">
-            <Link href="/currency" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f] transition-colors">
-              {t.currency}
-            </Link>
-            {orderedCats.map((cat) => (
-              <Link key={cat.slug} href={`/${cat.slug}`}
-                className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f] transition-colors">
-                {getCategoryLabel(cat.slug, t)}
+        {/* Footer — 移除冗余换算入口，强化 Compare / FAQ / Tips */}
+        <footer className="border-t border-[#e4e0da] pt-8 pb-6 mb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+            <div>
+              <p className="font-mono text-xs text-[#9a948a] mb-3">{t.copyright}</p>
+              <p className="text-sm text-[#6a6460] max-w-md leading-relaxed">
+                {localeText({
+                  en: "Fast, clean unit conversion with practical AI utilities. Free to use, no signup required.",
+                  zh: "轻量、实用的单位换算与 AI 工具。免费使用，无需注册。",
+                  es: "Conversión de unidades rápida y limpia con utilidades IA. Gratis, sin registro.",
+                  fr: "Conversion d'unités rapide et propre avec outils IA. Gratuit, sans inscription.",
+                  ru: "Быстрая конвертация единиц с AI-инструментами. Бесплатно, без регистрации.",
+                  ar: "تحويل وحدات سريع ونظيف مع أدوات الذكاء الاصطناعي. مجاني، بدون تسجيل.",
+                })}
+              </p>
+              <Link href="/about" className="inline-block mt-2 text-xs font-medium text-[#3d6b4f] hover:underline">
+                {localeText({ en: "Learn more →", zh: "了解更多 →", es: "Saber más →", fr: "En savoir plus →", ru: "Подробнее →", ar: "اعرف المزيد ←" })}
               </Link>
-            ))}
-            <Link href="/ai" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f] transition-colors">
-              {t.aiTools}
-            </Link>
-            <Link href="/compare" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f] transition-colors">
-              {localeText({ en: "Compare", zh: "对比", es: "Comparar", fr: "Comparer", ru: "Сравнить", ar: "مقارنة" })}
-            </Link>
-            <Link href="/faq" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f] transition-colors">
-              {localeText({ en: "FAQ", zh: "常见问题", es: "FAQ", fr: "FAQ", ru: "FAQ", ar: "الأسئلة الشائعة" })}
-            </Link>
-            <Link href="/conversion-tips" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f] transition-colors">
-              {localeText({ en: "Tips", zh: "小常识", es: "Consejos", fr: "Astuces", ru: "Советы", ar: "نصائح" })}
-            </Link>
+            </div>
+            <div className="flex flex-col gap-2 min-w-[160px]">
+              <p className="font-semibold text-xs text-[#1a1814] mb-1">
+                {localeText({ en: "Quick links", zh: "快捷入口", es: "Enlaces rápidos", fr: "Liens rapides", ru: "Быстрые ссылки", ar: "روابط سريعة" })}
+              </p>
+              <Link href="/compare" className="text-sm text-[#6a6460] hover:text-[#3d6b4f] transition-colors">
+                {localeText({ en: "Compare units", zh: "单位对比", es: "Comparar unidades", fr: "Comparer unités", ru: "Сравнить единицы", ar: "مقارنة الوحدات" })}
+              </Link>
+              <Link href="/faq" className="text-sm text-[#6a6460] hover:text-[#3d6b4f] transition-colors">
+                {localeText({ en: "FAQ", zh: "常见问题", es: "FAQ", fr: "FAQ", ru: "FAQ", ar: "الأسئلة الشائعة" })}
+              </Link>
+              <Link href="/conversion-tips" className="text-sm text-[#6a6460] hover:text-[#3d6b4f] transition-colors">
+                {localeText({ en: "Conversion tips", zh: "换算小常识", es: "Consejos de conversión", fr: "Astuces de conversion", ru: "Советы по конвертации", ar: "نصائح التحويل" })}
+              </Link>
+            </div>
           </div>
         </footer>
 
