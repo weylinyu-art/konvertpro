@@ -9,6 +9,8 @@ export function getCoreUrls() {
   const urls = [
     BASE_URL,
     `${BASE_URL}/about`,
+    `${BASE_URL}/faq`,
+    `${BASE_URL}/conversion-tips`,
     `${BASE_URL}/currency`,
     `${BASE_URL}/compare`,
     ...Object.keys(CATEGORIES).map((slug) => `${BASE_URL}/${slug}`),

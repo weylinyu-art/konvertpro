@@ -331,8 +331,11 @@ export default function HomePage() {
             <Link href="/compare" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f] transition-colors">
               {localeText({ en: "Compare", zh: "对比", es: "Comparar", fr: "Comparer", ru: "Сравнить", ar: "مقارنة" })}
             </Link>
-            <Link href="/about" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f] transition-colors">
-              {localeText({ en: "About", zh: "关于", es: "Acerca de", fr: "À propos", ru: "О проекте", ar: "حول" })}
+            <Link href="/faq" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f] transition-colors">
+              {localeText({ en: "FAQ", zh: "常见问题", es: "FAQ", fr: "FAQ", ru: "FAQ", ar: "الأسئلة الشائعة" })}
+            </Link>
+            <Link href="/conversion-tips" className="font-mono text-xs text-[#9a948a] hover:text-[#3d6b4f] transition-colors">
+              {localeText({ en: "Tips", zh: "小常识", es: "Consejos", fr: "Astuces", ru: "Советы", ar: "نصائح" })}
             </Link>
           </div>
         </footer>
