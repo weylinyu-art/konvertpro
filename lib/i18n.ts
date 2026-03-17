@@ -82,6 +82,9 @@ export interface Translations {
   popularConversionsHeading: string;
   allConversionsHeading: string;
   relatedConversionsHeading: string;
+  compare: string;
+  comparePageTitle: string;
+  comparePageSubtitle: string;
   compareHeading: string;
   formulaHeading: string;
   moreComparisons: string;
@@ -142,6 +145,9 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     popularConversionsHeading: "Popular conversions",
     allConversionsHeading: "All conversions",
     relatedConversionsHeading: "Related conversions",
+    compare: "Compare",
+    comparePageTitle: "Unit Comparison Hub",
+    comparePageSubtitle: "Explore high-intent unit comparisons with formulas, quick tables, and direct converter links.",
     compareHeading: "Side-by-side comparison table",
     formulaHeading: "Formula",
     moreComparisons: "More comparisons",
@@ -199,6 +205,9 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     popularConversionsHeading: "常用换算",
     allConversionsHeading: "所有换算",
     relatedConversionsHeading: "相关换算",
+    compare: "对比",
+    comparePageTitle: "单位对比中心",
+    comparePageSubtitle: "一览热门单位差异、换算公式、对照表及直达换算器链接。",
     compareHeading: "对比表格",
     formulaHeading: "计算公式",
     moreComparisons: "更多对比",
@@ -256,6 +265,9 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     popularConversionsHeading: "Conversiones populares",
     allConversionsHeading: "Todas las conversiones",
     relatedConversionsHeading: "Conversiones relacionadas",
+    compare: "Comparar",
+    comparePageTitle: "Centro de comparación de unidades",
+    comparePageSubtitle: "Explora comparaciones con fórmulas, tablas rápidas y enlaces directos al conversor.",
     compareHeading: "Tabla comparativa",
     formulaHeading: "Fórmula",
     moreComparisons: "Más comparaciones",
@@ -313,6 +325,9 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     popularConversionsHeading: "Conversions populaires",
     allConversionsHeading: "Toutes les conversions",
     relatedConversionsHeading: "Conversions associées",
+    compare: "Comparer",
+    comparePageTitle: "Centre de comparaison d'unités",
+    comparePageSubtitle: "Explorez les comparaisons avec formules, tableaux rapides et liens direct au convertisseur.",
     compareHeading: "Tableau comparatif",
     formulaHeading: "Formule",
     moreComparisons: "Plus de comparaisons",
@@ -370,6 +385,9 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     popularConversionsHeading: "Популярные конвертации",
     allConversionsHeading: "Все конвертации",
     relatedConversionsHeading: "Похожие конвертации",
+    compare: "Сравнение",
+    comparePageTitle: "Центр сравнений единиц",
+    comparePageSubtitle: "Популярные сравнения с формулами, таблицами и ссылками на конвертер.",
     compareHeading: "Сравнительная таблица",
     formulaHeading: "Формула",
     moreComparisons: "Больше сравнений",
@@ -427,6 +445,9 @@ export const TRANSLATIONS: Record<Locale, Translations> = {
     popularConversionsHeading: "التحويلات الشائعة",
     allConversionsHeading: "جميع التحويلات",
     relatedConversionsHeading: "تحويلات ذات صلة",
+    compare: "مقارنة",
+    comparePageTitle: "مركز مقارنة الوحدات",
+    comparePageSubtitle: "استكشف مقارنات شائعة مع الصيغ والجداول والروابط المباشرة للمحوّل.",
     compareHeading: "جدول مقارنة",
     formulaHeading: "الصيغة",
     moreComparisons: "مزيد من المقارنات",
