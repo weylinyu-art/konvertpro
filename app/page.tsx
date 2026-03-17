@@ -370,15 +370,15 @@ export default function HomePage() {
         <ConverterWidget />
 
         <section className="mt-8 mb-10 grid grid-cols-1 md:grid-cols-3 gap-3">
-          <Link href="/conversion-tips" className="group bg-white border border-[#e4e0da] rounded-xl px-4 py-3 shadow-sm hover:border-[#3d6b4f] transition-all">
+          <Link href="/conversion-tips" className="group bg-white border border-[#e8e4df] rounded-lg px-4 py-3 hover:border-[#3d6b4f] transition-colors">
             <p className="text-xs text-[#3d6b4f] mb-1">📘 {localeText({ en: "Tips", zh: "Tips", es: "Tips", fr: "Astuces", ru: "Советы", ar: "نصائح" })}</p>
             <p className="text-sm font-medium text-[#1a1814] group-hover:text-[#3d6b4f]">{localeText({ en: "Practical guides", zh: "实用指南", es: "Guías prácticas", fr: "Guides pratiques", ru: "Практические гайды", ar: "أدلة عملية" })}</p>
           </Link>
-          <Link href="/ai" className="group bg-white border border-[#e4e0da] rounded-xl px-4 py-3 shadow-sm hover:border-[#3d6b4f] transition-all">
+          <Link href="/ai" className="group bg-white border border-[#e8e4df] rounded-lg px-4 py-3 hover:border-[#3d6b4f] transition-colors">
             <p className="text-xs text-[#3d6b4f] mb-1">🤖 {t.aiTools}</p>
             <p className="text-sm font-medium text-[#1a1814] group-hover:text-[#3d6b4f]">{localeText({ en: "Token / Cost / Context", zh: "Token / 成本 / 上下文", es: "Token / Coste / Contexto", fr: "Token / Coût / Contexte", ru: "Токены / Стоимость / Контекст", ar: "الرموز / التكلفة / السياق" })}</p>
           </Link>
-          <Link href="/compare" className="group bg-white border border-[#e4e0da] rounded-xl px-4 py-3 shadow-sm hover:border-[#3d6b4f] transition-all">
+          <Link href="/compare" className="group bg-white border border-[#e8e4df] rounded-lg px-4 py-3 hover:border-[#3d6b4f] transition-colors">
             <p className="text-xs text-[#3d6b4f] mb-1">⚖️ {localeText({ en: "Compare", zh: "对比", es: "Comparar", fr: "Comparer", ru: "Сравнить", ar: "مقارنة" })}</p>
             <p className="text-sm font-medium text-[#1a1814] group-hover:text-[#3d6b4f]">{localeText({ en: "Popular pairs", zh: "热门单位对比", es: "Pares populares", fr: "Paires populaires", ru: "Популярные пары", ar: "مقارنات شائعة" })}</p>
           </Link>
@@ -405,7 +405,7 @@ export default function HomePage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {tipsPreview.map((item) => (
-              <Link key={item.slug} href={`/conversion-tips/${item.slug}`} className="group bg-white border border-[#e4e0da] rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+              <Link key={item.slug} href={`/conversion-tips/${item.slug}`} className="group bg-white border border-[#e8e4df] rounded-lg p-5 hover:border-[#3d6b4f] transition-colors">
                 <p className="text-xs text-[#9a948a] mb-1">{localeText(item.moduleTitle)}</p>
                 <p className="font-medium text-[#1a1814] group-hover:text-[#3d6b4f] transition-colors mb-2">{localeText(item.title)}</p>
                 <p className="text-sm text-[#6a6460] leading-relaxed">{localeText(item.summary)}</p>
@@ -421,7 +421,7 @@ export default function HomePage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {GLOBAL_TESTIMONIALS.slice(0, 4).map((item) => (
-              <article key={`${item.name}-${item.country.en}`} className="bg-white border border-[#e4e0da] rounded-2xl p-5 shadow-sm">
+              <article key={`${item.name}-${item.country.en}`} className="bg-white border border-[#e8e4df] rounded-lg p-5">
                 <div className="flex items-center justify-between mb-2">
                   <p className="text-sm font-semibold text-[#1a1814]">{item.name}</p>
                   <span className="text-[11px] text-[#8f8880]">{localeText(item.country)}</span>
@@ -441,7 +441,7 @@ export default function HomePage() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="bg-white border border-[#e4e0da] rounded-full px-3 py-1.5 text-xs text-[#1a1814] hover:border-[#3d6b4f] hover:text-[#3d6b4f] transition-all"
+                className="bg-white border border-[#e8e4df] rounded-full px-3 py-1.5 text-xs text-[#1a1814] hover:border-[#3d6b4f] hover:text-[#3d6b4f] transition-colors"
               >
                 {localeText({ en: item.en, zh: item.zh, es: item.es, fr: item.fr, ru: item.ru, ar: item.ar })}
               </Link>
@@ -454,7 +454,7 @@ export default function HomePage() {
           <h2 className="font-sans font-bold text-xl md:text-2xl mb-4">{seoText.faqTitle}</h2>
           <div className="space-y-2">
             {seoText.faq.map((item, i) => (
-              <details key={i} open={i === 0} className="group bg-white border border-[#e4e0da] rounded-xl overflow-hidden shadow-sm">
+              <details key={i} open={i === 0} className="group bg-white border border-[#e8e4df] rounded-lg overflow-hidden">
                 <summary className="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-[#faf8f5] transition-colors">
                   <span className="font-medium text-sm text-[#1a1814] pr-4">{item.q}</span>
                   <span className="text-[#9a948a] flex-shrink-0 group-open:rotate-180 transition-transform duration-200">▼</span>
@@ -480,7 +480,7 @@ export default function HomePage() {
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                   converterTab === scenario.key
                     ? "bg-[#3d6b4f] text-white"
-                    : "bg-white border border-[#e4e0da] text-[#6a6460] hover:border-[#3d6b4f] hover:text-[#3d6b4f]"
+                    : "bg-white border border-[#e8e4df] text-[#6a6460] hover:border-[#3d6b4f] hover:text-[#3d6b4f]"
                 }`}
               >
                 {localeText(scenario.title)}
@@ -491,7 +491,7 @@ export default function HomePage() {
             {(CONVERTER_SCENARIOS.find((s) => s.key === converterTab)?.items ?? []).map((item) => {
               if (item.type === "currency") {
                 return (
-                  <Link key="currency" href="/currency" className="group bg-white border border-[#e4e0da] rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all flex items-center gap-3">
+                  <Link key="currency" href="/currency" className="group bg-white border border-[#e8e4df] rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all flex items-center gap-3">
                     <span className="text-2xl">💱</span>
                     <div>
                       <span className="font-semibold text-[#1a1814] block">{t.currency}</span>
@@ -502,7 +502,7 @@ export default function HomePage() {
               }
               if (item.type === "ai") {
                 return (
-                  <Link key="ai" href="/ai" className="group bg-[#edf4f0] border border-[#3d6b4f]/30 rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#3d6b4f] transition-all flex items-center gap-3">
+                  <Link key="ai" href="/ai" className="group bg-[#f8faf8] border border-[#3d6b4f]/20 rounded-lg p-4 hover:border-[#3d6b4f] hover:bg-[#3d6b4f] transition-colors flex items-center gap-3">
                     <span className="text-2xl">🤖</span>
                     <div>
                       <span className="font-semibold text-[#3d6b4f] block group-hover:text-white">{t.aiTools}</span>
@@ -518,7 +518,7 @@ export default function HomePage() {
                 label: `${getUnitLabel(p.from, locale)} → ${getUnitLabel(p.to, locale)}`,
               }));
               return (
-                <div key={cat.slug} className="bg-white border border-[#e4e0da] rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all">
+                <div key={cat.slug} className="bg-white border border-[#e8e4df] rounded-lg p-4 hover:border-[#3d6b4f] hover:bg-[#f8faf8] transition-colors">
                   <Link href={`/${cat.slug}`} className="flex items-center gap-3 mb-2 block">
                     <span className="text-2xl">{cat.icon}</span>
                     <div className="min-w-0">
@@ -542,7 +542,7 @@ export default function HomePage() {
         </section>
 
         {/* Crawlable SEO content */}
-        <section className="mb-12 bg-white border border-[#e4e0da] rounded-2xl p-6 md:p-8 shadow-sm">
+        <section className="mb-12 bg-white border border-[#e8e4df] rounded-lg p-6 md:p-8">
           <h2 className="font-sans font-bold text-2xl md:text-3xl mb-4">{seoText.introTitle}</h2>
           <p className="text-[#6a6460] leading-relaxed text-sm md:text-base mb-3">{seoText.introBody}</p>
           <p className="text-[#6a6460] leading-relaxed text-sm md:text-base">{seoText.introBody2}</p>

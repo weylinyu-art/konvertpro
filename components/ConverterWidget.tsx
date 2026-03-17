@@ -97,7 +97,7 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
               <button key={c.slug} onClick={() => switchCat(c.slug)}
                 className={`flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-full text-xs md:text-[13px] font-medium border transition-all ${
                   catSlug === c.slug
-                    ? "bg-[#3d6b4f] border-[#3d6b4f] text-white shadow-md shadow-[#3d6b4f]/20"
+                    ? "bg-[#3d6b4f] border-[#3d6b4f] text-white "
                     : "bg-white border-[#e4e0da] text-[#9a948a] hover:border-[#3d6b4f] hover:text-[#3d6b4f] hover:bg-[#edf4f0]"
                 }`}>
                 <span className="text-sm shrink-0">{c.icon}</span>
@@ -105,12 +105,12 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
               </button>
             ))}
             <Link href="/currency"
-              className="flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-full text-xs md:text-[13px] font-medium border bg-white border-[#e4e0da] text-[#9a948a] hover:border-[#3d6b4f] hover:text-[#3d6b4f] hover:bg-[#edf4f0] transition-all">
+              className="flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-lg text-xs md:text-[13px] font-medium border bg-white border-[#e8e4df] text-[#6a6460] hover:border-[#3d6b4f] hover:text-[#3d6b4f] hover:bg-[#f8f7f5] transition-colors">
               <span className="text-sm shrink-0">💱</span>
               <span>{t.currency}</span>
             </Link>
             <Link href="/ai"
-              className="flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-full text-xs md:text-[13px] font-medium border bg-[#edf4f0] border-[#3d6b4f]/40 text-[#3d6b4f] hover:bg-[#3d6b4f] hover:text-white transition-all">
+              className="flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-lg text-xs md:text-[13px] font-medium border bg-[#f5f8f6] border-[#3d6b4f]/30 text-[#3d6b4f] hover:bg-[#3d6b4f] hover:text-white hover:border-[#3d6b4f] transition-colors">
               <span className="text-sm shrink-0">🤖</span>
               <span>{t.aiTools}</span>
             </Link>
@@ -118,7 +118,7 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
               <button key={c.slug} onClick={() => switchCat(c.slug)}
                 className={`flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-full text-xs md:text-[13px] font-medium border transition-all ${
                   catSlug === c.slug
-                    ? "bg-[#3d6b4f] border-[#3d6b4f] text-white shadow-md shadow-[#3d6b4f]/20"
+                    ? "bg-[#3d6b4f] border-[#3d6b4f] text-white "
                     : "bg-white border-[#e4e0da] text-[#9a948a] hover:border-[#3d6b4f] hover:text-[#3d6b4f] hover:bg-[#edf4f0]"
                 }`}>
                 <span className="text-sm shrink-0">{c.icon}</span>
@@ -126,7 +126,7 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
               </button>
             ))}
             <button onClick={() => setMoreExpanded(!moreExpanded)}
-              className="flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-full text-xs md:text-[13px] font-medium border border-[#e4e0da] bg-[#f8f6f2] text-[#9a948a] hover:border-[#3d6b4f] hover:text-[#3d6b4f] transition-all">
+              className="flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-lg text-xs md:text-[13px] font-medium border border-[#e8e4df] bg-[#f8f7f5] text-[#6a6460] hover:border-[#3d6b4f] hover:text-[#3d6b4f] transition-colors">
               {moreExpanded ? t.showLess : t.moreCategories}
             </button>
           </div>
@@ -134,7 +134,7 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
       )}
 
       {/* Main card — substantial layout, at least as weighty as ArticleMiniConverter */}
-      <div className="bg-white border border-[#e4e0da] rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
+      <div className="bg-white border border-[#e8e4df] rounded-xl overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between px-4 md:px-6 py-3 border-b border-[#e8e4df]">
           <span className={`font-mono text-[11px] text-[#9a948a] tracking-wider ${locale === "zh" ? "" : "uppercase"}`}>
@@ -242,7 +242,7 @@ export default function ConverterWidget({ defaultCategory = "length", defaultFro
               return (
                 <button key={`${p.from}-${p.to}`}
                   onClick={() => { setFrom(p.from); setTo(p.to); setInputVal(String(p.val)); }}
-                  className="group bg-white border border-[#e4e0da] rounded-xl p-4 text-left hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5">
+                  className="group bg-white border border-[#e4e0da] rounded-xl p-4 text-left hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all hover:border-[#3d6b4f]/60 transition-colors">
                   <p className="font-mono text-sm text-[#1a1814]">{p.val} {fs} →</p>
                   <p className="text-xs text-[#9a948a] mt-0.5 group-hover:text-[#3d6b4f]">{formatNumber(r)} {ts}</p>
                 </button>

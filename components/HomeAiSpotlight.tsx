@@ -80,7 +80,7 @@ export default function HomeAiSpotlight() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        <article className="bg-white border border-[#e4e0da] rounded-2xl p-4 shadow-sm">
+        <article className="bg-white border border-[#e8e4df] rounded-lg p-4">
           <p className="text-sm font-semibold text-[#1a1814] mb-2">
             🔤 {localeText({ en: "Token Calculator", zh: "Token 估算", es: "Tokens", fr: "Tokens", ru: "Токены", ar: "الرموز" })}
           </p>
@@ -113,7 +113,7 @@ export default function HomeAiSpotlight() {
           </Link>
         </article>
 
-        <article className="bg-white border border-[#e4e0da] rounded-2xl p-4 shadow-sm">
+        <article className="bg-white border border-[#e8e4df] rounded-lg p-4">
           <p className="text-sm font-semibold text-[#1a1814] mb-2">
             💰 {localeText({ en: "API Cost", zh: "API 成本", es: "Coste API", fr: "Coût API", ru: "Стоимость API", ar: "تكلفة API" })}
           </p>
@@ -146,7 +146,7 @@ export default function HomeAiSpotlight() {
           </Link>
         </article>
 
-        <article className="bg-white border border-[#e4e0da] rounded-2xl p-4 shadow-sm">
+        <article className="bg-white border border-[#e8e4df] rounded-lg p-4">
           <p className="text-sm font-semibold text-[#1a1814] mb-2">
             📄 {localeText({ en: "Context Window", zh: "上下文窗口", es: "Contexto", fr: "Contexte", ru: "Контекст", ar: "نافذة السياق" })}
           </p>

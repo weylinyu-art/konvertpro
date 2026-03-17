@@ -87,14 +87,14 @@ html[data-locale="zh"] .font-mono, html[data-locale="ru"] .font-mono, html[data-
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
-/* Dot grid */
+/* 极简点阵：极弱，扁平风格 */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background-image: radial-gradient(circle, #c5bdb4 1px, transparent 1px);
-  background-size: 28px 28px;
-  opacity: 0.3;
+  background-image: radial-gradient(circle, #d8d4cf 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.12;
   pointer-events: none;
   z-index: 0;
   contain: strict;
