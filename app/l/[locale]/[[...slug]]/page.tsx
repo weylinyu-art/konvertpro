@@ -8,6 +8,7 @@ import { CATEGORIES, formatNumber, convert, slugToUnit } from "@/lib/units";
 import { AI_TOOLS } from "@/lib/ai-units";
 import { COMPARE_PAIRS } from "@/lib/compare-pairs";
 import { getLocalizedSocialCopy } from "@/lib/social-i18n";
+import { getTipArticleBySlug } from "@/lib/conversion-tips-data";
 
 interface Props {
   params: { locale: string; slug?: string[] };
@@ -83,6 +84,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       compareFromLabel: pair ? getUnitLabel(pair.a, locale) : undefined,
       compareToLabel: pair ? getUnitLabel(pair.b, locale) : undefined,
     });
+  } else if (path === "/conversion-tips") {
+    social = {
+      title: locale === "zh" ? "单位转换基础与实用技巧 | Koverts" : "Unit Conversion Basics & Practical Tips | Koverts",
+      description:
+        locale === "zh"
+          ? "覆盖旅行、购物、工程协作中的高频换算常识与实操技巧。"
+          : "Practical conversion knowledge for travel, shopping, and technical workflows.",
+    };
+  } else if (segments[0] === "conversion-tips" && segments[1]) {
+    const article = getTipArticleBySlug(segments[1]);
+    if (article) {
+      social = {
+        title: locale === "zh" ? `${article.title.zh} | Koverts` : `${article.title.en} | Koverts`,
+        description: locale === "zh" ? article.summary.zh : article.summary.en,
+      };
+    }
   } else if (segments[0] && segments.length === 1 && CATEGORIES[segments[0]]) {
     social = getLocalizedSocialCopy(locale, { kind: "category", categoryLabel: getCategoryTitle(segments[0], locale) });
   } else if (segments[0] && segments[1] && CATEGORIES[segments[0]]) {

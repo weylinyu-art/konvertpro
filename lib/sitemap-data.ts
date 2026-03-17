@@ -2,6 +2,7 @@ import { CATEGORIES, getAllConversionPaths } from "@/lib/units";
 import { AI_TOOLS } from "@/lib/ai-units";
 import { NUMERIC_INDEX_PAIRS, NUMERIC_INDEX_VALUES } from "@/lib/indexing";
 import { COMPARE_PAIRS } from "@/lib/compare-pairs";
+import { getAllFlatTipArticles } from "@/lib/conversion-tips-data";
 
 export const BASE_URL = "https://koverts.com";
 
@@ -11,6 +12,7 @@ export function getCoreUrls() {
     `${BASE_URL}/about`,
     `${BASE_URL}/faq`,
     `${BASE_URL}/conversion-tips`,
+    ...getAllFlatTipArticles().map((a) => `${BASE_URL}/conversion-tips/${a.slug}`),
     `${BASE_URL}/currency`,
     `${BASE_URL}/compare`,
     ...Object.keys(CATEGORIES).map((slug) => `${BASE_URL}/${slug}`),
