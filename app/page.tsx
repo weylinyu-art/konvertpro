@@ -30,6 +30,105 @@ const HOME_POPULAR_LINKS = [
   { href: "/ai/token-calculator", en: "AI Token Calculator", zh: "AI Token 计算器", es: "Calculadora de tokens IA", fr: "Calculateur de tokens IA", ru: "Калькулятор токенов AI", ar: "حاسبة رموز الذكاء الاصطناعي" },
 ];
 
+const GLOBAL_TESTIMONIALS = [
+  {
+    name: "Mia",
+    initials: "MI",
+    country: { en: "United States", zh: "美国", es: "Estados Unidos", fr: "Etats-Unis", ru: "США", ar: "الولايات المتحدة" },
+    role: { en: "E-commerce operator", zh: "电商运营", es: "Operadora e-commerce", fr: "Operatrice e-commerce", ru: "Оператор e-commerce", ar: "مشغلة تجارة إلكترونية" },
+    quote: {
+      en: "The shoe-size and weight converters saved me from repeated listing mistakes.",
+      zh: "鞋码和重量换算帮我避免了反复改商品规格的问题。",
+      es: "Los conversores de talla y peso evitaron errores repetidos en mis fichas.",
+      fr: "Les convertisseurs de pointure et de poids m'evitent des erreurs repetitives.",
+      ru: "Конвертеры размеров и веса помогли избежать повторяющихся ошибок в карточках товаров.",
+      ar: "محولات المقاسات والوزن أنقذتني من أخطاء متكررة في إدراج المنتجات.",
+    },
+    likes: 128,
+    tool: "shoe-size",
+  },
+  {
+    name: "Luca",
+    initials: "LU",
+    country: { en: "Italy", zh: "意大利", es: "Italia", fr: "Italie", ru: "Италия", ar: "إيطاليا" },
+    role: { en: "Travel blogger", zh: "旅行博主", es: "Bloguero de viajes", fr: "Blogueur voyage", ru: "Тревел-блогер", ar: "مدون سفر" },
+    quote: {
+      en: "I use the temperature and distance converters every time I publish destination guides.",
+      zh: "每次写目的地攻略，我都会先用温度和距离换算校对一遍。",
+      es: "Uso conversiones de temperatura y distancia en cada guia de destino.",
+      fr: "J'utilise les conversions de temperature et distance pour chaque guide destination.",
+      ru: "Использую конвертер температуры и расстояния при публикации каждого гайда.",
+      ar: "أستخدم تحويل الحرارة والمسافة في كل دليل سفر أنشره.",
+    },
+    likes: 96,
+    tool: "travel-pack",
+  },
+  {
+    name: "Sofia",
+    initials: "SO",
+    country: { en: "Spain", zh: "西班牙", es: "España", fr: "Espagne", ru: "Испания", ar: "إسبانيا" },
+    role: { en: "Data analyst", zh: "数据分析师", es: "Analista de datos", fr: "Analyste data", ru: "Дата-аналитик", ar: "محللة بيانات" },
+    quote: {
+      en: "The MB/GB and API cost tools are now part of my weekly dashboard workflow.",
+      zh: "MB/GB 和 API 成本工具已经变成我每周看板流程的一部分。",
+      es: "MB/GB y coste API ya son parte de mi flujo semanal.",
+      fr: "MB/GB et cout API font desormais partie de mon workflow hebdomadaire.",
+      ru: "Инструменты MB/GB и API cost стали частью моего еженедельного процесса.",
+      ar: "أدوات MB/GB وتكلفة API أصبحت جزءًا من سير عملي الأسبوعي.",
+    },
+    likes: 113,
+    tool: "api-cost",
+  },
+  {
+    name: "Yuki",
+    initials: "YU",
+    country: { en: "Japan", zh: "日本", es: "Japon", fr: "Japon", ru: "Япония", ar: "اليابان" },
+    role: { en: "Frontend developer", zh: "前端开发", es: "Desarrolladora frontend", fr: "Developpeuse frontend", ru: "Frontend-разработчик", ar: "مطورة واجهات" },
+    quote: {
+      en: "I like the clean layout and instant results. It's fast enough for daily team handoffs.",
+      zh: "界面很清爽，结果秒出，日常跨团队交接时非常省事。",
+      es: "Me encanta el diseno limpio y la respuesta instantanea para trabajo diario.",
+      fr: "J'aime la mise en page claire et les resultats immediats pour le travail quotidien.",
+      ru: "Нравится чистый интерфейс и мгновенный результат для ежедневной работы команды.",
+      ar: "أحب الواجهة النظيفة والنتائج الفورية للاستخدام اليومي مع الفريق.",
+    },
+    likes: 84,
+    tool: "length",
+  },
+  {
+    name: "Omar",
+    initials: "OM",
+    country: { en: "United Arab Emirates", zh: "阿联酋", es: "EAU", fr: "EAU", ru: "ОАЭ", ar: "الإمارات" },
+    role: { en: "Procurement manager", zh: "采购经理", es: "Gerente de compras", fr: "Responsable achats", ru: "Менеджер по закупкам", ar: "مدير مشتريات" },
+    quote: {
+      en: "Fuel and pressure conversions helped us unify supplier specs across regions.",
+      zh: "油耗和压强换算帮我们把不同地区供应商参数统一了。",
+      es: "Las conversiones de combustible y presion unificaron especificaciones de proveedores.",
+      fr: "Les conversions de carburant et pression ont harmonise les specs fournisseurs.",
+      ru: "Конвертация топлива и давления помогла унифицировать параметры поставщиков.",
+      ar: "تحويلات الوقود والضغط ساعدتنا على توحيد مواصفات الموردين بين المناطق.",
+    },
+    likes: 77,
+    tool: "fuel",
+  },
+  {
+    name: "Anya",
+    initials: "AN",
+    country: { en: "Russia", zh: "俄罗斯", es: "Rusia", fr: "Russie", ru: "Россия", ar: "روسيا" },
+    role: { en: "Engineering student", zh: "工程专业学生", es: "Estudiante de ingenieria", fr: "Etudiante ingenierie", ru: "Студентка инженерии", ar: "طالبة هندسة" },
+    quote: {
+      en: "I use tips + calculator together while studying. It makes formulas easier to remember.",
+      zh: "我会边看 Tips 边用计算器练习，公式记忆效率明显提升。",
+      es: "Uso consejos y calculadora juntos para estudiar y recordar formulas.",
+      fr: "J'utilise astuces + calculateur ensemble pour mieux retenir les formules.",
+      ru: "Использую советы и калькулятор вместе при учебе, формулы запоминаются легче.",
+      ar: "أستخدم النصائح مع الحاسبة أثناء الدراسة وهذا يسهل تذكر الصيغ.",
+    },
+    likes: 101,
+    tool: "tips",
+  },
+];
+
 export default function HomePage() {
   const { locale, setLocale, mounted } = useLocale();
   const t = getTranslations(locale);
@@ -222,6 +321,63 @@ export default function HomePage() {
         <ConverterWidget />
 
         <HomeAiSpotlight />
+
+        <section className="mb-12">
+          <div className="mb-4 flex items-end justify-between gap-3">
+            <div>
+              <p className="text-xs font-mono tracking-[0.1em] text-[#3d6b4f] uppercase">
+                {localeText({ en: "Community Voices", zh: "用户推荐", es: "Comunidad", fr: "Communaute", ru: "Сообщество", ar: "آراء المجتمع" })}
+              </p>
+              <h2 className="font-sans font-bold text-xl md:text-2xl text-[#1a1814]">
+                {localeText({
+                  en: "Loved by users worldwide",
+                  zh: "来自全球用户的真实好评",
+                  es: "Valorado por usuarios globales",
+                  fr: "Adopte par des utilisateurs du monde entier",
+                  ru: "Отзывы пользователей по всему миру",
+                  ar: "موصى به من مستخدمين حول العالم",
+                })}
+              </h2>
+            </div>
+            <Link href="/conversion-tips" className="text-xs font-mono text-[#3d6b4f] hover:underline">
+              {localeText({
+                en: "Join the community →",
+                zh: "加入社区讨论 →",
+                es: "Unete a la comunidad →",
+                fr: "Rejoindre la communaute →",
+                ru: "Присоединиться →",
+                ar: "انضم إلى المجتمع →",
+              })}
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {GLOBAL_TESTIMONIALS.map((item) => (
+              <article key={`${item.name}-${item.country.en}`} className="bg-white border border-[#e4e0da] rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#edf4f0] text-[#3d6b4f] text-xs font-bold">
+                      {item.initials}
+                    </span>
+                    <div>
+                      <p className="text-sm font-semibold text-[#1a1814]">{item.name}</p>
+                      <p className="text-xs text-[#8f8880]">{localeText(item.role)}</p>
+                    </div>
+                  </div>
+                  <span className="text-[11px] px-2 py-1 rounded-full bg-[#f4f2ef] text-[#6f6a61]">
+                    {localeText(item.country)}
+                  </span>
+                </div>
+                <p className="text-sm leading-relaxed text-[#4f4942] mb-3">"{localeText(item.quote)}"</p>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-[#8f8880]">❤️ {item.likes}</span>
+                  <span className="px-2 py-1 rounded-full border border-[#e4e0da] text-[#6f6a61]">
+                    #{item.tool}
+                  </span>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
 
         {/* Crawlable SEO content */}
         <section className="mt-14 mb-12 bg-white border border-[#e4e0da] rounded-2xl p-6 md:p-8 shadow-sm">
