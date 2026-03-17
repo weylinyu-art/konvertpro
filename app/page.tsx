@@ -9,6 +9,7 @@ import HomeAiSpotlight from "@/components/HomeAiSpotlight";
 import { useLocale } from "@/components/LocaleProvider";
 import { getTranslations, getCategoryLabel } from "@/lib/i18n";
 import LocaleSwitcher from "@/components/LocaleSwitcher";
+import { getAllDetailedTipArticles } from "@/lib/conversion-tips-data";
 
 const BASE_URL = "https://koverts.com";
 
@@ -132,13 +133,17 @@ const GLOBAL_TESTIMONIALS = [
 export default function HomePage() {
   const { locale, setLocale, mounted } = useLocale();
   const t = getTranslations(locale);
-  const [mobileAllExpanded, setMobileAllExpanded] = useState(false);
-  const localeText = <T,>(m: { en: T; zh: T; es: T; fr: T; ru: T; ar: T }) => m[locale];
+  const [allExpanded, setAllExpanded] = useState(false);
+  const localeText = <T,>(m: { en: T; zh: T; es?: T; fr?: T; ru?: T; ar?: T }) =>
+    m[locale as keyof typeof m] ?? m.en;
 
   const orderedCats = [
     ...CATEGORY_ORDER.filter((s) => CATEGORIES[s]).map((s) => CATEGORIES[s]),
     ...Object.values(CATEGORIES).filter((c) => !CATEGORY_ORDER.includes(c.slug)),
   ];
+  const topCats = orderedCats.slice(0, 8);
+  const shownCats = allExpanded ? orderedCats : topCats;
+  const tipsPreview = getAllDetailedTipArticles().slice(0, 3);
 
   const seoText = {
     introTitle: localeText({
@@ -320,7 +325,79 @@ export default function HomePage() {
 
         <ConverterWidget />
 
+        <section className="mt-10 mb-12 grid grid-cols-1 md:grid-cols-3 gap-3">
+          <Link href="/conversion-tips" className="group bg-white border border-[#e4e0da] rounded-2xl p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+            <p className="text-xs font-mono text-[#3d6b4f] mb-2">📘 {localeText({ en: "Tips", zh: "Tips", es: "Tips", fr: "Astuces", ru: "Советы", ar: "نصائح" })}</p>
+            <h2 className="font-semibold text-[#1a1814] group-hover:text-[#3d6b4f] transition-colors mb-1">
+              {localeText({
+                en: "Read practical conversion guides",
+                zh: "阅读实用换算指南",
+                es: "Guías prácticas de conversión",
+                fr: "Guides pratiques de conversion",
+                ru: "Практические гайды",
+                ar: "أدلة تحويل عملية",
+              })}
+            </h2>
+            <p className="text-xs text-[#8f8880]">{localeText({ en: "Structured by modules and scenarios", zh: "按专题和场景组织内容", es: "Contenido por módulos", fr: "Contenu par modules", ru: "Материалы по модулям", ar: "محتوى منظم حسب الوحدات" })}</p>
+          </Link>
+          <Link href="/ai" className="group bg-white border border-[#e4e0da] rounded-2xl p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+            <p className="text-xs font-mono text-[#3d6b4f] mb-2">🤖 {t.aiTools}</p>
+            <h2 className="font-semibold text-[#1a1814] group-hover:text-[#3d6b4f] transition-colors mb-1">
+              {localeText({
+                en: "Try lightweight AI calculators",
+                zh: "使用 AI 轻量计算器",
+                es: "Prueba calculadoras IA ligeras",
+                fr: "Essayez les calculateurs IA",
+                ru: "Попробуйте AI-калькуляторы",
+                ar: "جرّب حاسبات الذكاء الاصطناعي",
+              })}
+            </h2>
+            <p className="text-xs text-[#8f8880]">{localeText({ en: "Token, cost, context and more", zh: "覆盖 Token、成本、上下文等", es: "Tokens, costes y contexto", fr: "Tokens, coûts et contexte", ru: "Токены, стоимость, контекст", ar: "الرموز والتكلفة والسياق" })}</p>
+          </Link>
+          <Link href="/compare" className="group bg-white border border-[#e4e0da] rounded-2xl p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+            <p className="text-xs font-mono text-[#3d6b4f] mb-2">⚖️ {localeText({ en: "Compare", zh: "对比", es: "Comparar", fr: "Comparer", ru: "Сравнить", ar: "مقارنة" })}</p>
+            <h2 className="font-semibold text-[#1a1814] group-hover:text-[#3d6b4f] transition-colors mb-1">
+              {localeText({
+                en: "Open high-intent pair pages",
+                zh: "查看高需求单位对比页",
+                es: "Abre comparaciones populares",
+                fr: "Ouvrez les comparaisons populaires",
+                ru: "Откройте популярные сравнения",
+                ar: "افتح صفحات المقارنة الشائعة",
+              })}
+            </h2>
+            <p className="text-xs text-[#8f8880]">{localeText({ en: "Formula + direct value examples", zh: "提供公式和直接示例值", es: "Con fórmula y ejemplos", fr: "Avec formules et exemples", ru: "Формулы и примеры", ar: "صيغ مع أمثلة مباشرة" })}</p>
+          </Link>
+        </section>
+
         <HomeAiSpotlight />
+
+        <section className="mb-12">
+          <div className="flex items-end justify-between gap-3 mb-4">
+            <h2 className="font-sans font-bold text-xl md:text-2xl text-[#1a1814]">
+              {localeText({
+                en: "Featured from Tips",
+                zh: "Tips 精选阅读",
+                es: "Destacados de Tips",
+                fr: "Sélection des astuces",
+                ru: "Рекомендуем в советах",
+                ar: "مختارات من النصائح",
+              })}
+            </h2>
+            <Link href="/conversion-tips" className="text-xs font-mono text-[#3d6b4f] hover:underline">
+              {localeText({ en: "View all →", zh: "查看全部 →", es: "Ver todo →", fr: "Tout voir →", ru: "Смотреть все →", ar: "عرض الكل →" })}
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {tipsPreview.map((item) => (
+              <Link key={item.slug} href={`/conversion-tips/${item.slug}`} className="group bg-white border border-[#e4e0da] rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+                <p className="text-xs text-[#9a948a] mb-1">{localeText(item.moduleTitle)}</p>
+                <p className="font-medium text-[#1a1814] group-hover:text-[#3d6b4f] transition-colors mb-2">{localeText(item.title)}</p>
+                <p className="text-sm text-[#6a6460] leading-relaxed">{localeText(item.summary)}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
 
         <section className="mb-12">
           <div className="mb-4 flex items-end justify-between gap-3">
@@ -350,8 +427,8 @@ export default function HomePage() {
               })}
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {GLOBAL_TESTIMONIALS.map((item) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {GLOBAL_TESTIMONIALS.slice(0, 4).map((item) => (
               <article key={`${item.name}-${item.country.en}`} className="bg-white border border-[#e4e0da] rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
@@ -377,13 +454,6 @@ export default function HomePage() {
               </article>
             ))}
           </div>
-        </section>
-
-        {/* Crawlable SEO content */}
-        <section className="mt-14 mb-12 bg-white border border-[#e4e0da] rounded-2xl p-6 md:p-8 shadow-sm">
-          <h2 className="font-sans font-bold text-2xl md:text-3xl mb-4">{seoText.introTitle}</h2>
-          <p className="text-[#6a6460] leading-relaxed text-sm md:text-base mb-3">{seoText.introBody}</p>
-          <p className="text-[#6a6460] leading-relaxed text-sm md:text-base">{seoText.introBody2}</p>
         </section>
 
         {/* Popular SEO links */}
@@ -421,22 +491,21 @@ export default function HomePage() {
         </section>
 
         {/* All categories grid */}
-        <section className="mt-16 mb-20">
+        <section className="mt-10 mb-14">
           <p className="font-mono text-[11px] text-[#9a948a] tracking-[0.1em] uppercase mb-5">
             // {t.allConverters}
           </p>
 
-          {/* Mobile: collapsed by default */}
-          <div className="md:hidden mb-4 flex justify-center">
+          <div className="mb-4 flex justify-center">
             <button
-              onClick={() => setMobileAllExpanded((v) => !v)}
+              onClick={() => setAllExpanded((v) => !v)}
               className="px-4 py-2 rounded-full text-xs font-medium border border-[#e4e0da] bg-[#f8f6f2] text-[#9a948a] hover:border-[#3d6b4f] hover:text-[#3d6b4f] transition-all"
             >
-              {mobileAllExpanded ? t.showLess : t.moreCategories}
+              {allExpanded ? t.showLess : t.moreCategories}
             </button>
           </div>
 
-          <div className={`${mobileAllExpanded ? "grid" : "hidden"} md:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3`}>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
 
             {/* Currency - highest traffic */}
             <Link href="/currency"
@@ -448,7 +517,7 @@ export default function HomePage() {
               <p className="text-xs text-[#9a948a] mt-1">49 {t.units} · {localeText({ en: "live", zh: "实时", es: "en vivo", fr: "en direct", ru: "онлайн", ar: "مباشر" })}</p>
             </Link>
 
-            {orderedCats.map((cat) => (
+            {shownCats.map((cat) => (
               <Link key={cat.slug} href={`/${cat.slug}`}
                 className="group bg-white border border-[#e4e0da] rounded-2xl p-5 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5">
                 <span className="text-2xl mb-3 block">{cat.icon}</span>
@@ -469,6 +538,13 @@ export default function HomePage() {
               <p className="text-xs text-[#3d6b4f]/60 group-hover:text-white/70 mt-1">5 {localeText({ en: "tools", zh: "工具", es: "herramientas", fr: "outils", ru: "инструментов", ar: "أدوات" })}</p>
             </Link>
           </div>
+        </section>
+
+        {/* Crawlable SEO content */}
+        <section className="mb-12 bg-white border border-[#e4e0da] rounded-2xl p-6 md:p-8 shadow-sm">
+          <h2 className="font-sans font-bold text-2xl md:text-3xl mb-4">{seoText.introTitle}</h2>
+          <p className="text-[#6a6460] leading-relaxed text-sm md:text-base mb-3">{seoText.introBody}</p>
+          <p className="text-[#6a6460] leading-relaxed text-sm md:text-base">{seoText.introBody2}</p>
         </section>
 
         {/* Footer */}
