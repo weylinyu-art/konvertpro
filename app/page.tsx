@@ -519,58 +519,112 @@ export default function HomePage() {
               </button>
             ))}
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-            {(CONVERTER_SCENARIOS.find((s) => s.key === converterTab)?.items ?? []).map((item) => {
-              if (item.type === "currency") {
+          {isMobile ? (
+            <div className="mt-2 rounded-xl border border-[#e8e4df] bg-white divide-y divide-[#e8e4df]">
+              {(CONVERTER_SCENARIOS.find((s) => s.key === converterTab)?.items ?? []).map((item) => {
+                if (item.type === "currency") {
+                  return (
+                    <Link
+                      key="currency"
+                      href="/currency"
+                      className="flex items-center justify-between px-4 py-3 active:bg-[#f7f5f2]"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-xl">💱</span>
+                        <span className="font-medium text-sm text-[#1a1814]">{t.currency}</span>
+                      </div>
+                      <span className="text-xs text-[#c5bdb4]">›</span>
+                    </Link>
+                  );
+                }
+                if (item.type === "ai") {
+                  return (
+                    <Link
+                      key="ai"
+                      href="/ai"
+                      className="flex items-center justify-between px-4 py-3 active:bg-[#f7f5f2]"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-xl">🤖</span>
+                        <span className="font-medium text-sm text-[#1a1814]">{t.aiTools}</span>
+                      </div>
+                      <span className="text-xs text-[#c5bdb4]">›</span>
+                    </Link>
+                  );
+                }
+                const cat = CATEGORIES[item.slug];
+                if (!cat) return null;
                 return (
-                  <Link key="currency" href="/currency" className="group bg-white border border-[#e8e4df] rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all flex items-center gap-3 min-h-[100px]">
-                    <span className="text-2xl flex-shrink-0">💱</span>
-                    <div className="min-w-0">
-                      <span className="font-semibold text-[15px] sm:text-base text-[#1a1814] block">{t.currency}</span>
-                      <p className="text-xs text-[#9a948a] mt-0.5">49 {t.units}</p>
+                  <Link
+                    key={cat.slug}
+                    href={`/${cat.slug}`}
+                    className="flex items-center justify-between px-4 py-3 active:bg-[#f7f5f2]"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-xl">{cat.icon}</span>
+                      <span className="font-medium text-sm text-[#1a1814]">
+                        {getCategoryLabel(cat.slug, t)}
+                      </span>
                     </div>
+                    <span className="text-xs text-[#c5bdb4]">›</span>
                   </Link>
                 );
-              }
-              if (item.type === "ai") {
+              })}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+              {(CONVERTER_SCENARIOS.find((s) => s.key === converterTab)?.items ?? []).map((item) => {
+                if (item.type === "currency") {
+                  return (
+                    <Link key="currency" href="/currency" className="group bg-white border border-[#e8e4df] rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#edf4f0] transition-all flex items-center gap-3 min-h-[100px]">
+                      <span className="text-2xl flex-shrink-0">💱</span>
+                      <div className="min-w-0">
+                        <span className="font-semibold text-[15px] sm:text-base text-[#1a1814] block">{t.currency}</span>
+                        <p className="text-xs text-[#9a948a] mt-0.5">49 {t.units}</p>
+                      </div>
+                    </Link>
+                  );
+                }
+                if (item.type === "ai") {
+                  return (
+                    <Link key="ai" href="/ai" className="group bg-[#f8faf8] border border-[#3d6b4f]/20 rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#3d6b4f] transition-colors flex items-center gap-3 min-h-[100px]">
+                      <span className="text-2xl flex-shrink-0">🤖</span>
+                      <div className="min-w-0">
+                        <span className="font-semibold text-[15px] sm:text-base text-[#3d6b4f] block group-hover:text-white">{t.aiTools}</span>
+                        <p className="text-xs text-[#3d6b4f]/70 mt-0.5">5 {localeText({ en: "tools", zh: "工具", es: "herramientas", fr: "outils", ru: "инструментов", ar: "أدوات" })}</p>
+                      </div>
+                    </Link>
+                  );
+                }
+                const cat = CATEGORIES[item.slug];
+                if (!cat) return null;
+                const subLinks = (cat.popular || []).slice(0, 2).map((p) => ({
+                  href: `/${cat.slug}/${String(p.from).replace(/_/g, "-")}-to-${String(p.to).replace(/_/g, "-")}`,
+                  label: `${getUnitLabel(p.from, locale)} → ${getUnitLabel(p.to, locale)}`,
+                }));
                 return (
-                  <Link key="ai" href="/ai" className="group bg-[#f8faf8] border border-[#3d6b4f]/20 rounded-xl p-4 hover:border-[#3d6b4f] hover:bg-[#3d6b4f] transition-colors flex items-center gap-3 min-h-[100px]">
-                    <span className="text-2xl flex-shrink-0">🤖</span>
-                    <div className="min-w-0">
-                      <span className="font-semibold text-[15px] sm:text-base text-[#3d6b4f] block group-hover:text-white">{t.aiTools}</span>
-                      <p className="text-xs text-[#3d6b4f]/70 mt-0.5">5 {localeText({ en: "tools", zh: "工具", es: "herramientas", fr: "outils", ru: "инструментов", ar: "أدوات" })}</p>
-                    </div>
-                  </Link>
+                  <div key={cat.slug} className="bg-white border border-[#e8e4df] rounded-xl p-4 sm:p-4 hover:border-[#3d6b4f] hover:bg-[#f8faf8] transition-colors min-h-[120px] flex flex-col">
+                    <Link href={`/${cat.slug}`} className="flex items-center gap-3 mb-2 block min-h-[44px]">
+                      <span className="text-2xl flex-shrink-0">{cat.icon}</span>
+                      <div className="min-w-0 flex-1">
+                        <span className="font-semibold text-[15px] sm:text-base text-[#1a1814] block leading-tight">{getCategoryLabel(cat.slug, t)}</span>
+                        <p className="text-xs text-[#9a948a] mt-0.5">{Object.keys(cat.units).length} {t.units}</p>
+                      </div>
+                    </Link>
+                    {subLinks.length > 0 && (
+                      <div className="flex flex-col sm:flex-row sm:flex-wrap gap-1.5 sm:gap-2 mt-2 sm:pl-11">
+                        {subLinks.map((s) => (
+                          <Link key={s.href} href={s.href} className="text-[13px] sm:text-xs text-[#6a6460] hover:text-[#3d6b4f] border-b border-dotted border-[#c5bdb4] hover:border-[#3d6b4f] py-0.5 w-fit leading-relaxed">
+                            {s.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 );
-              }
-              const cat = CATEGORIES[item.slug];
-              if (!cat) return null;
-              const subLinks = (cat.popular || []).slice(0, 2).map((p) => ({
-                href: `/${cat.slug}/${String(p.from).replace(/_/g, "-")}-to-${String(p.to).replace(/_/g, "-")}`,
-                label: `${getUnitLabel(p.from, locale)} → ${getUnitLabel(p.to, locale)}`,
-              }));
-              return (
-                <div key={cat.slug} className="bg-white border border-[#e8e4df] rounded-xl p-4 sm:p-4 hover:border-[#3d6b4f] hover:bg-[#f8faf8] transition-colors min-h-[120px] flex flex-col">
-                  <Link href={`/${cat.slug}`} className="flex items-center gap-3 mb-2 block min-h-[44px]">
-                    <span className="text-2xl flex-shrink-0">{cat.icon}</span>
-                    <div className="min-w-0 flex-1">
-                      <span className="font-semibold text-[15px] sm:text-base text-[#1a1814] block leading-tight">{getCategoryLabel(cat.slug, t)}</span>
-                      <p className="text-xs text-[#9a948a] mt-0.5">{Object.keys(cat.units).length} {t.units}</p>
-                    </div>
-                  </Link>
-                  {subLinks.length > 0 && (
-                    <div className="flex flex-col sm:flex-row sm:flex-wrap gap-1.5 sm:gap-2 mt-2 sm:pl-11">
-                      {subLinks.map((s) => (
-                        <Link key={s.href} href={s.href} className="text-[13px] sm:text-xs text-[#6a6460] hover:text-[#3d6b4f] border-b border-dotted border-[#c5bdb4] hover:border-[#3d6b4f] py-0.5 w-fit leading-relaxed">
-                          {s.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+              })}
+            </div>
+          )}
         </section>
 
         {/* Crawlable SEO content — 移动端默认收起 */}
